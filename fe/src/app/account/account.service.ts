@@ -12,11 +12,10 @@ export class AccountService {
     connectionstring = environment.apiUrl;
 
     public login(username: string, password: string): Observable<Boolean> {
-        const body = '{ UserName: "' + username + '",Password: "' + password + '"}';
+        const body = '{ "UserName": "' + username + '","Password": "' + password + '"}';
         const headers = new HttpHeaders()
             .append('Content-Type', 'application/json')
             .append('Access-Control-Allow-Methods', '*');
-            // tslint:disable-next-line: align
             return this.httpClient.post(this.connectionstring + 'api/auth/token', body, { headers }).pipe(
             map((res: any) => {
                 if (res.err == 'err') {
@@ -25,6 +24,7 @@ export class AccountService {
                 if (typeof res.token !== 'undefined') {
                     // Stores access token & refresh token.
                     localStorage.setItem('access_token', res.token);
+                    localStorage.setItem('role', res.role);
                     return true;
                 } else {
                     return false;

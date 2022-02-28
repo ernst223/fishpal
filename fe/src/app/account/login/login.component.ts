@@ -30,21 +30,19 @@ export class LoginComponent implements OnInit {
     }
      this.isLoading = true;
      const formModel = this.loginForm.value;
-    // this.accountService.login(formModel.username, formModel.password).subscribe((result) => {
-    //   if (result === true) {
-    //     this.isLoading = false;
-    //     this.router.navigate(['dashboard']);
-    //   } else {
-    //     this.isLoading = false;
-    //     this.snackBar.open('Could not log in! Make sure your details are correct', '', {
-    //       duration: 2000,
-    //     }).afterDismissed().subscribe(() => { });
+    this.accountService.login(formModel.username, formModel.password).subscribe((result) => {
+      if (result === true) {
+        this.isLoading = false;
+        this.router.navigate(['dashboard']);
+      } else {
+        this.isLoading = false;
+        this.snackBar.open('Could not log in! Make sure your details are correct', '', {
+          duration: 2000,
+        }).afterDismissed().subscribe(() => { });
 
-    //     console.log(result);
-    //   }
-    // });
-    localStorage.setItem('role', formModel.username);
-    this.router.navigate(['dashboard']);
+        console.log(result);
+      }
+    });
   }
 
   register() {

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 @Injectable()
 export class MenuService {
 
-  constructor( private router: ActivatedRoute) { }
+  constructor(private router: ActivatedRoute) { }
 
   getMenuItems(): MenuItem[] {
 
@@ -30,8 +30,8 @@ export class MenuService {
           icon: 'line_style',
         });
         break;
-      
-      case 'a2':
+
+      case 'a3':
         items.push({
           title: 'Dashboard',
           route: '/dashboard',
@@ -48,13 +48,30 @@ export class MenuService {
           icon: 'line_style',
         });
         break;
-      
-        default:
-          
-          break;
+
+      case 'A3':
+        items.push({
+          title: 'Dashboard',
+          route: '/dashboard',
+          icon: 'assessment'
+        });
+        items.push({
+          title: 'User Information',
+          route: '/user-information/user-information',
+          icon: 'assignment_ind',
+        });
+        items.push({
+          title: 'Dataset',
+          route: '/datasetadministration/manage-dataset',
+          icon: 'line_style',
+        });
+        break;
+      default:
+
+        break;
     }
-      
-  
+
+
 
     return items;
   }

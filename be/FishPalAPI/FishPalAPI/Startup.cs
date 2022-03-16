@@ -30,11 +30,8 @@ namespace FishPalAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    new MySqlServerVersion(new Version(5,5,62))));
+                    new MySqlServerVersion(new Version(8,0,28))));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-          //  services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-         //       .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentity<User, IdentityRole>(options =>
             {

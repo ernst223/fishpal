@@ -10,5 +10,6 @@ namespace FishPalAPI.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public string Province { get; set; }
+        public string Facet { get; set; }
     }
 }

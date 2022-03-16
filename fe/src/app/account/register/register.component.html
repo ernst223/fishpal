@@ -1,54 +1,103 @@
-<div class="login-container" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card>
-        <div class="logo" fxLayout="row" fxLayoutAlign="center center">
-            <img fxFlex="70" src="../../assets/newLogo.jpg">
-        </div>
-  
-        <form fxLayout="row wrap" fxLayoutAlign="center center" novalidate [formGroup]="loginForm">
-            <h2 style="width: 100%; text-align: center;">Registration</h2>
-            <mat-form-field fxFlex="80">
-                <input matInput
-                       formControlName="username"
-                       type="email"
-                       placeholder="Email">
-                <mat-error  *ngIf="loginForm.controls['username'].invalid">Your email is required</mat-error>
-            </mat-form-field>
+<div class="RegisterBlock" id="Disciplines">
+  <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+  </mat-progress-spinner>
+  <h2 class="RegisterHeader">Register</h2>
+  <mat-grid-list cols="1" rowHeight="90px">
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsFishing">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">list</mat-icon>&nbsp; Fishing Facet
+        </mat-label>
+        <mat-select [(ngModel)]="selectedFacet" (selectionChange)="facetSelected()">
+          <mat-option *ngFor="let facet of facets" [value]="facet.id">
+            {{facet.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsFishing">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Province
+        </mat-label>
+        <mat-select [(ngModel)]="selectedProvince" (selectionChange)="getFacetClubsByProvince()">
+          <mat-option *ngFor="let province of provinces" [value]="province.id">
+            {{province.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsFishing">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Club
+        </mat-label>
+        <mat-select [(ngModel)]="selectedClub">
+          <mat-option *ngFor="let club of clubs" [value]="club.id">
+            {{club.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
 
-            <mat-form-field fxFlex="80">
-                <input matInput
-                       formControlName="phone"
-                       type="text"
-                       placeholder="Mobile number">
-                <mat-error  *ngIf="loginForm.controls['username'].invalid">Your mobile number is required</mat-error>
-            </mat-form-field>
-  
-            <mat-form-field fxFlex="80">
-                <input matInput
-                       formControlName="password"
-                       type="password"
-                       placeholder="Password">
-                <mat-error  *ngIf="loginForm.controls['password'].invalid">Your password is required</mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="80">
-                <input matInput
-                       formControlName="confirmPassword"
-                       type="password"
-                       placeholder="Confirm Password">
-                <mat-error  *ngIf="loginForm.controls['password'].invalid">Your confirm password is required</mat-error>
-            </mat-form-field>
+  <hr class="splitLine">
 
-  
-            <button class="btn-sign-in"
-                    mat-raised-button
-                    fxFlex="25"
-                    color="warning"
-                    [disabled]="loginForm.invalid"
-                    (click)=register()>
-                REGISTER
-            </button>
-            <mat-progress-spinner style="min-width: 10px" [diameter]="40" mode="indeterminate" *ngIf="isLoading"></mat-progress-spinner>
-        </form>
-  
-    </mat-card>
-  </div>
-  
+  <mat-grid-list cols="2" rowHeight="90px">
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Name
+        </mat-label>
+        <input [(ngModel)]="Name" matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Surname
+        </mat-label>
+        <input [(ngModel)]="Surname" matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">mail_outline</mat-icon>&nbsp; Email (UserName)
+        </mat-label>
+        <input [(ngModel)]="Email" matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Phone
+        </mat-label>
+        <input [(ngModel)]="Phone" matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">lock</mat-icon>&nbsp; Password
+        </mat-label>
+        <input matInput [(ngModel)]="Password" type="password">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+        <mat-label>
+          <mat-icon aria-hidden="false" class="theIcon">lock</mat-icon>&nbsp; Confirm Password
+        </mat-label>
+        <input matInput [(ngModel)]="CPassword" type="password">
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols="1" rowHeight="90px">
+    <mat-grid-tile>
+      <button mat-raised-button class="registerButton" (click)=register()>Register</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>

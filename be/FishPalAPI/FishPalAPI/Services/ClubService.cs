@@ -1,5 +1,6 @@
 ﻿using FishPalAPI.Data;
 using FishPalAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,23 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
-        public List<ProvinceDTO> getAllProvinces()
+        public List<FacetDTO> getAllFacetsForRegistration()
         {
-            List<Province> provinces = context.Provinces.ToList();
+            List<Facet> facets = context.Facets.Include(a => a.Provinces).ToList();
+            List<FacetDTO> result = new List<FacetDTO>();
+            foreach (var entry in facets)
+            {
+                result.Add(new FacetDTO()
+                {
+                    Id = entry.Id,
+                    Description = entry.Description,
+                    provinces = getProvincesDTO(entry.Provinces)
+                });
+            }
+            return result;
+        }
+        public List<ProvinceDTO> getProvincesDTO(List<Province> provinces)
+        {
             List<ProvinceDTO> result = new List<ProvinceDTO>();
             foreach(var entry in provinces)
             {
@@ -31,25 +46,10 @@ namespace FishPalAPI.Services
             return result;
         }
 
-        public List<ClubDTO> getAllClubs()
+        public List<ClubDTO> getFacetClubsInProvince(int facetId, int provinceId)
         {
-            List<Club> clubs = context.Clubs.ToList();
-            List<ClubDTO> result = new List<ClubDTO>();
-            foreach(var entry in clubs)
-            {
-                result.Add(new ClubDTO()
-                {
-                    Id = entry.Id,
-                    Description = entry.Description,
-                    Province = entry.Province.Description
-                });
-            }
-            return result;
-        }
-
-        public List<ClubDTO> getClubsInProvince(int provinceId)
-        {
-            List<Club> clubs = context.Clubs.Where(p => p.Province.Id == provinceId).ToList();
+            List<Club> clubs = context.Clubs.Include(a => a.Province).Include(a => a.Facet)
+                .Where(p => p.Province.Id == provinceId && p.Facet.Id == facetId).ToList();
             List<ClubDTO> result = new List<ClubDTO>();
             foreach (var entry in clubs)
             {
@@ -57,7 +57,8 @@ namespace FishPalAPI.Services
                 {
                     Id = entry.Id,
                     Description = entry.Description,
-                    Province = entry.Province.Description
+                    Province = entry.Province.Description,
+                    Facet = entry.Facet.Description
                 });
             }
             return result;

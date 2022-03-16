@@ -69,14 +69,6 @@ D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.TagH
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.TagHelpers.output.cache
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.RazorCoreGenerate.cache
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Home\Privacy.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Shared\Error.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Shared\_Layout.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
-D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\Razor\Views\_ViewStart.cshtml.g.cs
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.RazorTargetAssemblyInfo.cache
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.RazorTargetAssemblyInfo.cs
 D:\Development\fishpal\be\FishPalAPI\FishPalAPI\obj\Debug\net5.0\FishPalAPI.Views.pdb

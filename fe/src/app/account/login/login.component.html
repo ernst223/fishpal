@@ -1,31 +1,30 @@
-<div class="login-container" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card>
-        <div class="logo" fxLayout="row" fxLayoutAlign="center center">
-            <img fxFlex="70" src="../../assets/newLogo.jpg">
-        </div>
-
-        <div fxLayout="row wrap" fxLayoutAlign="center center" novalidate [formGroup]="loginForm">
-            <mat-form-field fxFlex="80">
-                <input matInput formControlName="username" type="text" placeholder="Email">
+<div class="RegisterBlock" id="Disciplines">
+    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+    </mat-progress-spinner>
+    <h2 class="RegisterHeader">Login</h2>
+    <mat-grid-list cols="1" rowHeight="90px" [formGroup]="loginForm">    
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="loginInputs">
+                <mat-label><mat-icon aria-hidden="false" class="theIcon">mail_outline</mat-icon>&nbsp; Email (UserName)</mat-label>
+                <input matInput formControlName="username" type="text">
                 <mat-error *ngIf="loginForm.controls['username'].invalid">Your email address is required</mat-error>
             </mat-form-field>
-
-            <mat-form-field fxFlex="80">
-                <input matInput formControlName="password" type="password" placeholder="Password">
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="loginInputs">
+                <mat-label><mat-icon aria-hidden="false" class="theIcon">lock</mat-icon>&nbsp; Password</mat-label>
+                <input matInput formControlName="password" type="password">
                 <mat-error *ngIf="loginForm.controls['password'].invalid">Your password is required</mat-error>
             </mat-form-field>
+        </mat-grid-tile>    
+    </mat-grid-list>
 
-            <button class="btn-sign-in" mat-raised-button fxFlex="25" color="warning" [disabled]="loginForm.invalid"
-                (click)=login()>
-                SIGN IN
-            </button>
-            <button class="btn-sign-up" style="margin-left: 5px;" mat-raised-button fxFlex="25" color="warning"
-                [disabled]="loginForm.invalid" (click)=register()>
-                REGISTER
-            </button>
-            <mat-progress-spinner style="min-width: 10px" [diameter]="40" mode="indeterminate" *ngIf="isLoading">
-            </mat-progress-spinner>
-        </div>
-
-    </mat-card>
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button mat-raised-button class="registerButton" (click)=login()>Login</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="text-align: center;">
+        <a (click)=forgotPassword() style="color: gray; cursor: pointer; font-size: 13px; font-style: oblique;">Did you forgot your Password?</a>
+    </div>
 </div>

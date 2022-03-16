@@ -1,0 +1,52 @@
+<div *ngIf="!getShowClubs()">
+    <h1 mat-dialog-title>Do you want to add another Club?</h1>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button (click)="toggleShowAddClubs()" cdkFocusInitial>Yes</button>
+</div>
+<div *ngIf="getShowClubs()">
+    <h1 mat-dialog-title>Choose a Club</h1>
+    <div mat-dialog-content>
+        <mat-grid-list cols="1" rowHeight="90px">
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" class="registerInputsFishing">
+                    <mat-label>
+                        <mat-icon aria-hidden="false" class="theIcon">list</mat-icon>&nbsp; Fishing Facet
+                    </mat-label>
+                    <mat-select [(ngModel)]="selectedFacet" (selectionChange)="facetSelected()">
+                        <mat-option *ngFor="let facet of data.facets" [value]="facet.id">
+                            {{facet.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" class="registerInputsFishing">
+                    <mat-label>
+                        <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Province
+                    </mat-label>
+                    <mat-select [(ngModel)]="selectedProvince" (selectionChange)="getFacetClubsByProvince()">
+                        <mat-option *ngFor="let province of provinces" [value]="province.id">
+                            {{province.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" class="registerInputsFishing">
+                    <mat-label>
+                        <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Club
+                    </mat-label>
+                    <mat-select [(ngModel)]="selectedClub">
+                        <mat-option *ngFor="let club of clubs" [value]="club.id">
+                            {{club.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="addAnotherClub()">Add Another Club</button>
+        <button mat-button (click)="done()" cdkFocusInitial>Done</button>
+    </div>
+</div>

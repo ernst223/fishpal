@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace FishPalAPI.Data
 {
@@ -12,14 +11,21 @@ namespace FishPalAPI.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            // TO DO
-            // Make this line work
+            Database.Migrate();
+        }
 
-            //Database.Migrate();
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+            }
         }
 
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<UserInformation> UserInformation { get; set; }
+        public DbSet<Facet> Facets { get; set; }
+        public DbSet<Role> Role { get; set; }
     }
 }

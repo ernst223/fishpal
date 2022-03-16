@@ -14,5 +14,7 @@ namespace FishPalAPI.Data
         public int Id { get; set; }
         public string Description { get; set; }
         public Province Province { get; set; }
+        public Facet Facet { get; set; }
+        public List<User> Users { get; set; }
     }
 }

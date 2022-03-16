@@ -1,33 +1,46 @@
-
-$cardMargin: 24px;
-
-.login-container {
-    margin-top: 10px;
+.RegisterBlock{
+    background-color: #ffffff;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 50px;
+    height: auto;
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid #005b8f;
 }
-
-.logo{
-    width: 470px;
+.RegisterHeader{
+text-align: center;
+color: #005b8f;
+font-size: 40px;
 }
-
-app-card {
-    width: 450px;
-
-    .logo {
-        margin: $cardMargin 0;
-    }
-
-    .btn-sign-in {
-        margin-top: 5px;
-    }
-
-    hr {
-        border: 0;
-        border-top: 1px solid #ECEFF1;
-        margin: ($cardMargin / 2) -8px;
-    }
-
-    .forgot-password {
-        font-size: $cardMargin / 2;
-        margin-top: 5px;
-    }
+.theIcon{
+    vertical-align: middle;
+    color: rgb(0, 0, 0);
+  }
+  .registerInputsFishing{
+      width: 90%;
+  }
+  .registerInputsPersonalLeft{
+    width: 88%;
+    margin-left: 10%;
+    margin-right: 2%;
+}
+.registerInputsPersonalRight{
+    width: 88%;
+    margin-right: 10%;
+    margin-left: 2%;
+}
+.splitLine{
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 20px;
+}
+.registerButton{
+    width: 40%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #005b8f;
+}
+.fillerDiv{
+    height: 70px;
 }

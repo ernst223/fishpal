@@ -2,15 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ShellComponent } from './shell/shell.component';
 
-
-
 const routes: Routes = [
   {
     path: '',
      canActivate: [],
     component: ShellComponent,
     children: [
-      { path: '', redirectTo: '/account/login', pathMatch: 'full' },
+      { path: '', redirectTo: '/website/home', pathMatch: 'full' },
       { path: 'dashboard', loadChildren: './administration/administration.module#AdministrationModule'},
       { path: 'user-information', loadChildren: './administration/administration.module#AdministrationModule'},
       { path: 'datasetadministration', loadChildren: './datasetadministration/datasetadministration.module#DatasetadministrationModule'},

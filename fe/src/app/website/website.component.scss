@@ -1,0 +1,240 @@
+.WelcomePageBlock{
+    height: auto;
+    width: 100%;
+    background-color: #005b8f;
+    }
+    .AboutUsCard{
+    height: auto;
+    background-color: #005b8f;
+    width: 100%;
+    }
+    .BGImageWithItemsOnTop{
+     position: relative;
+    }
+    .AboutUsText{
+      color: white;
+      width: 60%;
+      text-align: justify;
+      text-justify: inter-word;
+      margin-left: 20%;
+      margin-right: 20%;
+      padding-bottom: 30px;
+      }
+      .AboutUsDescription{
+        text-align:center;
+        padding-top: 20px;
+      }
+      .MainPageTitle{
+        font-size: 60px;
+        margin-left: 15px;
+        color:white;
+        padding:30px;
+      }
+    .mainPageLoginRegisterButtonContainer{
+      margin-left: 60px;
+      margin-bottom: 30px;
+    }
+    
+    .mainPageLoginRegisterButtons{
+      border-radius: 15px;
+      border: 1px solid white;
+      justify-content: space-between;
+      margin-right: 1rem;
+      color: white;
+    }
+    .mainPageTitleAndButtons{
+      position: absolute;
+      top: 30%;
+      left: 0;
+    }
+    .mainPageImage1{
+      width: 100%;
+      height: 550px;
+    }
+    .LatestNewsBlock{
+      background-color: #005b8f;
+      height: auto;
+      min-height: 100px;
+    }
+    .DisciplinesBlock{
+      background-color: white;
+      height: auto;
+    }
+    .FacetsLogo{
+      height: 100px;
+      width: 100px;
+      vertical-align: middle;
+    }
+    .facetsHeader{
+      text-align: center;
+      font-size: 40px;
+      padding-top: 30px;
+      padding-top: 30px;
+      color: #005b8f;
+    }
+    .latestNewsHeader{
+      text-align: center;
+      font-size: 40px;
+      padding-top: 30px;
+      padding-top: 30px;
+      color: white;
+    }
+    .CalendarOfEventsBlock{
+      background-color: white;
+      height: auto;
+      min-height: 100px;
+    }
+    .CalendarOfEventsHeader{
+      text-align: center;
+      font-size: 40px;
+      padding-top: 30px;
+      padding-top: 30px;
+      color: #005b8f;
+    }
+    .GetInTouchBlock{
+      background-color: #005b8f;
+      height: auto;
+      min-height: 100px;
+    }
+    .GetInTouchHeader{
+      text-align: center;
+      font-size: 40px;
+      padding-top: 30px;
+      padding-top: 30px;
+      color: white;
+    }
+    .SignUpNowBlock{
+      background-color: white;
+      height: auto;
+      min-height: 100px;
+    }
+    .SignUpNowHeader{
+      text-align: center;
+      font-size: 40px;
+      padding-top: 30px;
+      padding-top: 30px;
+      color: #005b8f;
+    }
+    
+    .facetCard{
+      width: 93%;
+      color: #005b8f;
+    }
+    .facetCardTitle{
+      font-size: 30px;
+    }
+    .facetCardDescription{
+      font-size: 15px;
+    }
+    .facetCardTitleAndDescription{
+      display: inline-block;
+      margin-left: 10px;
+    }
+    
+    .FooterLogo{
+      height: 280px;
+      width: 280px;
+    }
+    .footerItems{
+      color: white;
+    }
+    .theIcon{
+      vertical-align: middle;
+    }
+    .toggleDetailBlockAboveFooterForMobile{
+      display: none;
+    }
+    
+      @media (max-width:700px) {
+        .SignUpNowHeader{
+          text-align: center;
+          font-size: 40px;
+          padding-top: 30px;
+          padding-top: 30px;
+          color: #005b8f;
+        font-size: 25px;
+        }
+        
+        .GetInTouchHeader{
+          text-align: center;
+          font-size: 40px;
+          padding-top: 30px;
+          padding-top: 30px;
+          color: white;
+        font-size: 25px;
+        }
+        
+        .CalendarOfEventsHeader{
+          text-align: center;
+          font-size: 40px;
+          padding-top: 30px;
+          padding-top: 30px;
+          color: #005b8f;
+        font-size: 25px;
+        }
+        
+        .latestNewsHeader{
+          text-align: center;
+          font-size: 40px;
+          padding-top: 30px;
+          padding-top: 30px;
+          color: white;
+        font-size: 25px;
+        }
+        .toggleDetailBlockAboveFooterForWeb{
+          display: none;
+        }
+        .toggleDetailBlockAboveFooterForMobile{
+          display: unset;
+        }
+        .mat-grid-list{
+          height: 100px;
+        }
+        .facetCardTitle{
+          font-size: 20px;
+        }
+        .facetCardDescription{
+          font-size: 10px;
+        }
+        .facetCard{
+          width: 80%;
+          color: #005b8f;
+        }
+        .FacetsLogo{
+          height: 35px;
+          width: 35px;
+          vertical-align: middle;
+        }
+        .facetsHeader{
+          text-align: center;
+          font-size: 25px;
+          padding-top: 30px;
+          padding-top: 30px;
+          color: #005b8f;
+        }
+        .mainPageTitleAndButtons{
+          position: absolute;
+          top: 20%;
+          left: 0;
+        }
+        .mainPageImage1{
+          width: 100%;
+          height: 300px;
+        }
+        .MainPageTitle{
+          font-size: 30px;
+          margin-left: 15px;
+          color:white;
+          padding:30px;
+        }
+        .AboutUsText{
+          color: white;
+          width: 70%;
+          text-align: justify;
+          text-justify: inter-word;
+          margin-left: 15%;
+          margin-right: 15%;
+          padding-bottom: 30px;
+          }
+      }
+      

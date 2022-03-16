@@ -15,4 +15,8 @@
     <PackageReference Include="Postmark" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Scripts\" />
+  </ItemGroup>
+
 </Project>

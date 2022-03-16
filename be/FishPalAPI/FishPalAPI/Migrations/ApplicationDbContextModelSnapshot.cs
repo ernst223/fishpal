@@ -17,6 +17,36 @@ namespace FishPalAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.10");
 
+            modelBuilder.Entity("ClubUser", b =>
+                {
+                    b.Property<string>("UsersId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("clubsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersId", "clubsId");
+
+                    b.HasIndex("clubsId");
+
+                    b.ToTable("ClubUser");
+                });
+
+            modelBuilder.Entity("FacetProvince", b =>
+                {
+                    b.Property<int>("FacetsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProvincesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FacetsId", "ProvincesId");
+
+                    b.HasIndex("ProvincesId");
+
+                    b.ToTable("FacetProvince");
+                });
+
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.Property<int>("Id")
@@ -26,14 +56,33 @@ namespace FishPalAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("FacetId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ProvinceId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FacetId");
+
                     b.HasIndex("ProvinceId");
 
                     b.ToTable("Clubs");
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Facet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Facets");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Province", b =>
@@ -67,7 +116,7 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("FishPalAPI.Data.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -87,7 +136,10 @@ namespace FishPalAPI.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -107,6 +159,9 @@ namespace FishPalAPI.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Surname")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -152,7 +207,7 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -189,7 +244,7 @@ namespace FishPalAPI.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -212,7 +267,7 @@ namespace FishPalAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -224,17 +279,17 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -246,10 +301,10 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -261,13 +316,13 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -277,11 +332,47 @@ namespace FishPalAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ClubUser", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FishPalAPI.Data.Club", null)
+                        .WithMany()
+                        .HasForeignKey("clubsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FacetProvince", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Facet", null)
+                        .WithMany()
+                        .HasForeignKey("FacetsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FishPalAPI.Data.Province", null)
+                        .WithMany()
+                        .HasForeignKey("ProvincesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
+                    b.HasOne("FishPalAPI.Data.Facet", "Facet")
+                        .WithMany()
+                        .HasForeignKey("FacetId");
+
                     b.HasOne("FishPalAPI.Data.Province", "Province")
                         .WithMany()
                         .HasForeignKey("ProvinceId");
+
+                    b.Navigation("Facet");
 
                     b.Navigation("Province");
                 });

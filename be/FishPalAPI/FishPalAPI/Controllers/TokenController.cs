@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace FishPalAPI.Controllers
 {
     [Route("api/auth")]
-    public class TokenController: Controller
+    public class TokenController : Controller
     {
         private UserManager<User> userMgr;
         private IPasswordHasher<User> hasher;
@@ -35,10 +35,10 @@ namespace FishPalAPI.Controllers
         {
             try
             {
-                var user = await userMgr.FindByNameAsync(model.UserName);
+                var user = await userMgr.FindByEmailAsync(model.UserName);
                 if (user != null)
                 {
-                    if(hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Success)
+                    if (hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Success)
                     {
                         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sdfgsdgrre;n34l5n;sdfgsdfg;dngk34l;wert;wert"));
                         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -58,7 +58,7 @@ namespace FishPalAPI.Controllers
                             role = role,
                             userName = user.UserName,
                         });
-                    } 
+                    }
                     else
                     {
                         return Unauthorized();
@@ -76,11 +76,11 @@ namespace FishPalAPI.Controllers
         }
 
         [HttpPost("user")]
-        public async Task<IActionResult> createUser([FromBody] Credentials model)
+        public async Task<IActionResult> createUser([FromBody] RegistrationDTO model)
         {
             try
             {
-                var user = await userMgr.FindByNameAsync(model.UserName);
+                var user = await userMgr.FindByEmailAsync(model.UserName);
                 if (user != null)
                 {
                     return Conflict("User already exist");
@@ -90,11 +90,26 @@ namespace FishPalAPI.Controllers
                     User idu = new User()
                     {
                         UserName = model.UserName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber
+                        Email = model.UserName,
+                        PhoneNumber = model.PhoneNumber,
+                        Name = model.Name,
+                        Surname = model.Surname
                     };
                     IdentityResult result = await userMgr.CreateAsync(idu, model.Password);
-                    return Ok("User Created");
+
+                    // Now adding the clubs to the user
+                    var createdUser = await userMgr.FindByEmailAsync(model.UserName);
+                    if (userService.addUserClubs(createdUser.Id, model.clubs))
+                    {
+                        // Send confirm email
+                        await userService.sendConfirmEmailAsync(createdUser);
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return BadRequest("User Created, but could not add Clubs");
+                    }
+
                 }
             }
             catch (Exception e)
@@ -103,5 +118,48 @@ namespace FishPalAPI.Controllers
             }
         }
 
+        [HttpGet("confirm/{id}")]
+        public async Task<IActionResult> confirmEmail(string id)
+        {
+            var user = await userMgr.FindByIdAsync(id);
+            var token = await userMgr.GenerateEmailConfirmationTokenAsync(user);
+            var result = await userMgr.ConfirmEmailAsync(user, token);
+            return Ok(result);
+        }
+
+        [HttpGet("resetEmail/{username}")]
+        public async Task<IActionResult> sendResetEmail(string username)
+        {
+            var user = await userMgr.FindByEmailAsync(username);
+            if (user != null)
+            {
+                ResetPasswordDTO resetModel = new ResetPasswordDTO()
+                {
+                    token = user.Id,
+                    userName = user.Email,
+                    newPassword = null
+                };
+                await userService.sendResetPasswordEmailAsync(resetModel, user.Name);
+            }
+            return Ok();
+        }
+
+        [HttpPost("reset")]
+        public async Task<IActionResult> resetUserPassword([FromBody] ResetPasswordDTO model)
+        {
+            var user = await userMgr.FindByIdAsync(model.token);
+            var token = await userMgr.GeneratePasswordResetTokenAsync(user);
+            var result = await userMgr.ResetPasswordAsync(user, token, model.newPassword);
+            return Ok(result);
+        }
+
+        [HttpGet("delete/{userName}")]
+        public async Task<ActionResult> DeleteUserd(string userName)
+        {
+            var user = await userMgr.FindByEmailAsync(userName);
+            userService.removeUserClubs(user.Id);
+            await userMgr.DeleteAsync(user);
+            return Ok();
+        }
     }
 }

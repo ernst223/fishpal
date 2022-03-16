@@ -24,6 +24,19 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  forgotPassword() {
+    const formModel = this.loginForm.value;
+    if(formModel.username == undefined || formModel.username == '') {
+      this.openSnackBar('Please fill in a Username or Email.', 'Close');
+    } else {
+      this.accountService.sendResetPasswordEmail(formModel.username).subscribe((result) => {
+        this.openSnackBar('Reset Link is send if the account exist', 'Close');
+      }, error => {
+        this.openSnackBar('Reset Link is send if the account exist', 'Close');
+      });
+    }
+  }
+
   login() {
     if (this.loginForm.invalid) {
       return;
@@ -42,10 +55,24 @@ export class LoginComponent implements OnInit {
 
         console.log(result);
       }
+    },
+    error => {
+      this.isLoading = false;
+      this.snackBar.open('Could not log in! Make sure your details are correct', '', {
+        duration: 2000,
+      }).afterDismissed().subscribe(() => { });
+
+      console.log(error);
     });
   }
 
   register() {
     this.router.navigate(['/account/register']);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

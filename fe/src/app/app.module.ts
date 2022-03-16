@@ -13,6 +13,8 @@ import { MenuService } from './shell/menu.service';
 import { AccountModule } from './account/account.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
+import { WebsiteComponent } from './website/website.component';
+import { NavbarpageComponent } from './navbarpage/navbarpage.component';
 
 
 @NgModule({
@@ -21,6 +23,8 @@ import { HeaderInterceptor } from './interceptors/header.interceptor';
     ShellBreadcrumbsComponent,
     ShellNavListComponent,
     ShellComponent,
+    WebsiteComponent,
+    NavbarpageComponent
   ],
   imports: [
     BrowserModule,

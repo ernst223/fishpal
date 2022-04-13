@@ -53,11 +53,11 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
                     b.Property<int?>("FacetId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("ProvinceId")
                         .HasColumnType("int");
@@ -77,7 +77,7 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -91,7 +91,7 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

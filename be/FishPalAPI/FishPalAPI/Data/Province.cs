@@ -12,7 +12,7 @@ namespace FishPalAPI.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; }
         public List<Facet> Facets { get; set; }
     }
 }

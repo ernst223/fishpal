@@ -1,7 +1,0 @@
-{
-  "name": "FishPalApp",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}

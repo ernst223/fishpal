@@ -18,15 +18,18 @@ import { ClothesOrderComponent } from './clothes-order/clothes-order.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { MembershipCardsComponent } from './membership-cards/membership-cards.component';
 import { MobileAppComponent } from './mobile-app/mobile-app.component';
-
+import { QRCodeModule } from 'angular2-qrcode';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   imports: [
+    QRCodeModule,
     CommonModule,
     AdministrationRoutingModule,
     SharedModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AngularFontAwesomeModule
   ],
   declarations: [
     DashboardComponent, 

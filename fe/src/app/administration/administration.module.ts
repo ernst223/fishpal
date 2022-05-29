@@ -5,7 +5,7 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { SharedModule } from 'src/shared/shared.module';
 import { SharedService } from 'src/shared/shared.serice';
 import { MatSnackBarModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserInformationComponent } from './user-information/user-information.component';
 import { CalendarOfEventsComponent } from './calendar-of-events/calendar-of-events.component';
@@ -20,9 +20,9 @@ import { MembershipCardsComponent } from './membership-cards/membership-cards.co
 import { MobileAppComponent } from './mobile-app/mobile-app.component';
 import { QRCodeModule } from 'angular2-qrcode';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     QRCodeModule,
     CommonModule,
     AdministrationRoutingModule,

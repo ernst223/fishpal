@@ -56,7 +56,7 @@ test:string = 'testering this is a test message to see if the full message doe i
 
   openModal(templateRef) {
     let dialogRef = this.dialog.open(templateRef, {
-         width: '250px',
+         width: '550px',
          // data: { name: this.name, animal: this.animal }
     });
 

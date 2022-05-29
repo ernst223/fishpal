@@ -1,4 +1,4 @@
-<button mat-raised-button class="newMessage" (click)="generateProfile()">New Message &nbsp; <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
+<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)">New Message &nbsp; <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
 <mat-card class="example-card" *ngFor="let card of obs | async" (click)="test(card)">
 
     <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
@@ -14,5 +14,10 @@
 <ng-template #mytemplate>
         <textarea matInput placeholder="No Message..." value="{{test}}" style="height: 200px;width: 600px;"></textarea>
         <button mat-raised-button class="newMessage" (click)="generateProfile()">Update &nbsp; <i class="fa fa-pencil" aria-hidden="true"></i></button>
-        <button mat-raised-button class="newMessage" (click)="generateProfile()">Delete &nbsp; <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        <button mat-raised-button class="deleteMessage" (click)="generateProfile()">Delete &nbsp; <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+</ng-template>
+
+<ng-template #myOpentemplate>
+    <textarea matInput placeholder="Type New Message..." style="height: 200px;width: 600px;"></textarea>
+    <button mat-raised-button class="newMessage" (click)="generateProfile()">Create &nbsp; <i class="fa fa-pencil" aria-hidden="true"></i></button>
 </ng-template>

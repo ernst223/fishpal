@@ -4,10 +4,20 @@
     margin-left: 5%;
     margin-top: 25px;
 }
-.proceedToChekoutButton{
+.BackButtonItemAdd{
+    background-color: #005b8f;
+    color: white;
+    padding: 5px;
+    margin-top: 15px;
+    float: right;
+}
+.AddItemsButton{
     background-color: #F40F02;
     margin-left: 5px;
     color: white;
+    float: right;
+    padding: 5PX;
+    margin-top: 15PX;
 }
 .BackButton{
     background-color: #005b8f;
@@ -16,6 +26,7 @@
     margin-left: 15px;
     margin-top: 30px;
 }
+
 .ActiveOrders{
     background-color: #005b8f;
     color: white;
@@ -45,11 +56,18 @@
     margin-bottom: 15px;
     float: right;
 }
-.tableHeader{
-    text-align: left;
-    padding-left: 5px;
-    padding-right: 5px;
-}
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th {
+    width: 25%;
+  }
 .cardContainer{
 border-radius: 15px;
 box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);    
@@ -88,23 +106,10 @@ padding: 10px;
     color: #ffffff;
     background-color: #005b8f;
 }
-table {
-    width: 100%;
-  }
+
 
   @media(max-width:700px)
   {
-    .tableHeader{
-        text-align: center;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-    .orderComponents{
-        margin-bottom: 10px;
-        border-radius:5px;
-        width: 85px;
-        height: auto;
-        padding: 10px;
-    }
+ 
   }
   

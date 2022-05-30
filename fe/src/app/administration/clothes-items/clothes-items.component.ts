@@ -1,20 +1,19 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InsertClothesOrderModel } from '../models/add-clothes-order-form-model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
+
 interface itemValue {
   value: string;
 }
 export interface UserData {
   id: string;
+  name: string;
   price: string;
-  username:string;
-  orderdate:string;
-  item:string;
-  status:string;
+  size: string;
 }
 
 /** Constants used to fill up our data base. */
@@ -49,17 +48,14 @@ const NAMES: string[] = [
   'mugs',
   'glas',
 ];
-@Component({
-  selector: 'app-clothes-order',
-  templateUrl: './clothes-order.component.html',
-  styleUrls: ['./clothes-order.component.scss']
-})
-export class ClothesOrderComponent  implements OnInit, AfterViewInit {
-  viewItems: boolean = false;
-  viewOrders: boolean = false;
 
-  viewitemsButton: boolean = true;
-  viewOrdersButton: boolean = true;
+
+@Component({
+  selector: 'app-clothes-items',
+  templateUrl: './clothes-items.component.html',
+  styleUrls: ['./clothes-items.component.scss']
+})
+export class ClothesItemsComponent  implements OnInit, AfterViewInit {
 
   addItemForm!: FormGroup;
   category: itemValue[] = [
@@ -68,7 +64,7 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
     { value: 'Other' },
   ];
 
-  displayedColumns: string[] = ['id', 'username', 'orderdate', 'item', 'price', 'status', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'price', 'actions'];
   dataSource: MatTableDataSource<UserData>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -102,13 +98,14 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
 
   /** Builds and returns a new User. */
   createNewUser(id: number): UserData {
+    const name =
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))]
+
     return {
       id: id.toString(),
-      price: "399.99",
-      username: "Basson",
-      orderdate: "2022/05/23",
-      item: "Blazer",
-      status: "Paid",
+      name: name,
+      price: Math.round(Math.random() * 100).toString(),
+      size: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
     };
   }
 
@@ -183,26 +180,4 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
   closeModal(templateRef) {
     this.dialog.closeAll();
   }
-
-  toggleViewItems(){
-    this.viewItems = true;
-    this.viewitemsButton = false;
-    this.viewOrdersButton = false;
-  }
-
-  toggleViewOrders(){
-    this.viewItems = false;
-    this.viewOrders = true;
-    this.viewitemsButton = false;
-    this.viewOrdersButton = false;
-  }
-
-  navigateBack(){
-    this.viewItems = false;
-    this.viewOrders = false;
-    this.viewitemsButton = true;
-    this.viewOrdersButton = true;
-  }
-
 }
-

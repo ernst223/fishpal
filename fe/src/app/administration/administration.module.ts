@@ -20,6 +20,7 @@ import { MembershipCardsComponent } from './membership-cards/membership-cards.co
 import { MobileAppComponent } from './mobile-app/mobile-app.component';
 import { QRCodeModule } from 'angular2-qrcode';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { ClothesItemsComponent } from './clothes-items/clothes-items.component';
 @NgModule({
   imports: [
     ReactiveFormsModule,
@@ -44,7 +45,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     ClothesOrderComponent,
     PaymentsComponent,
     MembershipCardsComponent,
-    MobileAppComponent
+    MobileAppComponent,
+    ClothesItemsComponent
   ],
   providers: [
     SharedService,

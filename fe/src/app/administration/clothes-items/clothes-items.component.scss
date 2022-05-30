@@ -4,6 +4,12 @@
     margin-left: 5%;
     margin-top: 25px;
 }
+.viewButton{
+    background-color: #005b8f;
+    color: white;
+    padding: 5px;
+    margin: 5px;
+}
 .BackButtonItemAdd{
     background-color: #005b8f;
     color: white;
@@ -56,12 +62,6 @@
     margin-bottom: 15px;
     float: right;
 }
-.viewButton{
-    background-color: #005b8f;
-    color: white;
-    padding: 5px;
-    margin: 5px;
-}
 table {
     width: 100%;
   }
@@ -72,7 +72,7 @@ table {
   }
   
   td, th {
-    width: 15%;
+    width: 10%;
   }
 .cardContainer{
 border-radius: 15px;

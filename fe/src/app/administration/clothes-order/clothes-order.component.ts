@@ -61,11 +61,21 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
   viewitemsButton: boolean = true;
   viewOrdersButton: boolean = true;
 
-  addItemForm!: FormGroup;
+  createOrderForm!: FormGroup;
   category: itemValue[] = [
     { value: 'Battle dress' },
     { value: 'Formals' },
     { value: 'Other' },
+  ];
+  team: itemValue[] = [
+    { value: 'PROTEA' },
+    { value: 'SASACC' },
+    { value: 'N/A' },
+  ];
+  item: itemValue[] = [
+    { value: 'Blazer' },
+    { value: 'T-Shirt' },
+    { value: 'Keepnet' },
   ];
 
   displayedColumns: string[] = ['id', 'username', 'orderdate', 'item', 'price', 'status', 'actions'];
@@ -117,20 +127,22 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
   }
 
   createForm(): void {
-    this.addItemForm = this.formBuilder.group({
+    this.createOrderForm = this.formBuilder.group({
       the_Category: ['', Validators.required],
-      the_ItemName: ['', Validators.required],
-      the_Price: ['', Validators.required]
+      the_Item: ['', Validators.required],
+      the_Team: ['', Validators.required],
+      the_Qty: ['', Validators.required],
+      the_Size: ['', Validators.required]
     });
   }
 
   onSubmit() {
-    if (this.addItemForm.invalid) {
-      this.validateAllFormFields(this.addItemForm);
+    if (this.createOrderForm.invalid) {
+      this.validateAllFormFields(this.createOrderForm);
       return;
     }
 
-    const formData = this.addItemForm.getRawValue();
+    const formData = this.createOrderForm.getRawValue();
     console.log("order form data test", formData);
 
     let today: object = new Date();
@@ -159,7 +171,7 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
   }
 
   componentIsInvalid(control: string): boolean {
-    return (this.addItemForm.get(control)!.touched || this.addItemForm.get(control)!.dirty) && !this.addItemForm.get(control)!.valid;
+    return (this.createOrderForm.get(control)!.touched || this.createOrderForm.get(control)!.dirty) && !this.createOrderForm.get(control)!.valid;
   }
 
   public validationMessages = {
@@ -169,7 +181,7 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
   openModal(templateRef) {
     console.log("inside", templateRef);
     let dialogRef = this.dialog.open(templateRef, {
-      width: '25%',
+      width: '40%',
       height: 'auto'
       // data: { name: this.name, animal: this.animal }
     });

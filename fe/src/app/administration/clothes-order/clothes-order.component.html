@@ -10,8 +10,12 @@
 </div>
 
 
+
 <!--start of add view order form-->
 <div *ngIf="viewOrders">
+    <button mat-raised-button class="BackButton" (click)="openModal(mytemplate)">New Order &nbsp;<i class="fa fa-plus"
+        aria-hidden="true"></i>
+    </button>
     <mat-form-field appearance="standard">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -75,3 +79,103 @@
 <div [hidden]="!viewOrders">
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
+
+<!--new order template-->
+<ng-template #mytemplate>
+    <form [formGroup]="createOrderForm">
+        <mat-grid-list cols="1" rowHeight="4:1" class="gridList">
+            <mat-grid-tile>
+                <h1 class="headerClothesOrder">New Order</h1>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-grid-list cols="2" rowHeight="4:1" class="gridList">
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Category</mat-label>
+                        <mat-select class="form-control" formControlName="the_Category">
+                            <mat-option *ngFor="let categoryItems of category" [value]="categoryItems.value">
+                                {{categoryItems.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Category')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Category')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Item</mat-label>
+                        <mat-select class="form-control" formControlName="the_Item">
+                            <mat-option *ngFor="let theItems of item" [value]="theItems.value">
+                                {{theItems.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Item')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Item')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Team</mat-label>
+                        <mat-select class="form-control" formControlName="the_Team">
+                            <mat-option *ngFor="let theTeams of team" [value]="theTeams.value">
+                                {{theTeams.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Team')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Team')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field class="example-full-width" appearance="fill" class="inputComponents">
+                        <mat-label>Qty</mat-label>
+                        <input matInput placeholder="Ex. 3" class="form-control" formControlName="the_Qty">
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Qty')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Qty')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field class="example-full-width" appearance="fill" class="inputComponents">
+                        <mat-label>Size</mat-label>
+                        <input matInput placeholder="Ex. XL or 34/36" class="form-control" formControlName="the_Size">
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Size')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Size')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+
+    <button mat-raised-button class="AddItemsButton" (click)="onSubmit()">Proceed
+        &nbsp; <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button mat-raised-button class="BackButtonItemAdd" (click)="closeModal()"><i class="fa fa-chevron-left"
+            aria-hidden="true"></i>&nbsp; Back</button>
+</ng-template>

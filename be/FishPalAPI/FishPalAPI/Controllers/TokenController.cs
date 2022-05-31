@@ -71,7 +71,7 @@ namespace FishPalAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("failed to generate token");
+                return Unauthorized("failed to generate token");
             }
         }
 

@@ -64,18 +64,18 @@ namespace FishPalAPI.Controllers
                             });
                         } else
                         {
-                            return Unauthorized();
+                            return BadRequest();
                         }
                         
                     }
                     else
                     {
-                        return Unauthorized();
+                        return BadRequest();
                     }
                 }
                 else
                 {
-                    return Unauthorized();
+                    return BadRequest();
                 }
             }
             catch (Exception e)

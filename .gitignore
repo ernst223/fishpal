@@ -46,3 +46,8 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+be/FishPalAPI/FishPalAPI/obj/
+
+be/FishPalAPI/FishPalAPI/bin/Debug/net5.0/
+
+*.user

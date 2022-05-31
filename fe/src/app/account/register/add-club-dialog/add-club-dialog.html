@@ -14,7 +14,7 @@
                     </mat-label>
                     <mat-select [(ngModel)]="selectedFacet" (selectionChange)="facetSelected()">
                         <mat-option *ngFor="let facet of data.facets" [value]="facet.id">
-                            {{facet.description}}
+                            {{facet.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -26,7 +26,7 @@
                     </mat-label>
                     <mat-select [(ngModel)]="selectedProvince" (selectionChange)="getFacetClubsByProvince()">
                         <mat-option *ngFor="let province of provinces" [value]="province.id">
-                            {{province.description}}
+                            {{province.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -38,7 +38,7 @@
                     </mat-label>
                     <mat-select [(ngModel)]="selectedClub">
                         <mat-option *ngFor="let club of clubs" [value]="club.id">
-                            {{club.description}}
+                            {{club.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

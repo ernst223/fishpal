@@ -26,7 +26,7 @@ namespace FishPalAPI.Services
                 result.Add(new FacetDTO()
                 {
                     Id = entry.Id,
-                    Description = entry.Description,
+                    Name = entry.Name,
                     provinces = getProvincesDTO(entry.Provinces)
                 });
             }
@@ -40,7 +40,7 @@ namespace FishPalAPI.Services
                 result.Add(new ProvinceDTO()
                 {
                     Id = entry.Id,
-                    Description = entry.Description
+                    Name = entry.Name
                 });
             }
             return result;
@@ -56,9 +56,9 @@ namespace FishPalAPI.Services
                 result.Add(new ClubDTO()
                 {
                     Id = entry.Id,
-                    Description = entry.Description,
-                    Province = entry.Province.Description,
-                    Facet = entry.Facet.Description
+                    Name = entry.Name,
+                    Province = entry.Province.Name,
+                    Facet = entry.Facet.Name
                 });
             }
             return result;

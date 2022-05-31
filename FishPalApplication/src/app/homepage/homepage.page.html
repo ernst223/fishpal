@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar class="new-background-color">
+    <ion-title style="color: white;">Dashboard</ion-title>
+
+    <ion-buttons slot="end" style="color: white;">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="mainPage">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="cardBlock" (click)="profileCardClick()">
+          <ion-icon name="id-card-outline"></ion-icon>
+          <br>
+          <ion-label>Profile Card</ion-label>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="cardBlock" (click)="qrScannerClick()">
+          <ion-icon name="scan-circle-outline"></ion-icon>
+          <br>
+          <ion-label>QR Scanner</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-content *ngIf="profileCardPage">
+  <ion-button (click)="backButtonClick()" class="backButton">Back</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngFor="let card of item" class="cardContainer" id="profilePDFCard">
+          <div class="profileCardLeftDiv">
+            <h1>
+              <img src="../../assets/images/logo.png" class="profileCardImage">         
+            </h1>
+            <h2>{{card.name}} {{card.surname}}</h2>
+            <h2>Facet: {{card.facet}}</h2>
+            <h2>Valid until: {{card.ValidUntil}}</h2>
+          </div>
+
+          <div class="profileCardRightDiv">
+            <qr-code [value]="qrInfo" size="200"></qr-code>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-content *ngIf="qrScannerPage">
+  <ion-button (click)="backButtonClick()" class="backButton">Back</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-label>QR Scanner</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

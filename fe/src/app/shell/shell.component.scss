@@ -1,4 +1,4 @@
-@import 'src/theme';
+@import '~src/theme';
 
 .sidenav-container {
   height: 100vh;
@@ -14,7 +14,7 @@
   }
   
   .main-toolbar {
-    background-color: mat-contrast($ecp-app-primary, A100);
+    background-color: mat-contrast($ecp-app-primary, A800);
     color: mat-contrast($ecp-app-primary, 900);
 
       position: fixed;

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Development\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj": {}
+    "C:\\Users\\Basson\\source\\repos\\FISHPAL\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj": {}
   },
   "projects": {
-    "D:\\Development\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj": {
+    "C:\\Users\\Basson\\source\\repos\\FISHPAL\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Development\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Basson\\source\\repos\\FISHPAL\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj",
         "projectName": "FishPalAPI",
-        "projectPath": "D:\\Development\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\fishpal\\be\\FishPalAPI\\FishPalAPI\\obj\\",
+        "projectPath": "C:\\Users\\Basson\\source\\repos\\FISHPAL\\fishpal\\be\\FishPalAPI\\FishPalAPI\\FishPalAPI.csproj",
+        "packagesPath": "C:\\Users\\Basson\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Basson\\source\\repos\\FISHPAL\\fishpal\\be\\FishPalAPI\\FishPalAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Basson\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -79,6 +79,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[5.0.13, 5.0.13]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -87,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

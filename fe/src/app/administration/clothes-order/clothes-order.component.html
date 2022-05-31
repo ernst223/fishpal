@@ -1,0 +1,181 @@
+<button mat-raised-button class="BackButton" (click)="toggleViewItems()" *ngIf="viewitemsButton">View Items &nbsp;<i
+        class="fa fa-eye" aria-hidden="true"></i>
+</button>
+<button mat-raised-button class="BackButton" (click)="toggleViewOrders()" *ngIf="viewOrdersButton">View Orders &nbsp;<i
+        class="fa fa-eye" aria-hidden="true"></i>
+</button>
+
+<div *ngIf="viewItems">
+    <app-clothes-items></app-clothes-items>
+</div>
+
+
+
+<!--start of add view order form-->
+<div *ngIf="viewOrders">
+    <button mat-raised-button class="BackButton" (click)="openModal(mytemplate)">New Order &nbsp;<i class="fa fa-plus"
+        aria-hidden="true"></i>
+    </button>
+    <mat-form-field appearance="standard">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+    
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+    
+            <!-- ID Column -->
+            <ng-container matColumnDef="id" style="text-align: left;">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
+
+             <!-- price Column -->
+             <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+                <td mat-cell *matCellDef="let row"> R{{row.price}} </td>
+            </ng-container>
+    
+            <!-- username Column -->
+            <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> UserName </th>
+                <td mat-cell *matCellDef="let row"> {{row.username}} </td>
+            </ng-container>
+    
+            <!-- order date Column -->
+            <ng-container matColumnDef="orderdate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderDate </th>
+                <td mat-cell *matCellDef="let row"> {{row.orderdate}} </td>
+            </ng-container>
+
+             <!-- order date Column -->
+             <ng-container matColumnDef="item">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Item </th>
+                <td mat-cell *matCellDef="let row"> {{row.item}} </td>
+            </ng-container>
+    
+             <!-- status Column -->
+             <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+            </ng-container>
+
+             <!-- Name Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+            <td mat-cell *matCellDef="let row"> <button mat-raised-button class="viewButton" (click)="getRecord(row.id)">View</button></td>
+        </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div [hidden]="!viewOrders">
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+
+<!--new order template-->
+<ng-template #mytemplate>
+    <form [formGroup]="createOrderForm">
+        <mat-grid-list cols="1" rowHeight="4:1" class="gridList">
+            <mat-grid-tile>
+                <h1 class="headerClothesOrder">New Order</h1>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-grid-list cols="2" rowHeight="4:1" class="gridList">
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Category</mat-label>
+                        <mat-select class="form-control" formControlName="the_Category">
+                            <mat-option *ngFor="let categoryItems of category" [value]="categoryItems.value">
+                                {{categoryItems.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Category')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Category')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Item</mat-label>
+                        <mat-select class="form-control" formControlName="the_Item">
+                            <mat-option *ngFor="let theItems of item" [value]="theItems.value">
+                                {{theItems.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Item')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Item')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="inputComponents">
+                        <mat-label>Team</mat-label>
+                        <mat-select class="form-control" formControlName="the_Team">
+                            <mat-option *ngFor="let theTeams of team" [value]="theTeams.value">
+                                {{theTeams.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Team')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Team')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field class="example-full-width" appearance="fill" class="inputComponents">
+                        <mat-label>Qty</mat-label>
+                        <input matInput placeholder="Ex. 3" class="form-control" formControlName="the_Qty">
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Qty')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Qty')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="form-group">
+                    <mat-form-field class="example-full-width" appearance="fill" class="inputComponents">
+                        <mat-label>Size</mat-label>
+                        <input matInput placeholder="Ex. XL or 34/36" class="form-control" formControlName="the_Size">
+                    </mat-form-field>
+                    <span *ngIf="componentIsInvalid('the_Size')" class="e-error">
+                        <small *ngIf="loginForm?.get('the_Size')?.hasError('required')">{{
+                            validationMessages.required
+                            }}</small>
+                    </span>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+
+    <button mat-raised-button class="AddItemsButton" (click)="onSubmit()">Proceed
+        &nbsp; <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button mat-raised-button class="BackButtonItemAdd" (click)="closeModal()"><i class="fa fa-chevron-left"
+            aria-hidden="true"></i>&nbsp; Back</button>
+</ng-template>

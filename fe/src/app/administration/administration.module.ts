@@ -41,7 +41,7 @@ import { PersonalInformationComponent } from './user-information/personal-inform
     FormsModule,
     MatSnackBarModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
     AngularFontAwesomeModule
   ],
   declarations: [
@@ -58,7 +58,7 @@ import { PersonalInformationComponent } from './user-information/personal-inform
     PaymentsComponent,
     MembershipCardsComponent,
     MobileAppComponent,
-    ClothesItemsComponent
+    ClothesItemsComponent,
     MedicalInformationComponent,
     ClubInformationComponent,
     ProvincialInformationComponent,

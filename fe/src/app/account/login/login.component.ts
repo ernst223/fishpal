@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isLoading = false;
+  title = "Login";
+  isForgetPassword = false;
 
   constructor(public snackBar: MatSnackBar, private formBuilder: FormBuilder,
               private accountService: AccountService, private router: Router) {
@@ -35,6 +37,16 @@ export class LoginComponent implements OnInit {
         this.openSnackBar('Reset Link is send if the account exist', 'Close');
       });
     }
+  }
+
+  forgotPasswordPage() {
+    this.title = "Forgot your Password?"
+    this.isForgetPassword = true;
+  }
+
+  goBackToLogin() {
+    this.title = "Login"
+    this.isForgetPassword = false;
   }
 
   login() {

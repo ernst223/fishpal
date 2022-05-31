@@ -1,0 +1,62 @@
+<div>
+    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+    </mat-progress-spinner>
+
+    <h2 class="RegisterHeader">Angling Administration History</h2>
+
+    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
+    <h4 class="SecondHeader">SAALAA Management Commitee</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">shopping_basket</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">shopping_basket</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>

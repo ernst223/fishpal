@@ -1,0 +1,99 @@
+<div>
+    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+    </mat-progress-spinner>
+
+    <h2 class="RegisterHeader">Training Information Page</h2>
+
+    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">bookmark</mat-icon>&nbsp; Manager Year Completed
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Manager Points Received
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">bookmark</mat-icon>&nbsp; Coach Lvl 1 Year Completed
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Coach Lvl 1 Points Received
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">bookmark</mat-icon>&nbsp; Coach Lvl 2 Year Completed
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Coach Lvl 2 Points Received
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">bookmark</mat-icon>&nbsp; Captain Year Completed
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Captain Points Received
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">bookmark</mat-icon>&nbsp; Admin Year Completed
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Admin Points Received
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>

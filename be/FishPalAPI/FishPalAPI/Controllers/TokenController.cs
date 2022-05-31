@@ -50,14 +50,23 @@ namespace FishPalAPI.Controllers
 
                         var role = userService.getUserRole(user);
 
-                        return Ok(new
+                        var isEmailConfirmed = await userMgr.IsEmailConfirmedAsync(user);
+
+                        if(isEmailConfirmed)
                         {
-                            token = new JwtSecurityTokenHandler().WriteToken(token),
-                            expiration = token.ValidTo,
-                            userId = user.Id,
-                            role = role,
-                            userName = user.UserName,
-                        });
+                            return Ok(new
+                            {
+                                token = new JwtSecurityTokenHandler().WriteToken(token),
+                                expiration = token.ValidTo,
+                                userId = user.Id,
+                                role = role,
+                                userName = user.UserName,
+                            });
+                        } else
+                        {
+                            return Unauthorized();
+                        }
+                        
                     }
                     else
                     {

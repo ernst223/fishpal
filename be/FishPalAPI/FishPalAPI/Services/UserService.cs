@@ -84,7 +84,7 @@ namespace FishPalAPI.Services
                   },
             };
 
-            var client = new PostmarkClient("c6f92306-e8f6-4d85-be35-1033ec1273b7");
+            var client = new PostmarkClient("fc1530d0-ed32-488f-8f40-33fb54be4801");
 
             var response = await client.SendMessageAsync(message);
 
@@ -109,7 +109,7 @@ namespace FishPalAPI.Services
                 },
             };
 
-            var client = new PostmarkClient("c6f92306-e8f6-4d85-be35-1033ec1273b7");
+            var client = new PostmarkClient("fc1530d0-ed32-488f-8f40-33fb54be4801");
 
             var response = await client.SendMessageAsync(message);
 

@@ -31,6 +31,7 @@ import { AnglingHistoryComponent } from './user-information/angling-history/angl
 import { AnglingAdministrationHistoryComponent } from './user-information/angling-administration-history/angling-administration-history.component';
 import { OtherAnglingAchievementsComponent } from './user-information/other-angling-achievements/other-angling-achievements.component';
 import { PersonalInformationComponent } from './user-information/personal-information/personal-information.component';
+import { AdministrationService } from './administration.service';
 @NgModule({
   imports: [
     ReactiveFormsModule,
@@ -71,6 +72,7 @@ import { PersonalInformationComponent } from './user-information/personal-inform
     PersonalInformationComponent
   ],
   providers: [
+    AdministrationService,
     SharedService,
     MatSnackBarModule
   ]

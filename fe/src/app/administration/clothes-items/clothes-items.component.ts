@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
+import { AdministrationService } from '../administration.service';
 
 interface itemValue {
   value: string;
@@ -56,7 +57,8 @@ const NAMES: string[] = [
   styleUrls: ['./clothes-items.component.scss']
 })
 export class ClothesItemsComponent  implements OnInit, AfterViewInit {
-
+  addUpdateItem:boolean = true;
+  clothesItemsModal: InsertClothesOrderModel = {} as any
   addItemForm!: FormGroup;
   category: itemValue[] = [
     { value: 'Battle dress' },
@@ -70,7 +72,7 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {
+  constructor(private adminService: AdministrationService,private formBuilder: FormBuilder, public dialog: MatDialog) {
     const users = Array.from({ length: 100 }, (_, k) => this.createNewUser(k + 1));
 
     // Assign the data to the data source for the table to render
@@ -84,6 +86,7 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
 
   getRecord(name)
   {
+    this.addUpdateItem = false;
     console.log(name);
   }
 
@@ -121,17 +124,22 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     });
   }
 
-  onSubmit() {
+  onAddItem() {
     if (this.addItemForm.invalid) {
       this.validateAllFormFields(this.addItemForm);
       return;
     }
 
     const formData = this.addItemForm.getRawValue();
-    console.log("order form data test", formData);
+    
+    this.clothesItemsModal.CategoryName = formData.the_ItemName;
+    this.clothesItemsModal.ItemName = formData.the_ItemName;
+    this.clothesItemsModal.Amount = formData.the_Price
 
-    let today: object = new Date();
 
+    this.adminService.insertOrderItem(this.clothesItemsModal).subscribe(result => {
+     console.log("this si the result", result);
+    });
     //this.myModel.Province = formData.the_Province;
     //this.myModel.photos = this.photosObject;
 
@@ -163,10 +171,16 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     required: 'Please complete required field.',
   };
 
-  openModal(templateRef) {
+  openModal(templateRef, rowVal:any) {
+    if(rowVal != undefined){
+      this.addUpdateItem = false;
+    }else{
+      this.addUpdateItem = true;
+    }
+   
     console.log("inside", templateRef);
     let dialogRef = this.dialog.open(templateRef, {
-      width: '25%',
+      width: '70%',
       height: 'auto'
       // data: { name: this.name, animal: this.animal }
     });

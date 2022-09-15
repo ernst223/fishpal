@@ -26,6 +26,7 @@ export class AccountService {
                     // Stores access token & refresh token.
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('role', res.role);
+                    localStorage.setItem('loggedInUserEmail', res.userName);
                     return true;
                 } else {
                     return false;
@@ -55,7 +56,6 @@ export class AccountService {
                 if (res.err == 'err') {
                     return false;
                 }
-                console.log(res);
                 return true;
             }));
     }

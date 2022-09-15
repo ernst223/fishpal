@@ -10,6 +10,8 @@ namespace FishPalAPI.Data
     {
         public string Name { get; set; }
         public string Surname { get; set; }
+
+        public List<Federation> federations { get; set; }
         public UserInformation userInformation { get; set; }
         public Role role { get; set; }
         public List<Club> clubs { get; set; }

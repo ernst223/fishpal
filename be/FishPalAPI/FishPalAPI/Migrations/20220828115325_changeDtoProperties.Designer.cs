@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220828115325_changeDtoProperties")]
+    partial class changeDtoProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,21 +47,6 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("ProvincesId");
 
                     b.ToTable("FacetProvince");
-                });
-
-            modelBuilder.Entity("FederationUser", b =>
-                {
-                    b.Property<int>("federationsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("usersId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("federationsId", "usersId");
-
-                    b.HasIndex("usersId");
-
-                    b.ToTable("FederationUser");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
@@ -114,8 +101,8 @@ namespace FishPalAPI.Migrations
                     b.Property<Guid?>("ApproverRequired")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("CreationDate")
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("CreatoruserId")
                         .HasColumnType("char(36)");
@@ -129,8 +116,8 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StatusChangeDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("StatusChangeDate")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -142,9 +129,6 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("Federation")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -461,21 +445,6 @@ namespace FishPalAPI.Migrations
                     b.HasOne("FishPalAPI.Data.Province", null)
                         .WithMany()
                         .HasForeignKey("ProvincesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FederationUser", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.Federation", null)
-                        .WithMany()
-                        .HasForeignKey("federationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FishPalAPI.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("usersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

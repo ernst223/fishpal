@@ -21,6 +21,7 @@ namespace FishPalAPI.Controllers
         private IPasswordHasher<User> hasher;
         private IConfiguration config;
         private UserService userService;
+        public static string loggedInUserEmail { get; set; }
 
         public TokenController(UserManager<User> userMgr, IPasswordHasher<User> hasher, IConfiguration config)
         {

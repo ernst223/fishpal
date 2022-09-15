@@ -1,23 +1,189 @@
-<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)">New Message &nbsp; <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
-<mat-card class="example-card" *ngFor="let card of obs | async" (click)="test(card)">
+<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)">New Message &nbsp; <i
+        class="fa fa-commenting-o" aria-hidden="true"></i></button>
 
-    <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
-   
-    &nbsp;
+<!--this is the Tabs only inbox is for normal members, inbox and outbox is for one of the management (excluding chariperson), inbox, outbox and messages request is for chairpeople-->
+<mat-tab-group>
+    <!--everything for the inbox-->
+    <mat-tab label="Inbox" *ngIf="member">
+        <mat-card class="example-card" *ngFor="let card of obsInBox | async" (click)="test(card)">
 
-    <label maxlength="5">this is a test message</label>
-    <button mat-raised-button style="float: right; background-color: white;color: #005b8f;" (click)="openModal(mytemplate)">View</button>
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
 
-</mat-card>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;"></mat-paginator>
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="openModal(mytemplate, card)">View</button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+
+    <!--everything for the outbox-->
+    <mat-tab label="Outbox" *ngIf="management">
+        <mat-card class="example-card" *ngFor="let card of obsOutBox | async" (click)="test(card)">
+
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
+
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="openModal(mytemplate, card)">View</button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+
+    <!--everything for the pending-->
+    <mat-tab label="Message Requests" *ngIf="chair">
+        <mat-card class="example-card" *ngFor="let card of obsPending | async" (click)="test(card)">
+
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
+
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="openModal(mytemplate, card)">View</button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+</mat-tab-group>
+
+
+<ng-template #myConfirmApprovaltemplate>
+    <span>Your message will be sent for approval by the chairperson, are you sure you want to continue?</span>
+    <button mat-raised-button class="newMessageModal" (click)="generateProfile()">Yes &nbsp; <i class="fa fa-pencil"
+            aria-hidden="true"></i></button>
+    <button mat-raised-button class="deleteMessage" (click)="closeModal()">No &nbsp; <i class="fa fa-trash-o"
+            aria-hidden="true"></i></button>
+</ng-template>
 
 <ng-template #mytemplate>
-        <textarea matInput placeholder="No Message..." value="{{test}}" style="height: 200px;width: 600px;"></textarea>
-        <button mat-raised-button class="newMessage" (click)="generateProfile()">Update &nbsp; <i class="fa fa-pencil" aria-hidden="true"></i></button>
-        <button mat-raised-button class="deleteMessage" (click)="generateProfile()">Delete &nbsp; <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+    <textarea matInput placeholder="No Message..." value="{{messages.message}}"
+        style="height: 200px;width: 600px;"></textarea>
+    <button mat-raised-button class="newMessageModal" (click)="generateProfile()">Update &nbsp; <i class="fa fa-pencil"
+            aria-hidden="true"></i></button>
+    <button mat-raised-button class="deleteMessage" (click)="generateProfile()">Delete &nbsp; <i class="fa fa-trash-o"
+            aria-hidden="true"></i></button>
 </ng-template>
 
-<ng-template #myOpentemplate>
-    <textarea matInput placeholder="Type New Message..." style="height: 200px;width: 600px;"></textarea>
-    <button mat-raised-button class="newMessage" (click)="generateProfile()">Create &nbsp; <i class="fa fa-pencil" aria-hidden="true"></i></button>
+<ng-template #myOpentemplate style="height: 300px;">
+    <form [formGroup]="newMessageForm" style="text-align: center;height: auto;">
+        <h1 class="newMessageTitle">New Message</h1>
+        <div class="card-body">
+            <!--Federation-->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="messageInputs">
+                        <mat-label>Federations</mat-label>
+                        <mat-select multiple [formControl]="feders" [(ngModel)]="selectedFederations"
+                            (openedChange)="onFederationOpenChange(multiUserSearch)"
+                            (ngModelChange)="test()">
+                            <mat-select-trigger>
+                                {{feders.value }}
+                            </mat-select-trigger>
+                            <input #multiUserSearch type="text" autocomplete="off" matInput
+                                placeholder="Search By Federation" (input)="onFederationInputChange($event)" />
+
+                            <mat-option *ngFor="let federation of filteredFederations" [value]="federation.name">
+                                {{federation.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <!--Province-->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="messageInputs">
+                        <mat-label>Province</mat-label>
+                        <mat-select multiple [formControl]="Provns" [(ngModel)]="selectedProvinces"
+                            (openedChange)="onOpenChange(multiUserSearch)">
+                            <mat-select-trigger>
+                                {{Provns.value }}
+                            </mat-select-trigger>
+                            <input #multiUserSearch type="text" autocomplete="off" matInput
+                                placeholder="Search By Province" (input)="onProvinceInputChange($event)" />
+
+                            <mat-option *ngFor="let federation of filteredFederations" [value]="federation.fed">
+                                {{federation.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!--Club-->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="messageInputs">
+                        <mat-label>Club</mat-label>
+                        <mat-select multiple [formControl]="Clbs" [(ngModel)]="selectedClubs"
+                            (openedChange)="onOpenChange(multiUserSearch)">
+                            <mat-select-trigger>
+                                {{Clbs.value }}
+                            </mat-select-trigger>
+                            <input #multiUserSearch type="text" autocomplete="off" matInput
+                                placeholder="Search By Club" (input)="onClubInputChange($event)" />
+
+                            <mat-option *ngFor="let federation of filteredFederations" [value]="federation.fed">
+                                {{federation.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!--Member-->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="messageInputs">
+                        <mat-label>Member</mat-label>
+                        <mat-select multiple [formControl]="membrs" [(ngModel)]="selectedMembers"
+                            (openedChange)="onOpenChange(multiUserSearch)">
+                            <mat-select-trigger>
+                                {{membrs.value }}
+                            </mat-select-trigger>
+                            <input #multiUserSearch type="text" autocomplete="off" matInput
+                                placeholder="Search By  Memeber" (input)="onFMemberInputChange($event)" />
+
+                            <mat-option *ngFor="let federation of filteredFederations" [value]="federation.fed">
+                                {{federation.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!--Message-->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="messageInputs">
+                        <mat-label>
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            &nbsp; Message
+                        </mat-label>
+                        <textarea matInput placeholder="Type New Message..." style="height: 100px;width: 600px;"
+                            type="text" class="form-control" formControlName="the_Message"></textarea>
+                        <!--<span *ngIf="componentIsInvalid('the_Message')" class="e-error">
+                            <small *ngIf="newMessageForm?.get('the_Message')?.hasError('required')">{{
+                                validationMessages.required
+                                }}</small>
+                        </span>-->
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <button mat-raised-button class="newMessageSendButton" (click)="sendMessage()">Send &nbsp; <i
+                class="fa fa-pencil" aria-hidden="true"></i></button>
+    </form>
 </ng-template>
+
+<p>{{selectedFederations}}</p>

@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   facets: FacetDTO[];
   provinces: ProvinceDTO[];
   clubs: ClubDTO[];
+  federation: any[] = [];
   selectedProvince: number;
   selectedFacet: number;
   selectedClub: number;
@@ -72,13 +73,17 @@ export class RegisterComponent implements OnInit {
         userClubs.push(this.selectedClub);
       }
 
+      //add check here to see what federation this is and pass it to backend
+      this.federation.push(1);
+
       this.registrationDTO = {
         userName: this.Email,
         password: this.Password,
         phoneNumber: this.Phone,
         name: this.Name,
         surname: this.Surname,
-        clubs: userClubs
+        clubs: userClubs,
+        federations: this.federation
       }
       this.accountService.register(this.registrationDTO).subscribe(a => {
         this.openSnackBar('Account Created!', 'Close');

@@ -64,8 +64,6 @@ export class LoginComponent implements OnInit {
         this.snackBar.open('Could not log in! Make sure your details are correct', '', {
           duration: 2000,
         }).afterDismissed().subscribe(() => { });
-
-        console.log(result);
       }
     },
     error => {
@@ -73,8 +71,6 @@ export class LoginComponent implements OnInit {
       this.snackBar.open('Could not log in! Make sure your details are correct', '', {
         duration: 2000,
       }).afterDismissed().subscribe(() => { });
-
-      console.log(error);
     });
   }
 

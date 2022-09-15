@@ -1,11 +1,11 @@
 .WelcomePageBlock{
     height: auto;
     width: 100%;
-    background-color: #005b8f;
+    background-color: #06602C;
     }
     .AboutUsCard{
     height: auto;
-    background-color: #005b8f;
+    background-color: #06602C;
     width: 100%;
     }
     .BGImageWithItemsOnTop{
@@ -23,6 +23,11 @@
       .AboutUsDescription{
         text-align:center;
         padding-top: 20px;
+        color: #FECD00;
+        font-size: 40px;
+      }
+      .contactInputs {
+        width: 90%;
       }
       .MainPageTitle{
         font-size: 60px;
@@ -51,8 +56,12 @@
       width: 100%;
       height: 550px;
     }
+    .getInTouchImage{
+      width: 50px;
+      height: 50px;
+    }
     .LatestNewsBlock{
-      background-color: #005b8f;
+      background-color: #06602C;
       height: auto;
       min-height: 100px;
     }
@@ -92,7 +101,7 @@
       color: #005b8f;
     }
     .GetInTouchBlock{
-      background-color: #005b8f;
+      background-color: #06602C;
       height: auto;
       min-height: 100px;
     }
@@ -136,7 +145,7 @@
       width: 280px;
     }
     .footerItems{
-      color: white;
+      color: #FECD00;
     }
     .theIcon{
       vertical-align: middle;

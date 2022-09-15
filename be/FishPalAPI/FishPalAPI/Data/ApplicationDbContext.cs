@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FishPalAPI.Data.Communication;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -30,5 +31,11 @@ namespace FishPalAPI.Data
         public DbSet<Role> Role { get; set; }
 
         public DbSet<OrderItems> OrderItems { get; set; }
+
+        public DbSet<Messages> Messages { get; set; }
+
+        public DbSet<MessageReceivers> MessageReceivers { get; set; }
+
+        public DbSet<Federation> Federation { get; set; }
     }
 }

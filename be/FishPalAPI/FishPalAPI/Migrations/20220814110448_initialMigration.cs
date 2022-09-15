@@ -36,12 +36,81 @@ namespace FishPalAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
+                    Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Facets", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Federation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Federation", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Message = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    InboxOutbox = table.Column<int>(type: "int", nullable: false),
+                    CreatoruserId = table.Column<int>(type: "int", nullable: false),
+                    StatusChangeDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ApprovalLevelRequired = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ItemName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Amount = table.Column<double>(type: "double", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Provinces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Provinces", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -99,24 +168,77 @@ namespace FishPalAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Provinces",
+                name: "MessageReceivers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
+                    AssignedUserId = table.Column<int>(type: "int", nullable: false),
+                    MessagesFKId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MessageReceivers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MessageReceivers_Messages_MessagesFKId",
+                        column: x => x.MessagesFKId,
+                        principalTable: "Messages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Clubs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProvinceId = table.Column<int>(type: "int", nullable: true),
                     FacetId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Provinces", x => x.Id);
+                    table.PrimaryKey("PK_Clubs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Provinces_Facets_FacetId",
+                        name: "FK_Clubs_Facets_FacetId",
                         column: x => x.FacetId,
                         principalTable: "Facets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Clubs_Provinces_ProvinceId",
+                        column: x => x.ProvinceId,
+                        principalTable: "Provinces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "FacetProvince",
+                columns: table => new
+                {
+                    FacetsId = table.Column<int>(type: "int", nullable: false),
+                    ProvincesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FacetProvince", x => new { x.FacetsId, x.ProvincesId });
+                    table.ForeignKey(
+                        name: "FK_FacetProvince_Facets_FacetsId",
+                        column: x => x.FacetsId,
+                        principalTable: "Facets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FacetProvince_Provinces_ProvincesId",
+                        column: x => x.ProvincesId,
+                        principalTable: "Provinces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -125,6 +247,10 @@ namespace FishPalAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Surname = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     userInformationId = table.Column<int>(type: "int", nullable: true),
                     roleId = table.Column<int>(type: "int", nullable: true),
@@ -164,35 +290,6 @@ namespace FishPalAPI.Migrations
                         name: "FK_AspNetUsers_UserInformation_userInformationId",
                         column: x => x.userInformationId,
                         principalTable: "UserInformation",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Clubs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProvinceId = table.Column<int>(type: "int", nullable: true),
-                    FacetId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clubs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Clubs_Facets_FacetId",
-                        column: x => x.FacetId,
-                        principalTable: "Facets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Clubs_Provinces_ProvinceId",
-                        column: x => x.ProvinceId,
-                        principalTable: "Provinces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -300,6 +397,32 @@ namespace FishPalAPI.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ClubUser",
+                columns: table => new
+                {
+                    UsersId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    clubsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClubUser", x => new { x.UsersId, x.clubsId });
+                    table.ForeignKey(
+                        name: "FK_ClubUser_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClubUser_Clubs_clubsId",
+                        column: x => x.clubsId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -358,9 +481,19 @@ namespace FishPalAPI.Migrations
                 column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Provinces_FacetId",
-                table: "Provinces",
-                column: "FacetId");
+                name: "IX_ClubUser_clubsId",
+                table: "ClubUser",
+                column: "clubsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FacetProvince_ProvincesId",
+                table: "FacetProvince",
+                column: "ProvincesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MessageReceivers_MessagesFKId",
+                table: "MessageReceivers",
+                column: "MessagesFKId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -381,7 +514,19 @@ namespace FishPalAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Clubs");
+                name: "ClubUser");
+
+            migrationBuilder.DropTable(
+                name: "FacetProvince");
+
+            migrationBuilder.DropTable(
+                name: "Federation");
+
+            migrationBuilder.DropTable(
+                name: "MessageReceivers");
+
+            migrationBuilder.DropTable(
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -390,7 +535,10 @@ namespace FishPalAPI.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Provinces");
+                name: "Clubs");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -400,6 +548,9 @@ namespace FishPalAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Facets");
+
+            migrationBuilder.DropTable(
+                name: "Provinces");
         }
     }
 }

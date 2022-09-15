@@ -1,7 +1,30 @@
 @media (max-width:700px) {
-    .test{
-background-color: brown;
+    .messageInputs{
+        width: auto; 
+        margin: auto;
     }
+}
+.messageInputs{
+    width: 90%;
+    margin-left: 5%; 
+    margin: auto;
+}
+
+.newMessageModal{
+    background-color: #005b8f;
+    color: white;
+    padding: 5px;
+    margin-left: 15px;
+    margin-top: 30px;
+    float: right;
+}
+.newMessageSendButton{
+    background-color: #005b8f;
+    color: white;
+    padding: 5px;
+    float: right;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .newMessage{
     background-color: #005b8f;
@@ -16,7 +39,13 @@ background-color: brown;
     padding: 5px;
     margin-left: 15px;
     margin-top: 30px;
+    float: right;
 }
+
+.newMessageTitle{
+color: #005b8f;
+}
+
 .example-card {
     width: 90%;
     height: 30px;
@@ -24,7 +53,7 @@ background-color: brown;
     margin-left: 5%;
     margin-top: 15px;
     //border-left: 60px solid #005b8f;
-    background-color: #30779f;
+    background-color: #005b8f;
     color: #fff;
   }
   

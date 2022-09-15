@@ -28,5 +28,6 @@ namespace FishPalAPI.Controllers
         {
             return Ok(clubService.getFacetClubsInProvince(facet, province));
         }
+
     }
 }

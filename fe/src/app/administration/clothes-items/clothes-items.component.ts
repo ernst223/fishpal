@@ -87,7 +87,6 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
   getRecord(name)
   {
     this.addUpdateItem = false;
-    console.log(name);
   }
 
   applyFilter(event: Event) {
@@ -138,7 +137,6 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
 
 
     this.adminService.insertOrderItem(this.clothesItemsModal).subscribe(result => {
-     console.log("this si the result", result);
     });
     //this.myModel.Province = formData.the_Province;
     //this.myModel.photos = this.photosObject;
@@ -178,7 +176,6 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
       this.addUpdateItem = true;
     }
    
-    console.log("inside", templateRef);
     let dialogRef = this.dialog.open(templateRef, {
       width: '70%',
       height: 'auto'
@@ -186,7 +183,6 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       // this.animal = result;
     });
   }

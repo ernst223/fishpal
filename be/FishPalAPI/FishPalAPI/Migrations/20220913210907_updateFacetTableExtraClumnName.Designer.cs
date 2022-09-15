@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220622193327_fixOrderTableNaming")]
-    partial class fixOrderTableNaming
+    [Migration("20220913210907_updateFacetTableExtraClumnName")]
+    partial class updateFacetTableExtraClumnName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,21 @@ namespace FishPalAPI.Migrations
                     b.ToTable("FacetProvince");
                 });
 
+            modelBuilder.Entity("FederationUser", b =>
+                {
+                    b.Property<int>("federationsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("federationsId", "usersId");
+
+                    b.HasIndex("usersId");
+
+                    b.ToTable("FederationUser");
+                });
+
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.Property<int>("Id")
@@ -73,7 +88,75 @@ namespace FishPalAPI.Migrations
                     b.ToTable("Clubs");
                 });
 
+            modelBuilder.Entity("FishPalAPI.Data.Communication.MessageReceivers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("AssignedUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("MessagesFKId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessagesFKId");
+
+                    b.ToTable("MessageReceivers");
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Communication.Messages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ApproverRequired")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("CreatoruserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("InboxOutbox")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StatusChangeDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("FishPalAPI.Data.Facet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Federation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Facets");
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Federation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,7 +167,7 @@ namespace FishPalAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Facets");
+                    b.ToTable("Federation");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.OrderItems", b =>
@@ -384,6 +467,21 @@ namespace FishPalAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FederationUser", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Federation", null)
+                        .WithMany()
+                        .HasForeignKey("federationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("usersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.HasOne("FishPalAPI.Data.Facet", "Facet")
@@ -397,6 +495,17 @@ namespace FishPalAPI.Migrations
                     b.Navigation("Facet");
 
                     b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Communication.MessageReceivers", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Communication.Messages", "Messages")
+                        .WithMany("AssignedUsers")
+                        .HasForeignKey("MessagesFKId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.User", b =>
@@ -463,6 +572,11 @@ namespace FishPalAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Communication.Messages", b =>
+                {
+                    b.Navigation("AssignedUsers");
                 });
 #pragma warning restore 612, 618
         }

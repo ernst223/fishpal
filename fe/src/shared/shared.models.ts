@@ -5,6 +5,7 @@ export interface RegistrationDTO {
   surname: string;
   phoneNumber: string;
   clubs: number[];
+  federations: number[];
 }
 export interface ResetPasswordDTO {
   token: string;
@@ -18,6 +19,11 @@ export interface FacetDTO {
   provinces: ProvinceDTO[];
 }
 
+export interface FederationDTO {
+  Id: number;
+  Name: string;
+}
+
 export interface ProvinceDTO {
   id: number;
   description: string;
@@ -28,4 +34,15 @@ export interface ClubDTO {
   description: string;
   province: string;
   facet: string;
+}
+
+export interface MessageDTO {
+  Id: number;
+  Message: string,
+  CreationDate: Date,
+  Status: number,
+  InboxOutbox: number,
+  CreatoruserId: string,
+  StatusChangeDate?: Date,
+  ApproverRequired?: string
 }

@@ -32,8 +32,10 @@ import { AnglingAdministrationHistoryComponent } from './user-information/anglin
 import { OtherAnglingAchievementsComponent } from './user-information/other-angling-achievements/other-angling-achievements.component';
 import { PersonalInformationComponent } from './user-information/personal-information/personal-information.component';
 import { AdministrationService } from './administration.service';
+import {MatTabsModule} from '@angular/material/tabs';
 @NgModule({
   imports: [
+    MatTabsModule,
     ReactiveFormsModule,
     QRCodeModule,
     CommonModule,

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Item Orders\" />
     <Folder Include="Data\Scripts\" />
   </ItemGroup>
 

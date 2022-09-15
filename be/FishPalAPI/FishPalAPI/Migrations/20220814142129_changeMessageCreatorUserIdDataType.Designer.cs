@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814142129_changeMessageCreatorUserIdDataType")]
+    partial class changeMessageCreatorUserIdDataType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,21 +49,6 @@ namespace FishPalAPI.Migrations
                     b.ToTable("FacetProvince");
                 });
 
-            modelBuilder.Entity("FederationUser", b =>
-                {
-                    b.Property<int>("federationsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("usersId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("federationsId", "usersId");
-
-                    b.HasIndex("usersId");
-
-                    b.ToTable("FederationUser");
-                });
-
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.Property<int>("Id")
@@ -92,8 +79,8 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AssignedUserId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("AssignedUserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MessagesFKId")
                         .HasColumnType("int");
@@ -111,10 +98,10 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ApproverRequired")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("ApprovalLevelRequired")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("CreatoruserId")
@@ -129,7 +116,7 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StatusChangeDate")
+                    b.Property<DateTime>("StatusChangeDate")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -142,9 +129,6 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("Federation")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -465,21 +449,6 @@ namespace FishPalAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FederationUser", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.Federation", null)
-                        .WithMany()
-                        .HasForeignKey("federationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FishPalAPI.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("usersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.HasOne("FishPalAPI.Data.Facet", "Facet")
@@ -498,7 +467,7 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("FishPalAPI.Data.Communication.MessageReceivers", b =>
                 {
                     b.HasOne("FishPalAPI.Data.Communication.Messages", "Messages")
-                        .WithMany("AssignedUsers")
+                        .WithMany("AssignedUserId")
                         .HasForeignKey("MessagesFKId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -574,7 +543,7 @@ namespace FishPalAPI.Migrations
 
             modelBuilder.Entity("FishPalAPI.Data.Communication.Messages", b =>
                 {
-                    b.Navigation("AssignedUsers");
+                    b.Navigation("AssignedUserId");
                 });
 #pragma warning restore 612, 618
         }

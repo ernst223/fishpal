@@ -11,11 +11,9 @@ export class MenuService {
 
     const role = localStorage.getItem('role');
     const items: MenuItem[] = [];
-console.log("here is the roles");
-console.log(role);
-console.log("here is the roles");
+
     switch (role) {
-      case 'A3':
+      case 'A0':
         items.push({
           title: 'Dashboard',
           route: '/dashboard',

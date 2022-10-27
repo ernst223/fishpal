@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PostmarkDotNet;
 using System.Threading.Tasks;
+using FishPalAPI.Models.MobileAppModels;
 
 namespace FishPalAPI.Services
 {
@@ -18,6 +19,26 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
+        public async Task<object> allUserInfo(string username, int? federation)
+        {
+            var query = context.Users;
+            if (federation != null)
+            {
+                query.Include(a => a.role).Include(a => a.federations).Include(a => a.clubs).Where(o => o.UserName == username && o.federations.Any(x => x.Id == federation));
+            }
+            else {
+                query.Include(a => a.role).Include(a => a.federations).Include(a => a.clubs).Where(o => o.UserName == username);
+            }
+
+            var userRecord = query.FirstOrDefaultAsync();
+
+            if (userRecord != null)
+            {
+                return userRecord;//changes needs to be made here after merge with ernst
+            }
+            return userRecord;//changes needs to be made here after merge with ernst
+        }
+        
         public string getUserRole(User user)
         {
             var tempUser = context.Users.Include(a => a.role).Where(o => o.Id == user.Id).FirstOrDefault();

@@ -19,7 +19,7 @@ export class ConfirmEmailComponent implements OnInit {
   ngOnInit() {
       this.service.confirmEmail(this.route.snapshot.paramMap.get('id')).subscribe(a => {
         this.openSnackBar('Email Address Confirmed', 'Close');
-        this.title = 'Congratiolations! Email Address Confirmed.';
+        this.title = 'Congratulations! Email Address Confirmed.';
       }, error => {
         this.openSnackBar('Could Not Confirm the Email Address', 'Close');
         this.title = 'Could not confirm this Users Email Address';

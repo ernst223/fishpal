@@ -11,10 +11,12 @@ namespace FishPalAPI.Controllers
     public class GeneralController: Controller
     {
         private ClubService clubService;
+        private UserService userService;
 
         public GeneralController()
         {
             clubService = new ClubService();
+            userService = new UserService();
         }
 
         [HttpGet("facets")]
@@ -27,6 +29,12 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> getFacetClubsByProvince(int facet, int province)
         {
             return Ok(clubService.getFacetClubsInProvince(facet, province));
+        }
+
+        [HttpGet("allUserInfo/{username}/{federation}")]
+        public async Task<IActionResult> allUserInfo(string username, int? federation)
+        {
+            return Ok(userService.allUserInfo(username, federation));
         }
 
     }

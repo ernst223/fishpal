@@ -129,11 +129,22 @@ namespace FishPalAPI.Services
             {
                 role = tempRoleToAdd,
                 club = club,
-                creationTime = DateTime.Now
+                creationTime = DateTime.Now,
+                userInformation = getDefaultUserInformation()
             };
 
             user.profiles.Add(tempProfileToAdd);
             context.SaveChanges();
+        }
+
+        public UserInformation getDefaultUserInformation()
+        {
+            PersonalInformation personalInfo = new PersonalInformation();
+
+            return new UserInformation
+            {
+                personalInformation = personalInfo
+            };
         }
 
         public bool removeUserProfiles(string userId)

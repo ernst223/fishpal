@@ -37,5 +37,6 @@ namespace FishPalAPI.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentMessage> DocumentMessages { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<PersonalInformation> PersonalInformation { get; set; }
     }
 }

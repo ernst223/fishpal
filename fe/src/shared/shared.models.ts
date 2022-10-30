@@ -67,3 +67,22 @@ export interface MessageDTO {
   StatusChangeDate?: Date,
   ApproverRequired?: string
 }
+
+export interface PersonalInformationDTO {
+  name: string;
+  nickName: string;
+  surname: string;
+  idNumber: string;
+  dob: Date;
+  nationality: string;
+  ethnicGroup: string;
+  gender: string;
+  passportNumber: string;
+  passportExpirationDate: Date;
+  homeAddress: string;
+  postalAddress: string;
+  phone: string;
+  cell: string;
+  skipperLicenseNumber: string;
+}
+

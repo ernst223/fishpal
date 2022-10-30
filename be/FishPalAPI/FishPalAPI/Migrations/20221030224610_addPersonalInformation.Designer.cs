@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221030224610_addPersonalInformation")]
+    partial class addPersonalInformation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,11 +245,8 @@ namespace FishPalAPI.Migrations
                     b.Property<string>("nickName")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("passportExpirationDate")
+                    b.Property<DateTime>("passportNumber")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("passportNumber")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("phone")
                         .HasColumnType("longtext");

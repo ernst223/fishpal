@@ -2,8 +2,6 @@
     <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
     </mat-progress-spinner>
 
-    
-
     <h2 class="RegisterHeader">Personal Information Page</h2>
 
     <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
@@ -15,7 +13,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; FullNames
                 </mat-label>
-                <input [(ngModel)]="FullName" matInput>
+                <input [(ngModel)]="personalInformation.name" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -23,7 +21,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Nickname
                 </mat-label>
-                <input [(ngModel)]="Nickname" matInput>
+                <input [(ngModel)]="personalInformation.nickName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -31,7 +29,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Surname
                 </mat-label>
-                <input [(ngModel)]="Surname" matInput>
+                <input [(ngModel)]="personalInformation.surname" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -39,7 +37,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">assignment_ind</mat-icon>&nbsp; ID Number
                 </mat-label>
-                <input [(ngModel)]="IdNumber" matInput>
+                <input [(ngModel)]="personalInformation.idNumber" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -52,7 +50,7 @@
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Date Of Birth</mat-label>
-                <input matInput [matDatepicker]="picker">
+                <input [(ngModel)]="personalInformation.dob" matInput [matDatepicker]="picker">
                 <mat-hint>YYYY/MM/DD</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -63,7 +61,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">language</mat-icon>&nbsp; Nationality
                 </mat-label>
-                <input [(ngModel)]="Nationality" matInput>
+                <input [(ngModel)]="personalInformation.nationality" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -71,7 +69,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">accessibility_new</mat-icon>&nbsp; Ethnic Group
                 </mat-label>
-                <input [(ngModel)]="EthnicGroup" matInput>
+                <input [(ngModel)]="personalInformation.ethnicGroup" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -79,7 +77,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">wc</mat-icon>&nbsp; Gender
                 </mat-label>
-                <input [(ngModel)]="Gender" matInput>
+                <input [(ngModel)]="personalInformation.gender" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -87,15 +85,15 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">assignment_ind</mat-icon>&nbsp; Passport Number
                 </mat-label>
-                <input [(ngModel)]="PassportNumber" matInput>
+                <input [(ngModel)]="personalInformation.passportNumber" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Passport Expiration Date</mat-label>
-                <input matInput [matDatepicker]="picker1">
+                <input [(ngModel)]="personalInformation.passportExpirationDate" matInput [matDatepicker]="picker1">
                 <mat-hint>YYYY/MM/DD</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
         </mat-grid-tile>
@@ -111,7 +109,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Home Address
                 </mat-label>
-                <textarea [(ngModel)]="HomeAddress" matInput></textarea>
+                <textarea [(ngModel)]="personalInformation.homeAddress" matInput></textarea>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -119,7 +117,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Postal Address
                 </mat-label>
-                <textarea [(ngModel)]="PostalAddress" matInput></textarea>
+                <textarea [(ngModel)]="personalInformation.postalAddress" matInput></textarea>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -127,7 +125,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">mail</mat-icon>&nbsp; Email Address (Username)
                 </mat-label>
-                <input [(ngModel)]="EmailAddress" matInput>
+                <input [(ngModel)]="emailAddress" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -135,7 +133,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Phone (Home)
                 </mat-label>
-                <input [(ngModel)]="Phonehome" matInput>
+                <input [(ngModel)]="personalInformation.phone" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -143,7 +141,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Phone (Work)
                 </mat-label>
-                <input [(ngModel)]="Phonehome" matInput>
+                <input [(ngModel)]="personalInformation.phone" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -151,7 +149,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Cell No.
                 </mat-label>
-                <input [(ngModel)]="Cell" matInput>
+                <input [(ngModel)]="personalInformation.cell" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -159,7 +157,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">assignment_ind</mat-icon>&nbsp; Skippers License Number
                 </mat-label>
-                <input [(ngModel)]="SkipperLicenseNumber" matInput>
+                <input [(ngModel)]="personalInformation.skipperLicenseNumber" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -173,7 +171,7 @@
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+            <button mat-raised-button class="registerButton" (click)=update()>Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

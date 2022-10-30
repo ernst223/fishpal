@@ -12,5 +12,6 @@ namespace FishPalAPI.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public PersonalInformation personalInformation { get; set; }
     }
 }

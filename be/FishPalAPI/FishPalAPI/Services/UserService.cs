@@ -19,70 +19,35 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
-        /*public async mobileUserInfoDTO allUserInfo(string userId, int? federationId)
+        public List<mobileUserInfoDTO> allUserInfo(string userName, int? federationId)
         {
-            User userDetails = new User();
-
-            var user = context.Users.Include(x => x.profiles).ThenInclude(x => x.club).Where(x => x.Id == userId).FirstOrDefault();
-
-            var userProfiles = user.profiles;
+            var currentUser = context.Users.Include(x => x.profiles).ThenInclude(x => x.club).ThenInclude(x => x.Province).ThenInclude(x => x.Facets).Where(x => x.UserName == userName).FirstOrDefault();
 
             if (federationId != null)
             {
-                userDetails = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Where(o => o.Id == userProfile.Id && o.federations.Any(x => x.Id == federationId)).FirstOrDefault();
-            }
-            else
-            {
-                foreach (var item in userProfiles)
-                {
-
-                }
-                userDetails = context.UserProfiles.Include(a => a.club).ThenInclude(x => x.Facet).ThenInclude(a => a.Provinces).Where(o => o.Id == userId).FirstOrDefault();
+                currentUser.profiles.Where(x => x.club.Facet.Id == federationId);
             }
 
-            mobileUserInfoDTO result = new mobileUserInfoDTO();
-            result = new mobileUserInfoDTO()
+            List<mobileUserInfoDTO> result = new List<mobileUserInfoDTO>();
+            foreach (var profile in currentUser.profiles)
             {
-                Id = userDetails.Id,
-                Name = userDetails.Name,
-                Surname = userDetails.Surname,
-                federations = getMobileAppUserFederationInfo(userDetails.federations),
-                clubs = getMobileAppUserClubsInfo(userDetails.clubs)
-            };
-
-            return result;
-        }
-
-        public List<FederationDTO> getMobileAppUserFederationInfo(List<Federation> federations)
-        {
-            List<FederationDTO> result = new List<FederationDTO>();
-            foreach (var entry in federations)
-            {
-                result.Add(new FederationDTO()
+                result.Add(new mobileUserInfoDTO()
                 {
-                    Id = entry.Id,
-                    Name = entry.Name,
-                    Type = entry.Type,
-                    base64Logo = entry.base64Logo
+                    ProfileId = profile.Id,
+                    UserId = currentUser.Id,
+                    Name = currentUser.Name,
+                    Surname = currentUser.Surname,
+                    FacetName = profile.club.Facet.Federation,
+                    FacetId = profile.club.Facet.Id,
+                    ClubId = profile.club.Id,
+                    ClubName = profile.club.Name,
+                    Province = profile.club.Province.Name,
+                    ProvinceId = profile.club.Province.Id,
+                    ProfileCreationDate = profile.creationTime
                 });
             }
             return result;
         }
-
-        public List<ClubDTO> getMobileAppUserClubsInfo(List<Club> clubs)
-        {
-            List<ClubDTO> result = new List<ClubDTO>();
-            foreach (var entry in clubs)
-            {
-                result.Add(new ClubDTO()
-                {
-                    Id = entry.Id,
-                    Name = entry.Name,
-                    FacetId = entry.Facet.Id
-                });
-            }
-            return result;
-        }*/
 
         public List<LoginProfilesDTO> getUserProfiles(User user)
         {
@@ -163,7 +128,8 @@ namespace FishPalAPI.Services
             UserProfile tempProfileToAdd = new UserProfile()
             {
                 role = tempRoleToAdd,
-                club = club
+                club = club,
+                creationTime = DateTime.Now
             };
 
             user.profiles.Add(tempProfileToAdd);

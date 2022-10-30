@@ -15,5 +15,6 @@ namespace FishPalAPI.Data
         public Role role { get; set; }
         public UserInformation userInformation { get; set; }
         public Club club { get; set; }
+        public DateTime creationTime { get; set; }
     }
 }

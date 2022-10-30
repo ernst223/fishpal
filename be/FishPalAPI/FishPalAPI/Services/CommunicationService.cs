@@ -1,6 +1,7 @@
 ﻿using FishPalAPI.Data;
 using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
+using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DocumentMessageDTO = FishPalAPI.Models.DocumentMessageModels.DocumentMessageDTO;
 
 namespace FishPalAPI.Services
 {
@@ -271,6 +273,43 @@ namespace FishPalAPI.Services
                 });
             }
             return result;
+        }
+
+        public void uploadDocument(UploadDocumentMessageDTO document)
+        {
+            Document documentToAdd = new Document();
+            documentToAdd.Aproved = false;
+            documentToAdd.CreatedDate = DateTime.Now;
+            documentToAdd.Note = document.note;
+            documentToAdd.Title = document.title;
+            documentToAdd.SendFrom = document.userName;
+            context.Documents.Add(documentToAdd);
+            context.SaveChanges();
+        }
+
+        public DocumentMessageDTO[] getInboxDocumentMessages()
+        {
+            return null;
+        }
+
+        public DocumentMessageDTO[] getOutboxDocumentMessages()
+        {
+            return null;
+        }
+
+        public DocumentMessageDTO[] getPendingDocumentMessages()
+        {
+            return null;
+        }
+
+        public DocumentMessageDTO[] aproveDocumentMessage(int id)
+        {
+            return null;
+        }
+
+        public DocumentMessageDTO[] declineDocumentMessage(int id)
+        {
+            return null;
         }
 
     }

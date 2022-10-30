@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014092423_addDocuments")]
+    partial class addDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,57 +137,6 @@ namespace FishPalAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AprovalDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Aproved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SendFrom")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.DocumentMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DocumentSendId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SendFrom")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SendTo")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentSendId");
-
-                    b.ToTable("DocumentMessages");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Facet", b =>
@@ -555,15 +506,6 @@ namespace FishPalAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.DocumentMessage", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.Document", "DocumentSend")
-                        .WithMany()
-                        .HasForeignKey("DocumentSendId");
-
-                    b.Navigation("DocumentSend");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.User", b =>

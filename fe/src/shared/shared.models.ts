@@ -19,6 +19,21 @@ export interface FacetDTO {
   provinces: ProvinceDTO[];
 }
 
+export interface UploadDocumentMessage {
+  data: FormData;
+  userName: string;
+  sendTo: number;
+  title: string;
+  note: string;
+}
+
+export interface MyDocumentMessages {
+  id: number;
+  title: string;
+  note: string;
+  sendFrom: string;
+}
+
 export interface FederationDTO {
   Id: number;
   Name: string;

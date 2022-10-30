@@ -19,6 +19,71 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
+        /*public async mobileUserInfoDTO allUserInfo(string userId, int? federationId)
+        {
+            User userDetails = new User();
+
+            var user = context.Users.Include(x => x.profiles).ThenInclude(x => x.club).Where(x => x.Id == userId).FirstOrDefault();
+
+            var userProfiles = user.profiles;
+
+            if (federationId != null)
+            {
+                userDetails = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Where(o => o.Id == userProfile.Id && o.federations.Any(x => x.Id == federationId)).FirstOrDefault();
+            }
+            else
+            {
+                foreach (var item in userProfiles)
+                {
+
+                }
+                userDetails = context.UserProfiles.Include(a => a.club).ThenInclude(x => x.Facet).ThenInclude(a => a.Provinces).Where(o => o.Id == userId).FirstOrDefault();
+            }
+
+            mobileUserInfoDTO result = new mobileUserInfoDTO();
+            result = new mobileUserInfoDTO()
+            {
+                Id = userDetails.Id,
+                Name = userDetails.Name,
+                Surname = userDetails.Surname,
+                federations = getMobileAppUserFederationInfo(userDetails.federations),
+                clubs = getMobileAppUserClubsInfo(userDetails.clubs)
+            };
+
+            return result;
+        }
+
+        public List<FederationDTO> getMobileAppUserFederationInfo(List<Federation> federations)
+        {
+            List<FederationDTO> result = new List<FederationDTO>();
+            foreach (var entry in federations)
+            {
+                result.Add(new FederationDTO()
+                {
+                    Id = entry.Id,
+                    Name = entry.Name,
+                    Type = entry.Type,
+                    base64Logo = entry.base64Logo
+                });
+            }
+            return result;
+        }
+
+        public List<ClubDTO> getMobileAppUserClubsInfo(List<Club> clubs)
+        {
+            List<ClubDTO> result = new List<ClubDTO>();
+            foreach (var entry in clubs)
+            {
+                result.Add(new ClubDTO()
+                {
+                    Id = entry.Id,
+                    Name = entry.Name,
+                    FacetId = entry.Facet.Id
+                });
+            }
+            return result;
+        }*/
+
         public List<LoginProfilesDTO> getUserProfiles(User user)
         {
             var tempUser = context.Users.Include(a => a.profiles).Where(o => o.Id == user.Id).FirstOrDefault();

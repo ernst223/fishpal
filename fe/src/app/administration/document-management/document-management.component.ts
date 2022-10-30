@@ -6,9 +6,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, ReplaySubject, Subscriber } from 'rxjs';
 import { MessageDTO, MyDocumentMessages, UploadDocumentMessage } from 'src/shared/shared.models';
 import { AdministrationService } from '../administration.service';
+import { environment } from 'src/environments/environment';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-document-management',
@@ -38,20 +40,18 @@ export class DocumentManagementComponent implements OnInit {
   ];
 
   member: boolean = true;
-  management: boolean = true;
-  chair: boolean = true;
+  management: boolean = false;
+  chair: boolean = false;
 
   selectedSendOption: number;
-  theFile: any;
+  theFile: File;
   fileName = '';
   title: string;
   note: string
   uploadData: UploadDocumentMessage = {
-    data: null,
     note: null,
-    userName: null,
     title: null,
-    sendTo: null
+    documentId: null
   }
 
   messages: MessageDTO[];
@@ -61,7 +61,26 @@ export class DocumentManagementComponent implements OnInit {
 
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
+    this.setPrivileges();
     this.setupDataStream();
+  }
+
+  setPrivileges() {
+    const role = localStorage.getItem('role');
+    if(this.contains(role, ['A0', 'A1', 'B0', 'B1', 'C0', 'C1', 'D0', 'D1'])) {
+      this.management = true;
+    }
+    if(this.contains(role, ['A1', 'B1', 'C1','D1'])) {
+      this.chair = true;
+    }
+  }
+
+  contains(str, arr){
+    var value = 0;
+    arr.forEach(function(word){
+      value = value + str.includes(word);
+    });
+    return (value === 1)
   }
 
   setupDataStream() {
@@ -83,6 +102,10 @@ export class DocumentManagementComponent implements OnInit {
         this.pendingDataSource.data = this.pendingData;
       });
     }
+  }
+
+  openDocument(id) {
+    window.open(environment.apiUrl + "documents/" + id + ".pdf", '_blank');
   }
 
   ngAfterViewInit() {
@@ -148,16 +171,14 @@ export class DocumentManagementComponent implements OnInit {
 
   aproveDocument(id) {
     this.service.aprovePendingDocumentMessage(id).subscribe(a => {
-      this.pendingData = a;
-      this.pendingDataSource.data = this.pendingData;
+      this.setupDataStream();
       this.openSnackBar("Document status has been updated", "close");
     });
   }
 
   declineDocument(id) {
     this.service.declinePendingDocumentMessage(id).subscribe(a => {
-      this.pendingData = a;
-      this.pendingDataSource.data = this.pendingData;
+      this.setupDataStream();
       this.openSnackBar("Document status has been updated", "close");
     });
   }
@@ -166,25 +187,32 @@ export class DocumentManagementComponent implements OnInit {
     this.openSnackBar('This may take a while, Please wait...', 'Close');
     this.uploadData.note = this.note;
     this.uploadData.title = this.title;
-    this.uploadData.userName = localStorage.getItem('loggedInUserEmail');
-    this.uploadData.sendTo = this.selectedSendOption;
-    const formData = new FormData();
-    formData.append('file', this.theFile);
-    this.uploadData.data = formData;
 
     if (this.title === null || this.title === undefined || this.title === "" ||
       this.selectedSendOption === null || this.selectedSendOption === undefined ||
       this.theFile === null || this.theFile === undefined) {
       this.openSnackBar("Please fill in all the values", "close");
     } else {
-      this.service.uploadDocumentMessage(this.uploadData).subscribe(a => {
-        this.openSnackBar('Process Completed', 'Close');
-        this.note = "";
-        this.title = "";
-        this.theFile = null;
-        this.dialog.closeAll();
+      this.service.uploadDocumentMessage(this.theFile, this.selectedSendOption).subscribe(a => {
+        console.log(a);
+        this.uploadData.documentId = a;
+        this.service.updateDocumentMessage(this.uploadData).subscribe(a => {
+          this.openSnackBar('Process Completed', 'Close');
+          this.note = "";
+          this.title = "";
+          this.theFile = null;
+          this.dialog.closeAll();
+        });
       });
     }
+  }
+
+  convertFile(file: File): Observable<string> {
+    const result = new ReplaySubject<string>(1);
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (event) => result.next(btoa(reader.result.toString()));
+    return result;
   }
 
   openSnackBar(message: string, action: string) {

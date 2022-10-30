@@ -28,38 +28,48 @@ export class SharedService {
   }
 
   // Uploading a document File
-  public uploadDocumentMessage(data: UploadDocumentMessage): Observable<any> {
-    return this.httpClient.post(this.connectionstring + 'api/communication/document/send',
+  public uploadDocumentMessage(data: File, sendTo: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/communication/document/send/' + localStorage.getItem('profileId') + "/" + sendTo,
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateDocumentMessage(data: UploadDocumentMessage): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/communication/document/update',
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
 
   public getDocumentInboxMessages(): Observable<Array<MyDocumentMessages>> {
-    return this.httpClient.get(this.connectionstring + 'api/communication/document/inbox', {
+    return this.httpClient.get(this.connectionstring + 'api/communication/document/inbox/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
 
   public getDocumentOutboxMessages(): Observable<Array<MyDocumentMessages>> {
-    return this.httpClient.get(this.connectionstring + 'api/communication/document/outbox', {
+    return this.httpClient.get(this.connectionstring + 'api/communication/document/outbox/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
 
   public getPendingDocumentMessages(): Observable<Array<MyDocumentMessages>> {
-    return this.httpClient.get(this.connectionstring + 'api/communication/document/pending', {
+    return this.httpClient.get(this.connectionstring + 'api/communication/document/pending/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
 
-  public aprovePendingDocumentMessage(id: number): Observable<Array<MyDocumentMessages>> {
+  public aprovePendingDocumentMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/aprove/' + id, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
 
-  public declinePendingDocumentMessage(id: number): Observable<Array<MyDocumentMessages>> {
+  public declinePendingDocumentMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/decline/' + id, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));

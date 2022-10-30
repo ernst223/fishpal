@@ -16,27 +16,27 @@
                 </div>
                 <mat-table fxFlex="100" #inboxTable [dataSource]="inboxDataSource" matSort>
                     <ng-container matColumnDef="Id">
-                        <mat-header-cell fxFlex="10" *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.id}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="SendFrom">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Title">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.title}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Note">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.note}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Actions">
                         <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
                             <button matTooltip="View Document" mat-icon-button color="primary"
-                                (click)="ChangeEditMe(element.id)">
+                                (click)="openDocument(element.id)">
                                 <mat-icon aria-label="">remove_red_eye</mat-icon>
                             </button>
                         </mat-cell>
@@ -67,27 +67,27 @@
                 </div>
                 <mat-table fxFlex="100" #outboxTable [dataSource]="outboxDataSource" matSort>
                     <ng-container matColumnDef="Id">
-                        <mat-header-cell fxFlex="10" *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.id}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="SendFrom">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Title">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.title}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Note">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.note}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Actions">
                         <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
                             <button matTooltip="View Document" mat-icon-button color="primary"
-                                (click)="ChangeEditMe(element.id)">
+                                (click)="openDocument(element.id)">
                                 <mat-icon aria-label="">remove_red_eye</mat-icon>
                             </button>
                         </mat-cell>
@@ -118,27 +118,27 @@
                 </div>
                 <mat-table fxFlex="100" #pendingTable [dataSource]="pendingDataSource" matSort>
                     <ng-container matColumnDef="Id">
-                        <mat-header-cell fxFlex="10" *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.id}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="SendFrom">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Title">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.title}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Note">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
-                        <mat-cell fxFlex="10" *matCellDef="let element"> {{element.note}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Actions">
                         <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
                             <button matTooltip="View Document" mat-icon-button color="primary"
-                                (click)="ChangeEditMe(element.id)">
+                                (click)="openDocument(element.id)">
                                 <mat-icon aria-label="">remove_red_eye</mat-icon>
                             </button>
                             <button matTooltip="Aprove Document" mat-icon-button color="primary"

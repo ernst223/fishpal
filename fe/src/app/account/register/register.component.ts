@@ -41,6 +41,7 @@ export class RegisterComponent implements OnInit {
   setupDataStream() {
     this.sharedService.getAllFacets().subscribe(a => {
       this.facets = a;
+      console.log(this.facets);
     });
   }
 

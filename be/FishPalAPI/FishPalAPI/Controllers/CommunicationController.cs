@@ -3,6 +3,7 @@ using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -132,41 +133,49 @@ namespace FishPalAPI.Controllers
             return Ok(communicationService.getAllPeople(userEmail));
         }
 
-        [HttpPost("document/send")]
-        public async Task<IActionResult> uploadDocumentMessage([FromBody] UploadDocumentMessageDTO documentMessageDTO)
+        [HttpPost("document/send/{profileId}/{sendTo}")]
+        public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, int sendTo)
         {
-            communicationService.uploadDocument(documentMessageDTO);
+            return Ok(await communicationService.uploadDocumentAsync(file, profileId, sendTo));
+        }
+
+        [HttpPut("document/update")]
+        public async Task<IActionResult> updateDocumentMessage([FromBody] UploadDocumentMessageDTO uploadDocumentMessageDTO)
+        {
+            communicationService.updateDocument(uploadDocumentMessageDTO);
             return Ok();
         }
 
-        [HttpGet("document/inbox")]
-        public async Task<IActionResult> getDocumentMessageInbox()
+        [HttpGet("document/inbox/{profileId}")]
+        public async Task<IActionResult> getDocumentMessageInbox(int profileId)
         {
-            return Ok(communicationService.getInboxDocumentMessages());
+            return Ok(communicationService.getInboxDocumentMessages(profileId));
         }
 
-        [HttpGet("document/outbox")]
-        public async Task<IActionResult> getDocumentMessageOutbox()
+        [HttpGet("document/outbox/{profileId}")]
+        public async Task<IActionResult> getDocumentMessageOutbox(int profileId)
         {
-            return Ok(communicationService.getOutboxDocumentMessages());
+            return Ok(communicationService.getOutboxDocumentMessages(profileId));
         }
 
-        [HttpGet("document/pending")]
-        public async Task<IActionResult> getDocumentMessagePending()
+        [HttpGet("document/pending/{profileId}")]
+        public async Task<IActionResult> getDocumentMessagePending(int profileId)
         {
-            return Ok(communicationService.getPendingDocumentMessages());
+            return Ok(communicationService.getPendingDocumentMessages(profileId));
         }
 
         [HttpGet("document/aprove/{id}")]
         public async Task<IActionResult> aprovePendingDocument(int id)
         {
-            return Ok(communicationService.aproveDocumentMessage(id));
+            communicationService.aproveDocumentMessage(id);
+            return Ok();
         }
 
         [HttpGet("document/decline/{id}")]
         public async Task<IActionResult> declinePendingDocument(int id)
         {
-            return Ok(communicationService.declineDocumentMessage(id));
+            communicationService.declineDocumentMessage(id);
+            return Ok();
         }
     }
 }

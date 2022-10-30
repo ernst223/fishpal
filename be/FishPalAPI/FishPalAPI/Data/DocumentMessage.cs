@@ -10,8 +10,7 @@ namespace FishPalAPI.Data
     {
         [Key]
         public int Id { get; set; }
-        public string SendTo { get; set; }
-        public string SendFrom { get; set; }
-        public Document DocumentSend { get; set; }
+        public UserProfile Recipient { get; set; }
+        public Document Document { get; set; }
     }
 }

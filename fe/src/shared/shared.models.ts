@@ -23,14 +23,12 @@ export interface LoginProfilesDTO {
 
 export interface FacetDTO {
   id: number;
-  description: string;
+  name: string;
   provinces: ProvinceDTO[];
 }
 
 export interface UploadDocumentMessage {
-  data: FormData;
-  userName: string;
-  sendTo: number;
+  documentId: number;
   title: string;
   note: string;
 }
@@ -49,12 +47,12 @@ export interface FederationDTO {
 
 export interface ProvinceDTO {
   id: number;
-  description: string;
+  name: string;
 }
 
 export interface ClubDTO {
   id: number;
-  description: string;
+  name: string;
   province: string;
   facet: string;
 }

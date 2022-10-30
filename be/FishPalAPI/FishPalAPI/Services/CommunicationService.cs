@@ -3,10 +3,12 @@ using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DocumentMessageDTO = FishPalAPI.Models.DocumentMessageModels.DocumentMessageDTO;
@@ -277,42 +279,270 @@ namespace FishPalAPI.Services
             return result;
         }
 
-        public void uploadDocument(UploadDocumentMessageDTO document)
+        public void updateDocument(UploadDocumentMessageDTO T)
         {
-            Document documentToAdd = new Document();
-            documentToAdd.Aproved = false;
-            documentToAdd.CreatedDate = DateTime.Now;
-            documentToAdd.Note = document.note;
-            documentToAdd.Title = document.title;
-            documentToAdd.SendFrom = document.userName;
-            context.Documents.Add(documentToAdd);
+            var document = context.Documents.Where(a => a.Id == T.documentId).FirstOrDefault();
+            document.Title = T.title;
+            document.Note = T.note;
             context.SaveChanges();
         }
 
-        public DocumentMessageDTO[] getInboxDocumentMessages()
+        public async Task<int> uploadDocumentAsync(IFormFile document, int profileId, int sendTo)
         {
+            // Saving the document meta data
+            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
+            Document documentToAdd = new Document();
+            documentToAdd.Aproved = false;
+            documentToAdd.CreatedDate = DateTime.Now;
+            documentToAdd.CreatedBy = currentProfile;
+            context.Documents.Add(documentToAdd);
+            context.SaveChanges();
+
+            // Store file on server
+            documentToAdd = context.Documents.OrderByDescending(a => a.Id).FirstOrDefault();
+            await UploadFile(document, documentToAdd.Id);
+
+            // Send to all in same role
+            if (sendTo == 0)
+            {
+                foreach (var profile in getProfilesInSameRole(currentProfile))
+                {
+                    context.DocumentMessages.Add(new DocumentMessage()
+                    {
+                        Document = documentToAdd,
+                        Recipient = profile
+                    });
+                }
+            }
+            // Send to all in lower roles
+            else if (sendTo == 1)
+            {
+                foreach (var profile in getProfilesInLowerRoles(currentProfile))
+                {
+                    context.DocumentMessages.Add(new DocumentMessage()
+                    {
+                        Document = documentToAdd,
+                        Recipient = profile
+                    });
+                }
+            }
+            context.SaveChanges();
+            return documentToAdd.Id;
+        }
+        private async Task<bool> UploadFile(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\documents", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public List<DocumentMessageDTO> getInboxDocumentMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient)
+                .Where(a => a.Recipient.Id == profileId && a.Document.Aproved == true).OrderByDescending(a => a.Id).ToList();
+
+            foreach(var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Document.Id,
+                    note = entry.Document.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Document.Title
+                });
+            }
+            return messages;
+        }
+
+        public List<DocumentMessageDTO> getOutboxDocumentMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.Documents.Where(a => a.CreatedBy == userProfile).ToList();
+
+            foreach (var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Id,
+                    note = entry.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Title
+                });
+            }
+            return messages;
+        }
+
+        public List<DocumentMessageDTO> getPendingDocumentMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.Documents
+                .Where(a => a.Aproved == false).OrderByDescending(a => a.Id).ToList();
+
+            foreach (var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Id,
+                    note = entry.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Title
+                });
+            }
+            return messages;
+        }
+
+        public void aproveDocumentMessage(int id)
+        {
+            var documentMessage = context.DocumentMessages.Include(a => a.Document).Where(a => a.Document.Id == id).FirstOrDefault();
+            documentMessage.Document.AprovalDate = DateTime.Now;
+            documentMessage.Document.Aproved = true;
+            context.SaveChanges();
+        }
+
+        public void declineDocumentMessage(int id)
+        {
+            var documentMessage = context.DocumentMessages.Include(a => a.Document).Where(a => a.Document.Id == id).FirstOrDefault();
+            var document = documentMessage.Document;
+            context.Remove(document);
+            context.Remove(documentMessage);
+        }
+
+        public List<UserProfile> getProfilesInSameRole(UserProfile profile)
+        {
+            var userClub = profile.club.Name;
+            var userRole = profile.role.Description;
+
+            if (new string[] { "D0", "D1", "D2", "D3", "D4" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.club.Name == userClub && (
+                a.role.Description == "D0" ||
+                a.role.Description == "D1" ||
+                a.role.Description == "D2" ||
+                a.role.Description == "D3" ||
+                a.role.Description == "D4"
+                )).ToList();
+            }
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id && (
+                a.role.Description == "C0" ||
+                a.role.Description == "C1" ||
+                a.role.Description == "C2" ||
+                a.role.Description == "C3" ||
+                a.role.Description == "C4"
+                )).ToList();
+            }
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4" }.Contains(userRole))
+            {
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
+                a.role.Description == "B0" ||
+                a.role.Description == "B1" ||
+                a.role.Description == "B2" ||
+                a.role.Description == "B3" ||
+                a.role.Description == "B4"
+                )).ToList();
+            }
+            else if (new string[] { "A0", "A1", "A2", "A3", "A4" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.role).Where(a =>
+                a.role.Description == "A0" ||
+                a.role.Description == "A1" ||
+                a.role.Description == "A2" ||
+                a.role.Description == "A3" ||
+                a.role.Description == "A4"
+                ).ToList();
+            }
             return null;
         }
 
-        public DocumentMessageDTO[] getOutboxDocumentMessages()
+        public List<UserProfile> getProfilesInLowerRoles(UserProfile profile)
         {
+            var userClub = profile.club.Name;
+            var userRole = profile.role.Description;
+
+            if (new string[] { "D0", "D1", "D2", "D3", "D4" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.role).Where(a => 
+                a.role.Description == "E0" ||
+                a.role.Description == "E1" ||
+                a.role.Description == "E2" ||
+                a.role.Description == "E3" ||
+                a.role.Description == "E4"
+                ).ToList();
+            }
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id && (
+                a.role.Description != "C0" &&
+                a.role.Description != "C1" &&
+                a.role.Description != "C2" &&
+                a.role.Description != "C3" &&
+                a.role.Description != "C4" &&
+                a.role.Description != "B0" &&
+                a.role.Description != "B1" &&
+                a.role.Description != "B2" &&
+                a.role.Description != "B3" &&
+                a.role.Description != "B4" &&
+                a.role.Description != "A0" &&
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4"
+                )).ToList();
+            }
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4" }.Contains(userRole))
+            {
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
+                a.role.Description != "B0" &&
+                a.role.Description != "B1" &&
+                a.role.Description != "B2" &&
+                a.role.Description != "B3" &&
+                a.role.Description != "B4" &&
+                a.role.Description != "A0" &&
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4"
+                )).ToList();
+            }
+            else if (new string[] { "A0", "A1", "A2", "A3", "A4" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.role).Where(a =>
+                a.role.Description != "A0" &&
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4"
+                ).ToList();
+            }
             return null;
         }
-
-        public DocumentMessageDTO[] getPendingDocumentMessages()
-        {
-            return null;
-        }
-
-        public DocumentMessageDTO[] aproveDocumentMessage(int id)
-        {
-            return null;
-        }
-
-        public DocumentMessageDTO[] declineDocumentMessage(int id)
-        {
-            return null;
-        }
-
     }
 }

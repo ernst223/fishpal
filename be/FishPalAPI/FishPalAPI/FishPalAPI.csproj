@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Data\Item Orders\" />
     <Folder Include="Data\Scripts\" />
+    <Folder Include="wwwroot\documents\" />
   </ItemGroup>
 
 </Project>

@@ -32,7 +32,7 @@ export class AccountService {
                     } else {
                         localStorage.setItem('multipleProfiles', '0');
                         localStorage.setItem('role', res.profiles[0].role);
-                        localStorage.setItem('profileId', res.profile[0].id);
+                        localStorage.setItem('profileId', res.profiles[0].id);
                         localStorage.setItem('club', res.profiles[0].club);
                         localStorage.setItem('federation', res.profiles[0].federation);
                         localStorage.setItem('profileName', res.profiles[0].name);

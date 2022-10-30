@@ -49,7 +49,8 @@ namespace FishPalAPI.Controllers
                            signingCredentials: creds
                            );
 
-                        var role = userService.getUserRole(user);
+                        var profiles = userService.getUserProfiles(user);
+
 
                         var isEmailConfirmed = await userMgr.IsEmailConfirmedAsync(user);
 
@@ -60,7 +61,7 @@ namespace FishPalAPI.Controllers
                                 token = new JwtSecurityTokenHandler().WriteToken(token),
                                 expiration = token.ValidTo,
                                 userId = user.Id,
-                                role = role,
+                                profiles = profiles,
                                 userName = user.UserName,
                             });
                         } else
@@ -167,7 +168,7 @@ namespace FishPalAPI.Controllers
         public async Task<ActionResult> DeleteUserd(string userName)
         {
             var user = await userMgr.FindByEmailAsync(userName);
-            userService.removeUserClubs(user.Id);
+            userService.removeUserProfiles(user.Id);
             await userMgr.DeleteAsync(user);
             return Ok();
         }

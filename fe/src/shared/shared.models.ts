@@ -13,6 +13,14 @@ export interface ResetPasswordDTO {
   userName: string;
 }
 
+export interface LoginProfilesDTO {
+  id: number;
+  name: string;
+  role: string;
+  club: string;
+  federation: string;
+}
+
 export interface FacetDTO {
   id: number;
   description: string;

@@ -30,16 +30,11 @@ namespace FishPalAPI.Data
         public DbSet<UserInformation> UserInformation { get; set; }
         public DbSet<Facet> Facets { get; set; }
         public DbSet<Role> Role { get; set; }
-
         public DbSet<OrderItems> OrderItems { get; set; }
-
         public DbSet<Messages> Messages { get; set; }
-
         public DbSet<MessageReceivers> MessageReceivers { get; set; }
-
-        public DbSet<Federation> Federation { get; set; }
-
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentMessage> DocumentMessages { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

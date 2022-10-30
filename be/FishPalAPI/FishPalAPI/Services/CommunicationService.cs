@@ -142,79 +142,81 @@ namespace FishPalAPI.Services
 
         public List<FederationDTO> getAllFederations(string userEmail)
         {
-            List<Federation> _federations=  null;
-            var user = context.Users.Include(y => y.role).Include(x => x.federations).FirstOrDefault(x => x.Email == userEmail);
-        
-            if (user.role.Id == 1 || user.role.Id == 2) { //if your in a sasacc role the return all the distinct federations that are avaialble
-                _federations = context.Federation.Distinct().ToList();
-            }
+            //List<Federation> _federations=  null;
+            //var user = context.Users.Include(y => y.role).Include(x => x.federations).FirstOrDefault(x => x.Email == userEmail);
 
-            if (user.role.Id == 5 || user.role.Id == 6) //if your role is that of a federation such as saalaa then return sasacc and your own federation
-            {
-                _federations = context.Federation.Where(x => x.Name == "SASACC" || x.Name == user.federations[0].Name).ToList();
-            }
+            //if (user.role.Id == 1 || user.role.Id == 2) { //if your in a sasacc role the return all the distinct federations that are avaialble
+            //    _federations = context.Federation.Distinct().ToList();
+            //}
 
-            if (user.role.Id == 9 || user.role.Id == 10) //if your role is that of a province then return only the federation to which you are afiliated
-            {
-                _federations = context.Federation.Where(x => x.Name == user.federations[0].Name).ToList();
-            }
+            //if (user.role.Id == 5 || user.role.Id == 6) //if your role is that of a federation such as saalaa then return sasacc and your own federation
+            //{
+            //    _federations = context.Federation.Where(x => x.Name == "SASACC" || x.Name == user.federations[0].Name).ToList();
+            //}
 
-            if (user.role.Id != 1 && user.role.Id != 2 && user.role.Id != 5 && user.role.Id != 6 && user.role.Id != 9 && user.role.Id != 10) //if your role is for a club or a member then return nothing, this will be displayed as "default" on the front end
-            {
-                _federations = context.Federation.Where(x => x.Name == "NothingGetsReturned").ToList();
-            }
+            //if (user.role.Id == 9 || user.role.Id == 10) //if your role is that of a province then return only the federation to which you are afiliated
+            //{
+            //    _federations = context.Federation.Where(x => x.Name == user.federations[0].Name).ToList();
+            //}
 
-            List<FederationDTO> result = new List<FederationDTO>();
-            foreach (var entry in _federations)
-            {
-                result.Add(new FederationDTO()
-                {
-                    Id = entry.Id,
-                    Name = entry.Name
-                });
-            }
-            return result;
+            //if (user.role.Id != 1 && user.role.Id != 2 && user.role.Id != 5 && user.role.Id != 6 && user.role.Id != 9 && user.role.Id != 10) //if your role is for a club or a member then return nothing, this will be displayed as "default" on the front end
+            //{
+            //    _federations = context.Federation.Where(x => x.Name == "NothingGetsReturned").ToList();
+            //}
+
+            //List<FederationDTO> result = new List<FederationDTO>();
+            //foreach (var entry in _federations)
+            //{
+            //    result.Add(new FederationDTO()
+            //    {
+            //        Id = entry.Id,
+            //        Name = entry.Name
+            //    });
+            //}
+            //return result;
+            return null;
         }
 
         public List<FederationDTO> getAllProvinces(string userEmail, FederationDTO[] selectedFacets)
         {
-            //get loggedin user credentials
-            //if() logged in user = role a getall provinces contained withing all selected federations
-            //if() logged in user = role b, c, d return own province name
-            List<Province> _provinces = null;
+            ////get loggedin user credentials
+            ////if() logged in user = role a getall provinces contained withing all selected federations
+            ////if() logged in user = role b, c, d return own province name
+            //List<Province> _provinces = null;
 
-            var user = context.Users.Include(y => y.role).Include(x => x.federations).FirstOrDefault(x => x.Email == userEmail);
+            //var user = context.Users.Include(y => y.role).Include(x => x.federations).FirstOrDefault(x => x.Email == userEmail);
 
-            if (user.role.Id == 1 || user.role.Id == 2)
-             { //if your in a sasacc role the return all the distinct federations that are avaialble
-                 _provinces = context.Provinces.Include(x => x.Facets).Distinct().ToList();//.Where(x => selectedFacets.Contains(x.Facets))
-            }
+            //if (user.role.Id == 1 || user.role.Id == 2)
+            // { //if your in a sasacc role the return all the distinct federations that are avaialble
+            //     _provinces = context.Provinces.Include(x => x.Facets).Distinct().ToList();//.Where(x => selectedFacets.Contains(x.Facets))
+            //}
 
-             if (user.role.Id == 5 || user.role.Id == 6) //if your role is that of a federation such as saalaa then return sasacc and your own federation
-             {
-                 //_provinces = context.Federation.Where(x => x.Name == "SASACC" || x.Name == user.federations[0].Name).ToList();
-             }
+            // if (user.role.Id == 5 || user.role.Id == 6) //if your role is that of a federation such as saalaa then return sasacc and your own federation
+            // {
+            //     //_provinces = context.Federation.Where(x => x.Name == "SASACC" || x.Name == user.federations[0].Name).ToList();
+            // }
 
-             if (user.role.Id == 9 || user.role.Id == 10) //if your role is that of a province then return only the federation to which you are afiliated
-             {
-                // _provinces = context.Federation.Where(x => x.Name == user.federations[0].Name).ToList();
-             }
+            // if (user.role.Id == 9 || user.role.Id == 10) //if your role is that of a province then return only the federation to which you are afiliated
+            // {
+            //    // _provinces = context.Federation.Where(x => x.Name == user.federations[0].Name).ToList();
+            // }
 
-             if (user.role.Id != 1 && user.role.Id != 2 && user.role.Id != 5 && user.role.Id != 6 && user.role.Id != 9 && user.role.Id != 10) //if your role is for a club or a member then return nothing, this will be displayed as "default" on the front end
-             {
-                 //_provinces = context.Federation.Where(x => x.Name == "NothingGetsReturned").ToList();
-             }
+            // if (user.role.Id != 1 && user.role.Id != 2 && user.role.Id != 5 && user.role.Id != 6 && user.role.Id != 9 && user.role.Id != 10) //if your role is for a club or a member then return nothing, this will be displayed as "default" on the front end
+            // {
+            //     //_provinces = context.Federation.Where(x => x.Name == "NothingGetsReturned").ToList();
+            // }
 
-            List<FederationDTO> result = new List<FederationDTO>();
-            foreach (var entry in _provinces)
-            {
-                result.Add(new FederationDTO()
-                {
-                    Id = entry.Id,
-                    Name = entry.Name
-                });
-            }
-            return result;
+            //List<FederationDTO> result = new List<FederationDTO>();
+            //foreach (var entry in _provinces)
+            //{
+            //    result.Add(new FederationDTO()
+            //    {
+            //        Id = entry.Id,
+            //        Name = entry.Name
+            //    });
+            //}
+            //return result;
+            return null;
         }
 
         public List<FederationDTO> getAllClubs(string userEmail)

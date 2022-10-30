@@ -14,7 +14,7 @@ namespace FishPalAPI.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Province> Provinces { get; set; }
-
         public string Federation { get; set; }
+        public string Base64String { get; set; }
     }
 }

@@ -31,11 +31,11 @@ namespace FishPalAPI.Controllers
             return Ok(clubService.getFacetClubsInProvince(facet, province));
         }
 
-        [HttpGet("allUserInfo/{username}/{federation}")]
-        public async Task<IActionResult> allUserInfo(string username, int? federation)
+       /* [HttpGet("allUserInfo/{userId}/{federationId}")]
+        public async Task<IActionResult> allUserInfo(string userId, int? federationId)
         {
-            return Ok(userService.allUserInfo(username, federation));
-        }
+            return Ok(userService.allUserInfo(userId, federationId));
+        }*/
 
     }
 }

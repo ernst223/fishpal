@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221030100133_addProfilesMigration")]
+    partial class addProfilesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,9 +165,6 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("Base64String")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Federation")
                         .HasColumnType("longtext");
@@ -343,6 +342,9 @@ namespace FishPalAPI.Migrations
                     b.Property<int?>("clubId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("federationId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("roleId")
                         .HasColumnType("int");
 
@@ -354,6 +356,8 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("clubId");
+
+                    b.HasIndex("federationId");
 
                     b.HasIndex("roleId");
 
@@ -561,6 +565,10 @@ namespace FishPalAPI.Migrations
                         .WithMany()
                         .HasForeignKey("clubId");
 
+                    b.HasOne("FishPalAPI.Data.Federation", "federation")
+                        .WithMany()
+                        .HasForeignKey("federationId");
+
                     b.HasOne("FishPalAPI.Data.Role", "role")
                         .WithMany()
                         .HasForeignKey("roleId");
@@ -570,6 +578,8 @@ namespace FishPalAPI.Migrations
                         .HasForeignKey("userInformationId");
 
                     b.Navigation("club");
+
+                    b.Navigation("federation");
 
                     b.Navigation("role");
 

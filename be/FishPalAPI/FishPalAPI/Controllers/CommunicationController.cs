@@ -1,6 +1,7 @@
 ﻿using FishPalAPI.Data;
 using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
+using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -129,6 +130,43 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> people(string userEmail)
         {
             return Ok(communicationService.getAllPeople(userEmail));
+        }
+
+        [HttpPost("document/send")]
+        public async Task<IActionResult> uploadDocumentMessage([FromBody] UploadDocumentMessageDTO documentMessageDTO)
+        {
+            communicationService.uploadDocument(documentMessageDTO);
+            return Ok();
+        }
+
+        [HttpGet("document/inbox")]
+        public async Task<IActionResult> getDocumentMessageInbox()
+        {
+            return Ok(communicationService.getInboxDocumentMessages());
+        }
+
+        [HttpGet("document/outbox")]
+        public async Task<IActionResult> getDocumentMessageOutbox()
+        {
+            return Ok(communicationService.getOutboxDocumentMessages());
+        }
+
+        [HttpGet("document/pending")]
+        public async Task<IActionResult> getDocumentMessagePending()
+        {
+            return Ok(communicationService.getPendingDocumentMessages());
+        }
+
+        [HttpGet("document/aprove/{id}")]
+        public async Task<IActionResult> aprovePendingDocument(int id)
+        {
+            return Ok(communicationService.aproveDocumentMessage(id));
+        }
+
+        [HttpGet("document/decline/{id}")]
+        public async Task<IActionResult> declinePendingDocument(int id)
+        {
+            return Ok(communicationService.declineDocumentMessage(id));
         }
     }
 }

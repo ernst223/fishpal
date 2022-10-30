@@ -20,7 +20,8 @@ namespace FishPalAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //optionsBuilder.UseMySql("datasource = localhost; port = 7777; username = root; password = awe7; database = fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
 
@@ -29,13 +30,11 @@ namespace FishPalAPI.Data
         public DbSet<UserInformation> UserInformation { get; set; }
         public DbSet<Facet> Facets { get; set; }
         public DbSet<Role> Role { get; set; }
-
         public DbSet<OrderItems> OrderItems { get; set; }
-
         public DbSet<Messages> Messages { get; set; }
-
         public DbSet<MessageReceivers> MessageReceivers { get; set; }
-
-        public DbSet<Federation> Federation { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentMessage> DocumentMessages { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

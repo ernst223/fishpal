@@ -19,74 +19,96 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
-        public async Task<object> allUserInfo(string username, int? federation)
+        public List<LoginProfilesDTO> getUserProfiles(User user)
         {
-            var query = context.Users;
-            if (federation != null)
-            {
-                query.Include(a => a.role).Include(a => a.federations).Include(a => a.clubs).Where(o => o.UserName == username && o.federations.Any(x => x.Id == federation));
-            }
-            else {
-                query.Include(a => a.role).Include(a => a.federations).Include(a => a.clubs).Where(o => o.UserName == username);
-            }
-
-            var userRecord = query.FirstOrDefaultAsync();
-
-            if (userRecord != null)
-            {
-                return userRecord;//changes needs to be made here after merge with ernst
-            }
-            return userRecord;//changes needs to be made here after merge with ernst
-        }
-        
-        public string getUserRole(User user)
-        {
-            var tempUser = context.Users.Include(a => a.role).Where(o => o.Id == user.Id).FirstOrDefault();
+            var tempUser = context.Users.Include(a => a.profiles).Where(o => o.Id == user.Id).FirstOrDefault();
             if (tempUser != null)
             {
-                return tempUser.role.Description;
+                List<LoginProfilesDTO> result = new List<LoginProfilesDTO>();
+                foreach (var entry in tempUser.profiles)
+                {
+                    var tempProfile = context.UserProfiles.Include(a => a.club)
+                        .Include(a => a.role).Where(a => a.Id == entry.Id).FirstOrDefault();
+                    LoginProfilesDTO tempResult = new LoginProfilesDTO();
+                    Facet tempFacet = null;
+                    Club tempClub = null;
+                    tempResult.Id = entry.Id;
+
+                    if (tempProfile.role != null)
+                    {
+                        tempResult.Role = tempProfile.role.Description;
+                    }
+                    if (tempProfile.club != null)
+                    {
+                        tempClub = context.Clubs.Include(a => a.Facet).Where(a => a.Id == tempProfile.club.Id).FirstOrDefault();
+                        tempResult.federation = tempClub.Facet.Federation;
+                        tempResult.club = tempProfile.club.Name;
+                        tempResult.Name = tempResult.federation + " role: " + tempResult.Role;
+                    }
+                    if (tempFacet != null)
+                    {
+                        tempResult.Name = tempFacet.Name + " " + tempProfile.role.Description;
+                    }
+                    result.Add(tempResult);
+                };
+                return result;
             }
-            return "A3";
-        }
+                return null;
+         }
 
         public bool addUserClubs(string userId, List<int> clubs)
         {
-            var user = context.Users.Include(a => a.clubs).Include(a => a.role).Where(a => a.Id == userId).FirstOrDefault();
-            addUserDefaultRole(user);
+            var user = context.Users.Include(a => a.profiles).Where(a => a.Id == userId).FirstOrDefault();
+            List<Club> tempClubs = new List<Club>();
+            foreach(var entry in clubs)
+            {
+                tempClubs.Add(context.Clubs.Where(a => a.Id == entry).FirstOrDefault());
+            }
+
             if (user != null)
             {
-                foreach(var entry in clubs)
+                foreach(var club in tempClubs)
                 {
-                    user.clubs.Add(context.Clubs.Where(a => a.Id == entry).First());
+                    addUserProfileAndClubAndDefaultRole(user, club);
                 }
                 context.SaveChanges();
             }
             return true;
         }
 
-        public void addUserDefaultRole(User user)
+        public void addUserProfileAndClubAndDefaultRole(User user, Club club)
         {
-            var role = context.Role.Where(a => a.Description == "A3").FirstOrDefault();
+            Role tempRoleToAdd;
+            var role = context.Role.Where(a => a.Description == "E0").FirstOrDefault();
             if(role == null)
             {
                 context.Role.Add(new Role()
                 {
-                    Description = "A3"
+                    Description = "E0"
                 });
                 context.SaveChanges();
-                var newRole = context.Role.Where(a => a.Description == "A3").FirstOrDefault();
-                user.role = newRole;
+                var newRole = context.Role.Where(a => a.Description == "E0").FirstOrDefault();
+
+                tempRoleToAdd = newRole;
             } else
             {
-                user.role = role;
+                tempRoleToAdd = role;
             }
+
+            UserProfile tempProfileToAdd = new UserProfile()
+            {
+                role = tempRoleToAdd,
+                club = club
+            };
+
+            user.profiles.Add(tempProfileToAdd);
             context.SaveChanges();
         }
 
-        public bool removeUserClubs(string userId)
+        public bool removeUserProfiles(string userId)
         {
-            var user = context.Users.Include(a => a.clubs).Where(a => a.Id == userId).FirstOrDefault();
-            user.clubs = null;
+            var user = context.Users.Include(a => a.profiles).Where(a => a.Id == userId).FirstOrDefault();
+            user.profiles = null;
             context.SaveChanges();
             return true;
         }

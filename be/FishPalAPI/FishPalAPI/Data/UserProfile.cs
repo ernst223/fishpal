@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace FishPalAPI.Data
 {
-    public class Facet
+    public class UserProfile
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public List<Province> Provinces { get; set; }
-        public string Federation { get; set; }
-        public string Base64String { get; set; }
+        public Role role { get; set; }
+        public UserInformation userInformation { get; set; }
+        public Club club { get; set; }
     }
 }

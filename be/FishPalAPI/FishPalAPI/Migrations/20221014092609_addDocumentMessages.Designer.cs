@@ -3,19 +3,36 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014092609_addDocumentMessages")]
+    partial class addDocumentMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.10");
+
+            modelBuilder.Entity("ClubUser", b =>
+                {
+                    b.Property<string>("UsersId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("clubsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersId", "clubsId");
+
+                    b.HasIndex("clubsId");
+
+                    b.ToTable("ClubUser");
+                });
 
             modelBuilder.Entity("FacetProvince", b =>
                 {
@@ -30,6 +47,21 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("ProvincesId");
 
                     b.ToTable("FacetProvince");
+                });
+
+            modelBuilder.Entity("FederationUser", b =>
+                {
+                    b.Property<int>("federationsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("federationsId", "usersId");
+
+                    b.HasIndex("usersId");
+
+                    b.ToTable("FederationUser");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
@@ -164,9 +196,6 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Base64String")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Federation")
                         .HasColumnType("longtext");
 
@@ -248,9 +277,6 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClubId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
@@ -261,9 +287,6 @@ namespace FishPalAPI.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("FederationId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -304,11 +327,13 @@ namespace FishPalAPI.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<int?>("roleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("userInformationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
-
-                    b.HasIndex("FederationId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -316,6 +341,10 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("roleId");
+
+                    b.HasIndex("userInformationId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -329,37 +358,6 @@ namespace FishPalAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserInformation");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.UserProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int?>("clubId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("roleId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("userInformationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("clubId");
-
-                    b.HasIndex("roleId");
-
-                    b.HasIndex("userInformationId");
-
-                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -490,6 +488,21 @@ namespace FishPalAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ClubUser", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FishPalAPI.Data.Club", null)
+                        .WithMany()
+                        .HasForeignKey("clubsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FacetProvince", b =>
                 {
                     b.HasOne("FishPalAPI.Data.Facet", null)
@@ -501,6 +514,21 @@ namespace FishPalAPI.Migrations
                     b.HasOne("FishPalAPI.Data.Province", null)
                         .WithMany()
                         .HasForeignKey("ProvincesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FederationUser", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Federation", null)
+                        .WithMany()
+                        .HasForeignKey("federationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("usersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -542,25 +570,6 @@ namespace FishPalAPI.Migrations
 
             modelBuilder.Entity("FishPalAPI.Data.User", b =>
                 {
-                    b.HasOne("FishPalAPI.Data.Club", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ClubId");
-
-                    b.HasOne("FishPalAPI.Data.Federation", null)
-                        .WithMany("users")
-                        .HasForeignKey("FederationId");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.UserProfile", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.User", null)
-                        .WithMany("profiles")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("FishPalAPI.Data.Club", "club")
-                        .WithMany()
-                        .HasForeignKey("clubId");
-
                     b.HasOne("FishPalAPI.Data.Role", "role")
                         .WithMany()
                         .HasForeignKey("roleId");
@@ -568,8 +577,6 @@ namespace FishPalAPI.Migrations
                     b.HasOne("FishPalAPI.Data.UserInformation", "userInformation")
                         .WithMany()
                         .HasForeignKey("userInformationId");
-
-                    b.Navigation("club");
 
                     b.Navigation("role");
 
@@ -627,24 +634,9 @@ namespace FishPalAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FishPalAPI.Data.Club", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("FishPalAPI.Data.Communication.Messages", b =>
                 {
                     b.Navigation("AssignedUsers");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Federation", b =>
-                {
-                    b.Navigation("users");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.User", b =>
-                {
-                    b.Navigation("profiles");
                 });
 #pragma warning restore 612, 618
         }

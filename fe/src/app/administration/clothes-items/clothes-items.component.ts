@@ -187,7 +187,7 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     });
   }
 
-  closeModal(templateRef) {
+  closeModal() {
     this.dialog.closeAll();
   }
 }

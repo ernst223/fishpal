@@ -54,8 +54,8 @@ const NAMES: string[] = [
   templateUrl: './clothes-order.component.html',
   styleUrls: ['./clothes-order.component.scss']
 })
-export class ClothesOrderComponent  implements OnInit, AfterViewInit {
-  viewItems: boolean = false;
+export class ClothesOrderComponent  {
+  /*viewItems: boolean = false;
   viewOrders: boolean = false;
 
   viewitemsButton: boolean = true;
@@ -110,7 +110,7 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
     }
   }
 
-  /** Builds and returns a new User. */
+
   createNewUser(id: number): UserData {
     return {
       id: id.toString(),
@@ -150,13 +150,7 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
     //this.myModel.Province = formData.the_Province;
     //this.myModel.photos = this.photosObject;
 
-    /*console.log(this.myModel);
-    this.http.post('https://localhost:44351/InsertListing', this.myModel).pipe().subscribe(a => {
-
-    }, (error) => {
-
-    });
-    console.log(formData);*/
+   
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -215,6 +209,6 @@ export class ClothesOrderComponent  implements OnInit, AfterViewInit {
     this.viewitemsButton = true;
     this.viewOrdersButton = true;
   }
-
+*/
 }
 

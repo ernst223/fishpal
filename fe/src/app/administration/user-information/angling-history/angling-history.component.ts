@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class AnglingHistoryComponent implements OnInit {
 
   constructor() { }
-
+  PhysicianName:any;
+  PhysicianContact:any
+  MAName:any;
   ngOnInit() {
   }
 

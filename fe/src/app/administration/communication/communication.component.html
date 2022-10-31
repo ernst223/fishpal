@@ -1,9 +1,10 @@
+<!--
 <button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)">New Message &nbsp; <i
         class="fa fa-commenting-o" aria-hidden="true"></i></button>
 
-<!--this is the Tabs only inbox is for normal members, inbox and outbox is for one of the management (excluding chariperson), inbox, outbox and messages request is for chairpeople-->
+
 <mat-tab-group>
-    <!--everything for the inbox-->
+
     <mat-tab label="Inbox" *ngIf="member">
         <mat-card class="example-card" *ngFor="let card of obsInBox | async" (click)="test(card)">
 
@@ -21,7 +22,7 @@
         </mat-paginator>
     </mat-tab>
 
-    <!--everything for the outbox-->
+    
     <mat-tab label="Outbox" *ngIf="management">
         <mat-card class="example-card" *ngFor="let card of obsOutBox | async" (click)="test(card)">
 
@@ -39,7 +40,7 @@
         </mat-paginator>
     </mat-tab>
 
-    <!--everything for the pending-->
+  
     <mat-tab label="Message Requests" *ngIf="chair">
         <mat-card class="example-card" *ngFor="let card of obsPending | async" (click)="test(card)">
 
@@ -80,7 +81,7 @@
     <form [formGroup]="newMessageForm" style="text-align: center;height: auto;">
         <h1 class="newMessageTitle">New Message</h1>
         <div class="card-body">
-            <!--Federation-->
+   
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
                     <mat-form-field appearance="fill" class="messageInputs">
@@ -102,7 +103,6 @@
 
             </div>
 
-            <!--Province-->
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
                     <mat-form-field appearance="fill" class="messageInputs">
@@ -122,7 +122,7 @@
                 </div>
             </div>
 
-            <!--Club-->
+      
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
                     <mat-form-field appearance="fill" class="messageInputs">
@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <!--Member-->
+  
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
                     <mat-form-field appearance="fill" class="messageInputs">
@@ -162,7 +162,7 @@
                 </div>
             </div>
 
-            <!--Message-->
+        
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
                     <mat-form-field appearance="fill" class="messageInputs">
@@ -172,11 +172,7 @@
                         </mat-label>
                         <textarea matInput placeholder="Type New Message..." style="height: 100px;width: 600px;"
                             type="text" class="form-control" formControlName="the_Message"></textarea>
-                        <!--<span *ngIf="componentIsInvalid('the_Message')" class="e-error">
-                            <small *ngIf="newMessageForm?.get('the_Message')?.hasError('required')">{{
-                                validationMessages.required
-                                }}</small>
-                        </span>-->
+       
                     </mat-form-field>
                 </div>
             </div>
@@ -187,3 +183,5 @@
 </ng-template>
 
 <p>{{selectedFederations}}</p>
+
+-->

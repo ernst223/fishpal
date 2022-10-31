@@ -38,7 +38,10 @@ export interface Tile {
   styleUrls: ['./communication.component.scss']
 })
 export class CommunicationComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: false })
+  ngOnInit(): void {
+    
+  }
+  /*@ViewChild(MatPaginator, { static: false })
 
   paginator!: MatPaginator;
   obsInBox!: Observable<any>;
@@ -127,19 +130,6 @@ export class CommunicationComponent implements OnInit {
     });
   }
 
-  /*getClubs() {
-    this.adminService.getAllFederations(this.loggedInUserEmail).subscribe(feds => {
-      console.log("this is the federations",feds);
-      this.allFederations = feds;
-    });
-  }
-
-  getMembers() {
-    this.adminService.getAllFederations(this.loggedInUserEmail).subscribe(feds => {
-      console.log("this is the federations",feds);
-      this.allFederations = feds;
-    });
-  }*/
 
   sendMessages() {
     if (this.newMessageForm.invalid) {
@@ -161,7 +151,7 @@ export class CommunicationComponent implements OnInit {
     }, (error) => {
 
     });
-    console.log(formData);*/
+    console.log(formData);
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -279,6 +269,10 @@ export class CommunicationComponent implements OnInit {
     this.filteredProvinces = this.allProvinces;
   }
 
+  onOpenChange(){
+
+  }
+
   onClubOpenChange(searchInput: any) {
     searchInput.value = "";
     this.filteredClubs = this.allClubs;
@@ -293,5 +287,6 @@ export class CommunicationComponent implements OnInit {
     console.log("this is the test", this.selectedFederations);
     this.getProvinces();
   }
+  */
 
 }

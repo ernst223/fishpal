@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class TrainingComponent implements OnInit {
 
   constructor() { }
-
+  MAName:any;
   ngOnInit() {
   }
 

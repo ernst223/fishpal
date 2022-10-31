@@ -1,3 +1,4 @@
+<!--
 <button mat-raised-button class="BackButton" (click)="toggleViewItems()" *ngIf="viewitemsButton">View Items &nbsp;<i
         class="fa fa-eye" aria-hidden="true"></i>
 </button>
@@ -11,7 +12,6 @@
 
 
 
-<!--start of add view order form-->
 <div *ngIf="viewOrders">
     <button mat-raised-button class="BackButton" (click)="openModal(mytemplate)">New Order &nbsp;<i class="fa fa-plus"
         aria-hidden="true"></i>
@@ -24,43 +24,42 @@
     <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>
     
-            <!-- ID Column -->
+            
             <ng-container matColumnDef="id" style="text-align: left;">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                 <td mat-cell *matCellDef="let row"> {{row.id}} </td>
             </ng-container>
 
-             <!-- price Column -->
+            
              <ng-container matColumnDef="price">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
                 <td mat-cell *matCellDef="let row"> R{{row.price}} </td>
             </ng-container>
     
-            <!-- username Column -->
+           
             <ng-container matColumnDef="username">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> UserName </th>
                 <td mat-cell *matCellDef="let row"> {{row.username}} </td>
             </ng-container>
     
-            <!-- order date Column -->
+         
             <ng-container matColumnDef="orderdate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderDate </th>
                 <td mat-cell *matCellDef="let row"> {{row.orderdate}} </td>
             </ng-container>
 
-             <!-- order date Column -->
+          
              <ng-container matColumnDef="item">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Item </th>
                 <td mat-cell *matCellDef="let row"> {{row.item}} </td>
             </ng-container>
     
-             <!-- status Column -->
              <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
                 <td mat-cell *matCellDef="let row"> {{row.status}} </td>
             </ng-container>
 
-             <!-- Name Column -->
+            
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
             <td mat-cell *matCellDef="let row"> <button mat-raised-button class="viewButton" (click)="getRecord(row.id)">View</button></td>
@@ -69,7 +68,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     
-            <!-- Row shown when there is no matching data. -->
+            
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
             </tr>
@@ -80,7 +79,7 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
 
-<!--new order template-->
+
 <ng-template #mytemplate>
     <form [formGroup]="createOrderForm">
         <mat-grid-list cols="1" rowHeight="4:1" class="gridList">
@@ -179,3 +178,5 @@
     <button mat-raised-button class="BackButtonItemAdd" (click)="closeModal()"><i class="fa fa-chevron-left"
             aria-hidden="true"></i>&nbsp; Back</button>
 </ng-template>
+
+-->

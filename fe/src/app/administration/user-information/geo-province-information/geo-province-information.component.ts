@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class GeoProvinceInformationComponent implements OnInit {
 
   constructor() { }
-
+  isLoading:any;
   ngOnInit() {
   }
 

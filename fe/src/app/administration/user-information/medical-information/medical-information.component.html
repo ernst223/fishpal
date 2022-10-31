@@ -45,7 +45,7 @@
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
                 Attach Copy of Medical Aid...
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #MedicalFile (change)="OpenFile($event)">
+            <input hidden type="file" accept=".pdf" id="File" #MedicalFile>
         </mat-grid-tile>
     </mat-grid-list>
 
@@ -248,7 +248,7 @@
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+            <button color="primary" mat-raised-button class="registerButton">Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

@@ -42,8 +42,7 @@
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"
-                        [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </mat-table>
                 <div fxFlex="grow">
                     <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
@@ -93,8 +92,7 @@
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"
-                        [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </mat-table>
                 <div fxFlex="grow">
                     <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
@@ -152,8 +150,7 @@
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"
-                        [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </mat-table>
                 <div fxFlex="grow">
                     <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
@@ -164,24 +161,6 @@
         </mat-card>
     </mat-tab>
 </mat-tab-group>
-
-
-<ng-template #myConfirmApprovaltemplate>
-    <span>Your message will be sent for approval by the chairperson, are you sure you want to continue?</span>
-    <button mat-raised-button class="newMessageModal" (click)="generateProfile()">Yes &nbsp; <i class="fa fa-pencil"
-            aria-hidden="true"></i></button>
-    <button mat-raised-button class="deleteMessage" (click)="closeModal()">No &nbsp; <i class="fa fa-trash-o"
-            aria-hidden="true"></i></button>
-</ng-template>
-
-<ng-template #mytemplate>
-    <textarea matInput placeholder="No Message..." value="{{messages.message}}"
-        style="height: 200px;width: 600px;"></textarea>
-    <button mat-raised-button class="newMessageModal" (click)="generateProfile()">Update &nbsp; <i class="fa fa-pencil"
-            aria-hidden="true"></i></button>
-    <button mat-raised-button class="deleteMessage" (click)="generateProfile()">Delete &nbsp; <i class="fa fa-trash-o"
-            aria-hidden="true"></i></button>
-</ng-template>
 
 <ng-template #myOpentemplate style="height: 300px;">
     <h1 class="newMessageTitle">New Message</h1>

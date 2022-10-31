@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class BoatInformationComponent implements OnInit {
 
   constructor() { }
-
+  MAName:any;
+  PhysicianName:any;
   ngOnInit() {
   }
 

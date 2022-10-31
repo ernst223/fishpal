@@ -1,7 +1,5 @@
 <div id="Disciplines">
-    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
-    </mat-progress-spinner>
-
+    
     <h2 class="RegisterHeader">Personal Information Page</h2>
 
     <!-- <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle> -->
@@ -45,7 +43,7 @@
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
                 Attach Copy of ID...
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #CSVFile (change)="OpenFile($event)">
+            <input hidden type="file" accept=".pdf" id="File" #CSVFile>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
@@ -102,7 +100,7 @@
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
                 Attach Copy of Passport...
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #PASSPORTFile (change)="OpenFile($event)">
+            <input hidden type="file" accept=".pdf" id="File" #PASSPORTFile>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
@@ -165,7 +163,7 @@
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
                 Attach Copy of Skippers License...
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #SKIPPERFile (change)="OpenFile($event)">
+            <input hidden type="file" accept=".pdf" id="File" #SKIPPERFile>
         </mat-grid-tile>
     </mat-grid-list>
 

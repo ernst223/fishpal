@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class ProvincialInformationComponent implements OnInit {
 
   constructor() { }
-
+  PharmacyName:any;
+  PhysicianContact:any;
   ngOnInit() {
   }
 

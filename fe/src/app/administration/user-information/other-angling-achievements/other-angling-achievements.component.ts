@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class OtherAnglingAchievementsComponent implements OnInit {
 
   constructor() { }
-
+  PhysicianName:any;
   ngOnInit() {
   }
 

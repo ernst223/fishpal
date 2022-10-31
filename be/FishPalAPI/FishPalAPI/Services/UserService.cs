@@ -38,12 +38,14 @@ namespace FishPalAPI.Services
                     Name = currentUser.Name,
                     Surname = currentUser.Surname,
                     FacetName = profile.club.Facet.Federation,
+                    TypeName = profile.club.Facet.Name,
                     FacetId = profile.club.Facet.Id,
                     ClubId = profile.club.Id,
                     ClubName = profile.club.Name,
                     Province = profile.club.Province.Name,
                     ProvinceId = profile.club.Province.Id,
-                    ProfileCreationDate = profile.creationTime
+                    ProfileCreationDate = profile.creationTime,
+                    FacetLogoBase64 = profile.club.Facet.Base64String
                 });
             }
             return result;

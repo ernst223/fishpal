@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace FishPalAPI.Data
 {
-    public class UserInformation
+    public class MedicalInformationAllergies
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public PersonalInformation personalInformation { get; set; }
-        public MedicalInformation medicalInformation { get; set; }
+        public string AllergyName { get; set; }
+        public string AllergyReaction { get; set; }
+        public string AllergyMedication { get; set; }
     }
 }

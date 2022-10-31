@@ -140,10 +140,22 @@ namespace FishPalAPI.Services
         public UserInformation getDefaultUserInformation()
         {
             PersonalInformation personalInfo = new PersonalInformation();
+            MedicalInformation medicalInformation = new MedicalInformation();
+            List<MedicalInformationAllergies> medicalInformationAllergies = new List<MedicalInformationAllergies>();
+            List<MedicalInformationEmergencyContacts> medicalInformationEmergencyContacts = new List<MedicalInformationEmergencyContacts>();
+            List<MedicalInformationMedicalConditions> medicalInformationMedicalConditions = new List<MedicalInformationMedicalConditions>();
+            List<MedicalInformationPharmacies> medicalInformationPharmacies = new List<MedicalInformationPharmacies>();
+            List<MedicalInformationPhysicians> medicalInformationPhysicians = new List<MedicalInformationPhysicians>();
+            medicalInformation.MedicalInformationEmergencyContacts = medicalInformationEmergencyContacts;
+            medicalInformation.MedicalInformationAllergies = medicalInformationAllergies;
+            medicalInformation.MedicalInformationMedicalConditions = medicalInformationMedicalConditions;
+            medicalInformation.MedicalInformationPharmacies = medicalInformationPharmacies;
+            medicalInformation.MedicalInformationPhysicians = medicalInformationPhysicians;
 
             return new UserInformation
             {
-                personalInformation = personalInfo
+                personalInformation = personalInfo,
+                medicalInformation = medicalInformation
             };
         }
 

@@ -38,5 +38,11 @@ namespace FishPalAPI.Data
         public DbSet<DocumentMessage> DocumentMessages { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
+        public DbSet<MedicalInformation> MedicalInformation { get; set; }
+        public DbSet<MedicalInformationPhysicians> MedicalInformationPhysicians { get; set; }
+        public DbSet<MedicalInformationPharmacies> MedicalInformationPharmacies { get; set; }
+        public DbSet<MedicalInformationEmergencyContacts> MedicalInformationEmergencyContacts { get; set; }
+        public DbSet<MedicalInformationMedicalConditions> MedicalInformationMedicalConditions { get; set; }
+        public DbSet<MedicalInformationAllergies> MedicalInformationAllergies { get; set; }
     }
 }

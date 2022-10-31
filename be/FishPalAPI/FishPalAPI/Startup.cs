@@ -41,6 +41,9 @@ namespace FishPalAPI
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",

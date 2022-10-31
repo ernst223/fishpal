@@ -1,9 +1,8 @@
-﻿using FishPalAPI.Models;
+﻿using AutoMapper;
+using FishPalAPI.Models;
+using FishPalAPI.Models.UserInformation.MedicalInformation;
 using FishPalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FishPalAPI.Controllers
@@ -12,10 +11,12 @@ namespace FishPalAPI.Controllers
     public class UserInformationController: Controller
     {
         private UserInformationService userInformationService;
+        private readonly IMapper _mapper;
 
-        public UserInformationController()
+        public UserInformationController(IMapper mapper)
         {
-            userInformationService = new UserInformationService();
+            _mapper = mapper;
+            userInformationService = new UserInformationService(_mapper);
         }
 
         [HttpGet("personalinformation/{profileId}")]
@@ -28,6 +29,19 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> updatePersonalInformation([FromBody] PersonalInformationDTO personalInformationDTO,int profileId)
         {
             userInformationService.updatePersonalInformation(personalInformationDTO, profileId);
+            return Ok();
+        }
+
+        [HttpGet("medicalinformation/{profileId}")]
+        public async Task<IActionResult> getMedicalInformation(int profileId)
+        {
+            return Ok(userInformationService.getMedicalInformation(profileId));
+        }
+
+        [HttpPut("medicalinformation/{profileId}")]
+        public async Task<IActionResult> updateMedicalInformation([FromBody] MedicalInformationDTO medicalInformationDTO, int profileId)
+        {
+            userInformationService.updateMedicalAid(medicalInformationDTO, profileId);
             return Ok();
         }
 

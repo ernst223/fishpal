@@ -429,7 +429,13 @@ namespace FishPalAPI.Services
 
             if (new string[] { "D0", "D1", "D2", "D3", "D4" }.Contains(userRole))
             {
-                return context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.club.Name == userClub && (
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Name == userClub && a.club.Facet.Id == userFacet.Id && a.club.Province.Id == userProvince.Id && (
                 a.role.Description == "D0" ||
                 a.role.Description == "D1" ||
                 a.role.Description == "D2" ||
@@ -439,10 +445,13 @@ namespace FishPalAPI.Services
             }
             else if (new string[] { "C0", "C1", "C2", "C3", "C4" }.Contains(userRole))
             {
-                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
-                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id && (
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
+                a.club.Facet.Id == userFacet.Id && (
                 a.role.Description == "C0" ||
                 a.role.Description == "C1" ||
                 a.role.Description == "C2" ||
@@ -483,12 +492,15 @@ namespace FishPalAPI.Services
 
             if (new string[] { "D0", "D1", "D2", "D3", "D4" }.Contains(userRole))
             {
-                return context.UserProfiles.Include(a => a.role).Where(a => 
-                a.role.Description == "E0" ||
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && a.club.Name == userClub &&
+                (a.role.Description == "E0" ||
                 a.role.Description == "E1" ||
                 a.role.Description == "E2" ||
                 a.role.Description == "E3" ||
-                a.role.Description == "E4"
+                a.role.Description == "E4")
                 ).ToList();
             }
             else if (new string[] { "C0", "C1", "C2", "C3", "C4" }.Contains(userRole))
@@ -496,7 +508,11 @@ namespace FishPalAPI.Services
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
 
-                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id && (
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
+                a.club.Facet.Id == userFacet.Id && (
                 a.role.Description != "C0" &&
                 a.role.Description != "C1" &&
                 a.role.Description != "C2" &&
@@ -540,6 +556,24 @@ namespace FishPalAPI.Services
                 a.role.Description != "A2" &&
                 a.role.Description != "A3" &&
                 a.role.Description != "A4"
+                ).ToList();
+            }
+            return null;
+        }
+
+        public List<UserProfile> getProfilesInLowerRolesInSameFacet(UserProfile profile)
+        {
+            var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+            var userRole = profile.role.Description;
+            if (new string[] { "A0", "A1", "A2", "A3", "A4" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id &&
+                (a.role.Description != "A0" &&
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4")
                 ).ToList();
             }
             return null;

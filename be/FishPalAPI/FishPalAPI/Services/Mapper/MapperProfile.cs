@@ -18,11 +18,11 @@ namespace FishPalAPI.Services.Mapper
             CreateMap<MedicalInformationPharmacies, MedicalInformationPharmaciesDTO>();
             CreateMap<MedicalInformationPhysicians, MedicalInformationPhysiciansDTO>();
 
-            CreateMap<MedicalInformationAllergiesDTO, MedicalInformationAllergies>();
-            CreateMap<MedicalInformationEmergencyContactsDTO, MedicalInformationEmergencyContacts>();
-            CreateMap<MedicalInformationMedicalConditionsDTO, MedicalInformationMedicalConditions>();
-            CreateMap<MedicalInformationPharmaciesDTO, MedicalInformationPharmacies>();
-            CreateMap<MedicalInformationPhysiciansDTO, MedicalInformationPhysicians>();
+            CreateMap<MedicalInformationAllergiesDTO, MedicalInformationAllergies>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<MedicalInformationEmergencyContactsDTO, MedicalInformationEmergencyContacts>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<MedicalInformationMedicalConditionsDTO, MedicalInformationMedicalConditions>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<MedicalInformationPharmaciesDTO, MedicalInformationPharmacies>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<MedicalInformationPhysiciansDTO, MedicalInformationPhysicians>().ForMember(a => a.Id, a => a.Ignore());
         }
     }
 }

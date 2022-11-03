@@ -1,10 +1,7 @@
 <div>
-    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
-    </mat-progress-spinner>
 
     <h2 class="RegisterHeader">Medical Information Page</h2>
 
-    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
     <hr class="splitLine">
 
     <mat-grid-list cols="2" rowHeight="90px">
@@ -13,7 +10,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Name
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="medicalInformation.medicalAidName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -21,7 +18,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Plan
                 </mat-label>
-                <input [(ngModel)]="MAPlan" matInput>
+                <input [(ngModel)]="medicalInformation.medicalAidPlan" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -29,7 +26,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Number
                 </mat-label>
-                <input [(ngModel)]="MANumber" matInput>
+                <input [(ngModel)]="medicalInformation.medicalAidNumber" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -37,7 +34,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Medical Aid Contact Number
                 </mat-label>
-                <input [(ngModel)]="MAContactNumber" matInput>
+                <input [(ngModel)]="medicalInformation.medicalAidContactNumber" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -58,7 +55,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Physician Name
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="physicianName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -66,36 +63,30 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Physician Contact Number
                 </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
+                <input [(ngModel)]="physicianContact" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToPhysicians() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Physician Name
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Physician Contact Number
-                </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
-            </mat-form-field>
-            <div class="example-button-container">
-                <button style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-                  <mat-icon>remove</mat-icon>
-                </button>
-              </div>
-        </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let physician of physicians;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{physician.physicianName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{physician.physicianContactNumber}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromPhysicians(physician) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <h4 class="SecondHeader">Pharmacy(s)</h4>
     <hr class="splitLine">
@@ -106,7 +97,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Pharmacy name
                 </mat-label>
-                <input [(ngModel)]="PharmacyName" matInput>
+                <input [(ngModel)]="pharmacyName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -114,15 +105,30 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Pharmacy Contact Number
                 </mat-label>
-                <input [(ngModel)]="PharmacyContact" matInput>
+                <input [(ngModel)]="pharmacyContact" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToPharmacies() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let pharmacie of pharmacies;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{pharmacie.pharmacyName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{pharmacie.pharmacyContactNumber}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromPharmacies(pharmacie) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
 
     <h4 class="SecondHeader">Emergency Contacts(s)</h4>
@@ -150,7 +156,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Contact Number Cell
                 </mat-label>
-                <input [(ngModel)]="emrelationship" matInput>
+                <input [(ngModel)]="emcontactNumberCell" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -158,15 +164,32 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Contact Number Work/Home
                 </mat-label>
-                <input [(ngModel)]="PharmacyContact" matInput>
+                <input [(ngModel)]="emcontactNumberHome" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToEmergencyContacts() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let emergencyContact of emergencyContacts;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{emergencyContact.name}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.relationship}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.contactNumberCell}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.contactNumberHome}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromEmergencyContacts(emergencyContact) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <h4 class="SecondHeader">Medical Condition(s)</h4>
     <hr class="splitLine">
@@ -201,15 +224,32 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">query_builder</mat-icon>&nbsp; Medication Frequency
                 </mat-label>
-                <input [(ngModel)]="ConditionFreq" matInput>
+                <input [(ngModel)]="conditionFreq" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToMedicalConditions() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let medicalCondition of medicalConditions;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{medicalCondition.conditionName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationDosage}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationFrequency}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromMedicalConditions(medicalCondition) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <h4 class="SecondHeader">Allergie(s)</h4>
     <hr class="splitLine">
@@ -220,7 +260,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Name
                 </mat-label>
-                <input [(ngModel)]="conditionName" matInput>
+                <input [(ngModel)]="allergyName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -228,7 +268,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Reaction
                 </mat-label>
-                <input [(ngModel)]="conditionMed" matInput>
+                <input [(ngModel)]="allergyReaction" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -236,19 +276,35 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Medication
                 </mat-label>
-                <input [(ngModel)]="ConditionFreq" matInput>
+                <input [(ngModel)]="allergyMedication" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToAllergies() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let allergie of allergies;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{allergie.allergyName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{allergie.allergyReaction}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{allergie.allergyMedication}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromAllergies(allergie) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button color="primary" mat-raised-button class="registerButton">Save Changes</button>
+            <button (click)=update() color="primary" mat-raised-button class="registerButton">Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

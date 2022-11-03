@@ -1,3 +1,5 @@
+import * as internal from "assert";
+
 export interface RegistrationDTO {
   userName: string;
   password: string;
@@ -86,3 +88,50 @@ export interface PersonalInformationDTO {
   skipperLicenseNumber: string;
 }
 
+export interface MedicalInformationPhysiciansDTO {
+  id: number;
+  physicianName: string;
+  physicianContactNumber: string;
+}
+
+export interface MedicalInformationPharmaciesDTO {
+  id: number;
+  pharmacyName: string;
+  pharmacyContactNumber: string;
+}
+
+export interface MedicalInformationEmergencyContactsDTO {
+  id: number;
+  name: string;
+  relationship: string;
+  contactNumberCell: string;
+  contactNumberHome: string;
+}
+
+export interface MedicalInformationMedicalConditionsDTO {
+  id: number;
+  conditionName: string;
+  medicationName: string;
+  medicationDosage: string;
+  medicationFrequency: string;
+}
+
+export interface MedicalInformationAllergiesDTO {
+  id: number;
+  allergyName: string;
+  allergyReaction: string;
+  allergyMedication: string;
+}
+
+export interface MedicalInformationDTO {
+  id: number;
+  medicalAidName: string;
+  medicalAidPlan: string;
+  medicalAidNumber: string;
+  medicalAidContactNumber: string;
+  medicalInformationPhysicians: MedicalInformationPhysiciansDTO[];
+  medicalInformationPharmacies: MedicalInformationPharmaciesDTO[];
+  medicalInformationEmergencyContacts: MedicalInformationEmergencyContactsDTO[];
+  medicalInformationMedicalConditions: MedicalInformationMedicalConditionsDTO[];
+  medicalInformationAllergies: MedicalInformationAllergiesDTO[];
+}

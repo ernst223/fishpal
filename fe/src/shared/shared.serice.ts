@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ClubDTO, FacetDTO, MyDocumentMessages, PersonalInformationDTO, UploadDocumentMessage } from './shared.models';
+import { ClubDTO, FacetDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -84,6 +84,19 @@ export class SharedService {
 
   public updatePersonalInformation(data: PersonalInformationDTO, profileId: number): Observable<any> {
     return this.httpClient.put(this.connectionstring + 'api/userinformation/personalinformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getMedicalInformation(profileId: number): Observable<MedicalInformationDTO> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/medicalinformation/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateMedicalInformation(data: MedicalInformationDTO, profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/userinformation/medicalinformation/' + profileId,
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));

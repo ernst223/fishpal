@@ -9,7 +9,7 @@ namespace FishPalAPI.Data.Communication
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Guid AssignedUserId { get; set; }
+        public int AssignedUserProfileId { get; set; }
 
         [ForeignKey("Messages")]
         public int MessagesFKId { get; set; }

@@ -26,6 +26,7 @@ export interface LoginProfilesDTO {
 export interface FacetDTO {
   id: number;
   name: string;
+  federation: string;
   provinces: ProvinceDTO[];
 }
 
@@ -64,10 +65,10 @@ export interface MessageDTO {
   Message: string,
   CreationDate: Date,
   Status: number,
-  InboxOutbox: number,
-  CreatoruserId: string,
+  CreatorUserProfileId:number,
+  rolesToSendTo: string[],
   StatusChangeDate?: Date,
-  ApproverRequired?: string
+  ApproverRequired?: number
 }
 
 export interface PersonalInformationDTO {
@@ -135,3 +136,19 @@ export interface MedicalInformationDTO {
   medicalInformationMedicalConditions: MedicalInformationMedicalConditionsDTO[];
   medicalInformationAllergies: MedicalInformationAllergiesDTO[];
 }
+export interface MobileUserInfoDTO {
+  ProfileId : number;
+  UserId : string;
+  Name : string;
+  Surname: string;
+  FacetName: string; 
+  TypeName: string; 
+  FacetId : number;
+  ProfileCreationDate :Date
+  ClubName : string;
+  ClubId : number;
+  Province : string;
+  ProvinceId : number;
+  FacetLogoBase64: string;
+}
+

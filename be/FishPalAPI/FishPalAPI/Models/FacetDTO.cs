@@ -9,6 +9,7 @@ namespace FishPalAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Federation { get; set; }
         public List<ProvinceDTO> provinces { get; set; }
     }
 }

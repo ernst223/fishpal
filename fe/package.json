@@ -24,6 +24,7 @@
     "@angular/router": "~8.1.2",
     "angular-font-awesome": "^3.1.2",
     "angular2-qrcode": "^2.0.3",
+    "angularx-qrcode": "~2.1.4",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
     "html2canvas": "^1.4.1",

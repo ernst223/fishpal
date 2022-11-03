@@ -1,36 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
-import { FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
+import { FacetDTO, FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
 import { AdministrationService } from '../administration.service';
-
-
-export interface Card {
-  title: string;
-  subtitle: string;
-  text: string;
-}
-
-const DATA: Tile[] = [
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 },
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 }, { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 },
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 },
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 },
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 },
-  { text: 'One', price: 700000, bed: 2, bath: 1, parking: 2 }
-];
-
-
-export interface Tile {
-  text: string;
-  price: number;
-  bed: number;
-  bath: number;
-  parking: number;
-}
 
 @Component({
   selector: 'app-communication',
@@ -38,10 +13,7 @@ export interface Tile {
   styleUrls: ['./communication.component.scss']
 })
 export class CommunicationComponent implements OnInit {
-  ngOnInit(): void {
-    
-  }
-  /*@ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator, { static: false })
 
   paginator!: MatPaginator;
   obsInBox!: Observable<any>;
@@ -78,20 +50,45 @@ export class CommunicationComponent implements OnInit {
   selectedMembers: any[] = [];
 
   federations: FederationDTO[];
-  messages: MessageDTO[];
-  loggedInUserEmail: string;
-  constructor(private adminService: AdministrationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) { }
+  message: MessageDTO = {} as any;
+  userRole: string;
+  userEmail: string;
+  selectedFederation: string;
+  facet: FacetDTO[] = [];
+  roles: string[] = [];
+  selectedFacet: any;
+  selectedRoles: any;
+  federationId: number;
+  profileId: number;
+  typedMessage: string;
+
+  constructor(public snackBar: MatSnackBar,private adminService: AdministrationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
-    this.loggedInUserEmail = localStorage.getItem('loggedInUserEmail');
+    this.userRole = localStorage.getItem('role');
+    this.testWhichTypeOfUserIsLoggedIn(this.userRole);
+    this.userEmail = localStorage.getItem('loggedInUserEmail');
+    this.profileId = Number(localStorage.getItem('profileId'));
     this.createForm();
     this.getInboxMessages();
     this.getFederations();
   }
 
-  test() {
-    console.log("this is the test", this.selectedFederations);
+  testWhichTypeOfUserIsLoggedIn(theUserRole: string) {
+    if (theUserRole == "A1" || theUserRole == "B1" || theUserRole == "C1" || theUserRole == "D1") {
+      this.chair = true;
+      this.member = true;
+      this.management = true;
+    } else if (theUserRole == "A0" || theUserRole == "B0" || theUserRole == "C0" || theUserRole == "D0") {
+      this.chair = false;
+      this.member = true;
+      this.management = true;
+    } else {
+      this.chair = false;
+      this.member = true;
+      this.management = false;
+    }
   }
 
   createForm(): void {
@@ -105,53 +102,48 @@ export class CommunicationComponent implements OnInit {
   }
 
   getFederations() {
-    this.adminService.getAllFederations(this.loggedInUserEmail).subscribe(feds => {
-      console.log("this is the federations", feds);
-      this.allFederations = feds;
-      this.getProvinces();
+    if (this.userRole != "A2" && this.userRole != "A3") {
+      this.adminService.getAllFederations(this.userRole).subscribe(feds => {
+        this.facet = feds;
+        console.log("this is the returned facets", this.facet);
+        if (this.facet == null) {
+          this.federationId = Number(localStorage.getItem('federationId'));
+        }
+        this.getRolesCurrentRoleCanSendTo();
+      });
+    } else {
+      this.facet = undefined;
+    }
+  }
+
+  getRolesCurrentRoleCanSendTo() {
+    this.adminService.getAllRolesCurrentRoleCanSendTo(this.userRole).subscribe(feds => {
+      this.roles = feds;
+      console.log("this is the returned roles", this.roles);
     });
   }
 
-  getProvinces() {
-    let myInterfacesArray = this.selectedFederations.map(value => {
-
-      return <any>{
-        Id: null,
-        Name: value
-      };
-
-    });
-
-    console.log("this is the 777 get provinces", myInterfacesArray);
-
-    this.adminService.getAllProvinces(this.loggedInUserEmail, myInterfacesArray).subscribe(feds => {
-      console.log("this is the federations", feds);
-      this.allProvinces = feds;
-    });
+  setSelectedFacet() {
+    this.federationId = this.selectedFacet;
+    console.log("this is the slected facet", this.federationId);
   }
-
 
   sendMessages() {
-    if (this.newMessageForm.invalid) {
-      this.validateAllFormFields(this.newMessageForm);
-      return;
-    }
+    this.message.Message = this.typedMessage;
+    this.message.rolesToSendTo = this.selectedRoles;
 
-    const formData = this.newMessageForm.getRawValue();
-    console.log("order form data test", formData);
-
-    let today: object = new Date();
-
-    //this.myModel.Province = formData.the_Province;
-    //this.myModel.photos = this.photosObject;
-
-    /*console.log(this.myModel);
-    this.http.post('https://localhost:44351/InsertListing', this.myModel).pipe().subscribe(a => {
-
-    }, (error) => {
-
+    this.adminService.sendMessages(this.message, this.federationId, this.profileId).subscribe(result => {
+      this.getInboxMessages();
+      this.dialog.closeAll();
+      this.openSnackBar("Message sent successfully","Close");
+      console.log("this is the result from sending message", result);
     });
-    console.log(formData);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -174,41 +166,37 @@ export class CommunicationComponent implements OnInit {
   };
 
   getInboxMessages() {
-    this.adminService.getAllMessages(0, this.loggedInUserEmail).subscribe(message => {
+    this.adminService.getAllMessages(0, this.profileId).subscribe(message => {
       console.log("this is the INBOX messages", message);
       this.dataSourceInBox = new MatTableDataSource<MessageDTO>(message);
       this.dataSourceInBox.paginator = this.paginator;
       this.obsInBox = this.dataSourceInBox.connect();
-
       this.getOutboxMessages();
     });
   }
   getOutboxMessages() {
-    this.adminService.getAllMessages(1, this.loggedInUserEmail).subscribe(message => {
+    this.adminService.getAllMessages(1, this.profileId).subscribe(message => {
+      console.log("this is the OUTBOX messages", message);
       this.dataSourceOutBox = new MatTableDataSource<MessageDTO>(message);
       this.dataSourceOutBox.paginator = this.paginator;
       this.obsOutBox = this.dataSourceOutBox.connect();
-
-      console.log("this is the OUTBOX messages", message);
       this.getRequestMessages();
     });
   }
   getRequestMessages() {
-    this.adminService.getAllMessages(2, this.loggedInUserEmail).subscribe(message => {
+    this.adminService.getAllMessages(2, this.profileId).subscribe(message => {
+      console.log("this is the PENDING messages", message);
       this.dataSourcePending = new MatTableDataSource<MessageDTO>(message);
       this.dataSourcePending.paginator = this.paginator;
       this.obsPending = this.dataSourcePending.connect();
-
-      console.log("this is the PENDING messages", message);
     });
   }
 
   openModal(templateRef, card?: any) {
-    if (card) {
-      this.messages = card;
+    console.log("this is the card", card);
+    if (card != undefined) {
+      this.message = card;
     }
-
-    console.log("this is the card", this.messages);
 
     let dialogRef = this.dialog.open(templateRef, {
       width: '550px',
@@ -222,71 +210,18 @@ export class CommunicationComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  onFederationInputChange(event: any) {
-    const searchInput = event.target.value.toLowerCase();
-
-    this.filteredFederations = this.allFederations.filter(({ name }) => {
-      const fed = name.toLowerCase();
-      return fed.includes(searchInput);
-
+  approveDeclineMessage(approveDecline: number, messageId: number) {
+    this.adminService.approveDeclineMessage(approveDecline, messageId).subscribe(response => {
+      this.getInboxMessages();
+      this.dialog.closeAll();
     });
   }
 
-  onProvinceInputChange(event: any) {
-    const searchInput = event.target.value.toLowerCase();
-
-    this.filteredProvinces = this.allProvinces.filter(({ name }) => {
-      const provc = name.toLowerCase();
-      return provc.includes(searchInput);
+  deleteMessage(messageId: number) {
+    this.adminService.deleteMessage(messageId).subscribe(response => {
+      this.getInboxMessages();
+      this.dialog.closeAll();
     });
   }
-
-  onClubInputChange(event: any) {
-    const searchInput = event.target.value.toLowerCase();
-
-    this.filteredClubs = this.allClubs.filter(({ name }) => {
-      const clb = name.toLowerCase();
-      return clb.includes(searchInput);
-    });
-  }
-
-  onFMemberInputChange(event: any) {
-    const searchInput = event.target.value.toLowerCase();
-
-    this.filteredMembers = this.allMembers.filter(({ name }) => {
-      const mmber = name.toLowerCase();
-      return mmber.includes(searchInput);
-    });
-  }
-
-  onFederationOpenChange(searchInput: any) {
-    searchInput.value = "";
-    this.filteredFederations = this.allFederations;
-  }
-
-  onProvinceOpenChange(searchInput: any) {
-    searchInput.value = "";
-    this.filteredProvinces = this.allProvinces;
-  }
-
-  onOpenChange(){
-
-  }
-
-  onClubOpenChange(searchInput: any) {
-    searchInput.value = "";
-    this.filteredClubs = this.allClubs;
-  }
-
-  onMemberOpenChange(searchInput: any) {
-    searchInput.value = "";
-    this.filteredMembers = this.allMembers;
-  }
-
-  sendMessage() {
-    console.log("this is the test", this.selectedFederations);
-    this.getProvinces();
-  }
-  */
 
 }

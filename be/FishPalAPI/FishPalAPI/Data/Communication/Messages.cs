@@ -14,10 +14,9 @@ namespace FishPalAPI.Data.Communication
         public DateTime? CreationDate { get; set; }
 
         public int Status { get; set; }
-        public int InboxOutbox { get; set; }
-        public Guid CreatoruserId { get; set; }
+        public int CreatorUserProfileId { get; set; }
         public DateTime? StatusChangeDate { get; set; }
-        public Guid? ApproverRequired { get; set; }
+        public int? ApproverRequired { get; set; }
         public List<MessageReceivers> AssignedUsers { get; set; }
     }
 }

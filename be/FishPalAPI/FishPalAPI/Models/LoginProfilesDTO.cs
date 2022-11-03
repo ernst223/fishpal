@@ -12,5 +12,7 @@ namespace FishPalAPI.Models
         public string Role { get; set; }
         public string club { get; set; }
         public string federation { get; set; }
+
+        public int federationId { get; set; }
     }
 }

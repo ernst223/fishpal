@@ -23,13 +23,17 @@ namespace FishPalAPI.Services
         {
             var currentUser = context.Users.Include(x => x.profiles).ThenInclude(x => x.club).ThenInclude(x => x.Province).ThenInclude(x => x.Facets).Where(x => x.UserName == userName).FirstOrDefault();
 
+            List<UserProfile> specificProfile = new List<UserProfile>();
+
             if (federationId != null)
             {
-                currentUser.profiles.Where(x => x.club.Facet.Id == federationId);
+                specificProfile = currentUser.profiles.Where(x => x.club.Facet.Id == federationId).ToList();
+            }else{
+                specificProfile = currentUser.profiles;
             }
 
             List<mobileUserInfoDTO> result = new List<mobileUserInfoDTO>();
-            foreach (var profile in currentUser.profiles)
+            foreach (var profile in specificProfile)
             {
                 result.Add(new mobileUserInfoDTO()
                 {
@@ -59,7 +63,7 @@ namespace FishPalAPI.Services
                 List<LoginProfilesDTO> result = new List<LoginProfilesDTO>();
                 foreach (var entry in tempUser.profiles)
                 {
-                    var tempProfile = context.UserProfiles.Include(a => a.club)
+                    var tempProfile = context.UserProfiles.Include(a => a.club).ThenInclude(a=>a.Facet)
                         .Include(a => a.role).Where(a => a.Id == entry.Id).FirstOrDefault();
                     LoginProfilesDTO tempResult = new LoginProfilesDTO();
                     Facet tempFacet = null;
@@ -76,6 +80,7 @@ namespace FishPalAPI.Services
                         tempResult.federation = tempClub.Facet.Federation;
                         tempResult.club = tempProfile.club.Name;
                         tempResult.Name = tempResult.federation + " role: " + tempResult.Role;
+                        tempResult.federationId = tempProfile.club.Facet.Id;
                     }
                     if (tempFacet != null)
                     {

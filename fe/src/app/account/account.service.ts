@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { LoginProfilesDTO, RegistrationDTO, ResetPasswordDTO } from 'src/shared/shared.models';
+import { LoginProfilesDTO, MobileUserInfoDTO, RegistrationDTO, ResetPasswordDTO } from 'src/shared/shared.models';
 
 @Injectable()
 export class AccountService {
@@ -36,6 +36,7 @@ export class AccountService {
                         localStorage.setItem('club', res.profiles[0].club);
                         localStorage.setItem('federation', res.profiles[0].federation);
                         localStorage.setItem('profileName', res.profiles[0].name);
+                        localStorage.setItem('federationId', res.profiles[0].federationId);
                     }
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('loggedInUserEmail', res.userName);
@@ -101,5 +102,12 @@ export class AccountService {
     public logout() {
         localStorage.clear();
         return this.httpClient.get('auth/logout');
+    }
+
+    public getAllUserInfo(username: string, federationID?: number): Observable<MobileUserInfoDTO> {
+        const headers = new HttpHeaders()
+            .append('Content-Type', 'application/json')
+            .append('Access-Control-Allow-Methods', '*');
+            return this.httpClient.get(this.connectionstring + 'api/general/allUserInfo/' + username + "/" + federationID, { headers }).pipe(map((res: any) => res));
     }
 }

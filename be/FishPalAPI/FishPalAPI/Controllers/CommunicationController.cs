@@ -2,6 +2,7 @@
 using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
+using FishPalAPI.Models.MessagesModels;
 using FishPalAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -54,12 +55,12 @@ namespace FishPalAPI.Controllers
         /// </summary>
         /// <param name="T"></param>
         /// <returns></returns>
-        [HttpGet("getAllMessage/{messageTypeToReturn}/{userEmail}")]
-        public async Task<IActionResult> getAllMessage(int messageTypeToReturn, string userEmail)
+        [HttpGet("getAllMessage/{messageTypeToReturn}/{profileId}")]
+        public async Task<IActionResult> getAllMessage(int messageTypeToReturn, int profileId)
         {
             try
             {
-                return Ok(communicationService.getAllMessages(messageTypeToReturn, userEmail));
+                return Ok(communicationService.getAllMessages(messageTypeToReturn, profileId));
             }
             catch (Exception e)
             {
@@ -72,12 +73,12 @@ namespace FishPalAPI.Controllers
         /// </summary>
         /// <param name="T"></param>
         /// <returns></returns>
-        [HttpPost("approveDeclineMessage")]
-        public async Task<IActionResult> approveDeclineMessage([FromBody] Messages T)
+        [HttpPost("approveDeclineMessage/{approveDecline}/{messageId}")]
+        public async Task<IActionResult> approveDeclineMessage(int approveDecline, int messageId)
         {
             try
             {
-                bool result = communicationService.approveDeclineMessages(T);
+                bool result = communicationService.approveDeclineMessages(approveDecline, messageId);
                 if (result)
                 {
                     return Ok();
@@ -97,42 +98,33 @@ namespace FishPalAPI.Controllers
         /// gets all the Federations including sasacc for communication
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getAll/federations/{userEmail}")]
-        public async Task<IActionResult> federations(string userEmail)
+        [HttpGet("getAll/federations/{role}")]
+        public async Task<IActionResult> federations(string role)
         {
-            return Ok(communicationService.getAllFederations(userEmail));
+            return Ok(communicationService.getAllFederations(role));
         }
 
         /// <summary>
-        /// gets all the provinces for new messages
+        /// gets all the Federations including sasacc for communication
         /// </summary>
         /// <returns></returns>
-        [HttpPost("getAll/provinces/{userEmail}")]
-        public async Task<IActionResult> provinces(string userEmail, [FromBody] FederationDTO[] T)
+        [HttpGet("getAll/RolesCurrentRoleCanSendTo/{role}")]
+        public async Task<IActionResult> RolesCurrentRoleCanSendTo(string role)
         {
-            return Ok(communicationService.getAllProvinces(userEmail, T));
+            return Ok(communicationService.RolesCurrentRoleCanSendTo(role));
         }
 
         /// <summary>
-        /// gets all the clubs for communication
+        /// sends the message to all the selected roles inside your/selected federation
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getAll/clubs/{userEmail}")]
-        public async Task<IActionResult> clubs(string userEmail)
+        [HttpPost("getAll/sendMessages/{federationId}/{profileId}")]
+        public async Task<IActionResult> sendMessages([FromBody] MessageDTO message, int federationId, int profileId)
         {
-            return Ok(communicationService.getAllClubs(userEmail));
+            communicationService.sendMessages(message, federationId, profileId);
+            return Ok();
         }
-
-        /// <summary>
-        /// gets all the people for communication
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getAll/people/{userEmail}")]
-        public async Task<IActionResult> people(string userEmail)
-        {
-            return Ok(communicationService.getAllPeople(userEmail));
-        }
-
+        
         [HttpPost("document/send/{profileId}/{sendTo}")]
         public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, int sendTo)
         {
@@ -176,6 +168,32 @@ namespace FishPalAPI.Controllers
         {
             communicationService.declineDocumentMessage(id);
             return Ok();
+        }
+
+        /// <summary>
+        /// Delete a message
+        /// </summary>
+        /// <param name="T"></param>
+        /// <returns></returns>
+        [HttpDelete("deleteMessage/{messageId}")]
+        public async Task<IActionResult> deleteMessage(int messageId)
+        {
+            try
+            {
+                bool result = communicationService.deleteMessage(messageId);
+                if (result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221105073049_addedGeoProvinceInformation")]
+    partial class addedGeoProvinceInformation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,85 +56,6 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("ProvinceId");
 
                     b.ToTable("Clubs");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ClubCodeOfConductDateAccepted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ClubCodeOfConductRecieved")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("ClubConstitutionDateAccepted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ClubConstitutionRecieved")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("ClubDisciplinaryCodeDateAccepted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ClubDisciplinaryCodeRecieved")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClubName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClubPeriod")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClubInformation");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformationComitteeMembers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClubInformationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Period")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Position")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubInformationId");
-
-                    b.ToTable("ClubInformationComitteeMembers");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformationPriorPeriods", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClubInformationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClubName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClubPeriod")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubInformationId");
-
-                    b.ToTable("ClubInformationPriorPeriods");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Communication.MessageReceivers", b =>
@@ -417,48 +340,7 @@ namespace FishPalAPI.Migrations
                     b.ToTable("MedicalInformationPhysicians");
                 });
 
-            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Boat_Information.BoatInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("BoatNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BoatOwner")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CofExpiryDate")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CofNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HorsePower")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HullColour")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HullType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("MotorMake")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TowVehicleRegistrationNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TrailerRegistrationNumber")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BoatInformation");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinceInformation", b =>
+            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinecInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -476,47 +358,6 @@ namespace FishPalAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GeoProvinecInformation");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Training.Training", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("AdminPointsReceived")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("AdminYearCompleted")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CaptainPointsReceived")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CaptainYearCompleted")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CoachLvl1PointsReceived")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CoachLvl1YearCompleted")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CoachLvl2PointsReceived")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CoachLvl2YearCompleted")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ManagerPointsReceived")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ManagerYearCompleted")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Training");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.OrderItems", b =>
@@ -703,13 +544,7 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("clubInformationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("boatInformationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("geoProvinceInformationId")
+                    b.Property<int?>("geoProvineInformationId")
                         .HasColumnType("int");
 
                     b.Property<int?>("medicalInformationId")
@@ -718,22 +553,13 @@ namespace FishPalAPI.Migrations
                     b.Property<int?>("personalInformationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("trainingId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("clubInformationId");
-
-                    b.HasIndex("boatInformationId");
-
-                    b.HasIndex("geoProvinceInformationId");
+                    b.HasIndex("geoProvineInformationId");
 
                     b.HasIndex("medicalInformationId");
 
                     b.HasIndex("personalInformationId");
-
-                    b.HasIndex("trainingId");
 
                     b.ToTable("UserInformation");
                 });
@@ -930,20 +756,6 @@ namespace FishPalAPI.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformationComitteeMembers", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.ClubInformation", null)
-                        .WithMany("ComitteeMembers")
-                        .HasForeignKey("ClubInformationId");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformationPriorPeriods", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.ClubInformation", null)
-                        .WithMany("PriorPeriods")
-                        .HasForeignKey("ClubInformationId");
-                });
-
             modelBuilder.Entity("FishPalAPI.Data.Communication.MessageReceivers", b =>
                 {
                     b.HasOne("FishPalAPI.Data.Communication.Messages", "Messages")
@@ -1027,17 +839,9 @@ namespace FishPalAPI.Migrations
 
             modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
                 {
-                    b.HasOne("FishPalAPI.Data.ClubInformation", "clubInformation")
+                    b.HasOne("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinecInformation", "geoProvineInformation")
                         .WithMany()
-                        .HasForeignKey("clubInformationId");
-
-                    b.HasOne("FishPalAPI.Data.Member_Information.Boat_Information.BoatInformation", "boatInformation")
-                        .WithMany()
-                        .HasForeignKey("boatInformationId");
-
-                    b.HasOne("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinceInformation", "geoProvinceInformation")
-                        .WithMany()
-                        .HasForeignKey("geoProvinceInformationId");
+                        .HasForeignKey("geoProvineInformationId");
 
                     b.HasOne("FishPalAPI.Data.MedicalInformation", "medicalInformation")
                         .WithMany()
@@ -1047,21 +851,11 @@ namespace FishPalAPI.Migrations
                         .WithMany()
                         .HasForeignKey("personalInformationId");
 
-                    b.Navigation("clubInformation");
-
-                    b.HasOne("FishPalAPI.Data.Member_Information.Training.Training", "training")
-                        .WithMany()
-                        .HasForeignKey("trainingId");
-
-                    b.Navigation("boatInformation");
-
-                    b.Navigation("geoProvinceInformation");
+                    b.Navigation("geoProvineInformation");
 
                     b.Navigation("medicalInformation");
 
                     b.Navigation("personalInformation");
-
-                    b.Navigation("training");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.UserProfile", b =>
@@ -1143,13 +937,6 @@ namespace FishPalAPI.Migrations
             modelBuilder.Entity("FishPalAPI.Data.Club", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.ClubInformation", b =>
-                {
-                    b.Navigation("ComitteeMembers");
-
-                    b.Navigation("PriorPeriods");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Communication.Messages", b =>

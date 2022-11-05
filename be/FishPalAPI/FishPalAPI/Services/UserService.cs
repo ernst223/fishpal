@@ -7,6 +7,9 @@ using System.Linq;
 using PostmarkDotNet;
 using System.Threading.Tasks;
 using FishPalAPI.Models.MobileAppModels;
+using FishPalAPI.Data.Member_Information.Geo_Province_Information;
+using FishPalAPI.Data.Member_Information.Boat_Information;
+using FishPalAPI.Data.Member_Information.Training;
 
 namespace FishPalAPI.Services
 {
@@ -148,6 +151,9 @@ namespace FishPalAPI.Services
         {
             PersonalInformation personalInfo = new PersonalInformation();
             MedicalInformation medicalInformation = new MedicalInformation();
+            GeoProvinceInformation geoProvinceInformation = new GeoProvinceInformation();
+            BoatInformation boatInformation = new BoatInformation();
+            Training training = new Training();
             List<MedicalInformationAllergies> medicalInformationAllergies = new List<MedicalInformationAllergies>();
             List<MedicalInformationEmergencyContacts> medicalInformationEmergencyContacts = new List<MedicalInformationEmergencyContacts>();
             List<MedicalInformationMedicalConditions> medicalInformationMedicalConditions = new List<MedicalInformationMedicalConditions>();
@@ -166,8 +172,11 @@ namespace FishPalAPI.Services
 
             return new UserInformation
             {
+                geoProvinceInformation = geoProvinceInformation,
                 personalInformation = personalInfo,
                 medicalInformation = medicalInformation,
+                boatInformation = boatInformation,
+                training = training
                 clubInformation = clubInformation
             };
         }

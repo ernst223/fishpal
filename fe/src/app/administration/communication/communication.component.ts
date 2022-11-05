@@ -61,8 +61,9 @@ export class CommunicationComponent implements OnInit {
   federationId: number;
   profileId: number;
   typedMessage: string;
-
-  constructor(public snackBar: MatSnackBar,private adminService: AdministrationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) { }
+  newRoles = {} as any;
+  rolesToDisplay = [];
+  constructor(public snackBar: MatSnackBar, private adminService: AdministrationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
@@ -117,15 +118,26 @@ export class CommunicationComponent implements OnInit {
   }
 
   getRolesCurrentRoleCanSendTo() {
+    
     this.adminService.getAllRolesCurrentRoleCanSendTo(this.userRole).subscribe(feds => {
+    
+
       this.roles = feds;
-      console.log("this is the returned roles", this.roles);
+      this.roles.forEach(value => {
+        var _displayValue = this.getNewDisplayValue(value);
+ 
+        this.newRoles = {
+          theValue: value,
+          displayValue: _displayValue
+        }
+        this.rolesToDisplay.push(this.newRoles);
+      });
+
     });
   }
 
   setSelectedFacet() {
     this.federationId = this.selectedFacet;
-    console.log("this is the slected facet", this.federationId);
   }
 
   sendMessages() {
@@ -135,7 +147,7 @@ export class CommunicationComponent implements OnInit {
     this.adminService.sendMessages(this.message, this.federationId, this.profileId).subscribe(result => {
       this.getInboxMessages();
       this.dialog.closeAll();
-      this.openSnackBar("Message sent successfully","Close");
+      this.openSnackBar("Message sent successfully", "Close");
       console.log("this is the result from sending message", result);
     });
   }
@@ -192,7 +204,14 @@ export class CommunicationComponent implements OnInit {
     });
   }
 
+  clearMessageForm() {
+    this.selectedFacet = undefined;
+    this.selectedRoles = undefined;
+    this.typedMessage = undefined;
+  }
+
   openModal(templateRef, card?: any) {
+    this.clearMessageForm();
     console.log("this is the card", card);
     if (card != undefined) {
       this.message = card;
@@ -222,6 +241,46 @@ export class CommunicationComponent implements OnInit {
       this.getInboxMessages();
       this.dialog.closeAll();
     });
+  }
+
+  getNewDisplayValue(providedRole: string) {
+    if (providedRole == "A0") {
+      return "SASACC Admin (A0)";
+    } else if (providedRole == "A1") {
+      return "SASACC Chair (A1)";
+    } else if (providedRole == "A2") {
+      return "SASACC Action com (A2)";
+    } else if (providedRole == "A3") {
+      return "SASACC Management com (A3)";
+    } else if (providedRole == "B0") {
+      return "Federation Admin (B0)";
+    } else if (providedRole == "B1") {
+      return "Federation Chair (B1)";
+    } else if (providedRole == "B2") {
+      return "Federation Action com (B2)";
+    } else if (providedRole == "B3") {
+      return "Federation Management com (B3)";
+    } else if (providedRole == "C0") {
+      return "Province Admin (C0)";
+    } else if (providedRole == "C1") {
+      return "Province Chair (C1)";
+    } else if (providedRole == "C2") {
+      return "Province Action com (C2)";
+    } else if (providedRole == "C3") {
+      return "Province Management com (C3)";
+    } else if (providedRole == "D0") {
+      return "Club Admin (D0)";
+    } else if (providedRole == "D1") {
+      return "Club Chair (D1)";
+    } else if (providedRole == "D2") {
+      return "Club Action com (D2)";
+    } else if (providedRole == "D3") {
+      return "Club Management com (D3)";
+    } else if (providedRole == "E0") {
+      return "Club member (E0)";
+    } else if (providedRole == "E1") {
+      return "Social Member (E1)";
+    }
   }
 
 }

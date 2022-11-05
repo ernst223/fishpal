@@ -83,7 +83,6 @@ export class MedicalInformationComponent implements OnInit {
     this.medicalInformation.medicalInformationMedicalConditions = this.medicalConditions;
     this.medicalInformation.medicalInformationAllergies = this.allergies;
 
-    console.log(this.medicalInformation);
     this.service.updateMedicalInformation(
       this.medicalInformation,
       Number(this.currentProfile)

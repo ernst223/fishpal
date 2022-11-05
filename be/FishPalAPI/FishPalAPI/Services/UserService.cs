@@ -153,6 +153,11 @@ namespace FishPalAPI.Services
             List<MedicalInformationMedicalConditions> medicalInformationMedicalConditions = new List<MedicalInformationMedicalConditions>();
             List<MedicalInformationPharmacies> medicalInformationPharmacies = new List<MedicalInformationPharmacies>();
             List<MedicalInformationPhysicians> medicalInformationPhysicians = new List<MedicalInformationPhysicians>();
+            ClubInformation clubInformation = new ClubInformation();
+            List<ClubInformationComitteeMembers> comitteeMembers = new List<ClubInformationComitteeMembers>();
+            List<ClubInformationPriorPeriods> priorPeriods = new List<ClubInformationPriorPeriods>();
+            clubInformation.ComitteeMembers = comitteeMembers;
+            clubInformation.PriorPeriods = priorPeriods;
             medicalInformation.MedicalInformationEmergencyContacts = medicalInformationEmergencyContacts;
             medicalInformation.MedicalInformationAllergies = medicalInformationAllergies;
             medicalInformation.MedicalInformationMedicalConditions = medicalInformationMedicalConditions;
@@ -162,7 +167,8 @@ namespace FishPalAPI.Services
             return new UserInformation
             {
                 personalInformation = personalInfo,
-                medicalInformation = medicalInformation
+                medicalInformation = medicalInformation,
+                clubInformation = clubInformation
             };
         }
 

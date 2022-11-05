@@ -152,3 +152,28 @@ export interface MobileUserInfoDTO {
   FacetLogoBase64: string;
 }
 
+export interface ClubInformationComitteeMembersDTO {
+  id: number;
+  position: string;
+  period: string;
+}
+
+export interface ClubInformationPriorPeriodsDTO {
+  id: number;
+  clubName: string;
+  clubPeriod: string;
+}
+
+export interface ClubInformationDTO {
+  id: number;
+  clubName: string;
+  clubPeriod: string;
+  clubConstitutionRecieved: string;
+  clubConstitutionDateAccepted: Date;
+  clubCodeOfConductRecieved: string;
+  clubCodeOfConductDateAccepted: Date;
+  clubDisciplinaryCodeRecieved: string;
+  clubDisciplinaryCodeDateAccepted: Date;
+  comitteeMembers: ClubInformationComitteeMembersDTO[];
+  priorPeriods: ClubInformationPriorPeriodsDTO[];
+}

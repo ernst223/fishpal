@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FishPalAPI.Data;
+using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,14 @@ namespace FishPalAPI.Services.Mapper
             CreateMap<MedicalInformationMedicalConditionsDTO, MedicalInformationMedicalConditions>().ForMember(a => a.Id, a => a.Ignore());
             CreateMap<MedicalInformationPharmaciesDTO, MedicalInformationPharmacies>().ForMember(a => a.Id, a => a.Ignore());
             CreateMap<MedicalInformationPhysiciansDTO, MedicalInformationPhysicians>().ForMember(a => a.Id, a => a.Ignore());
+
+            CreateMap<ClubInformation, ClubInformationDTO>();
+            CreateMap<ClubInformationComitteeMembers, ClubInformationComitteeMembersDTO>();
+            CreateMap<ClubInformationPriorPeriods, ClubInformationPriorPeriodsDTO>();
+
+            CreateMap<ClubInformationDTO, ClubInformation>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<ClubInformationComitteeMembersDTO, ClubInformationComitteeMembers>().ForMember(a => a.Id, a => a.Ignore());
+            CreateMap<ClubInformationPriorPeriodsDTO, ClubInformationPriorPeriods>().ForMember(a => a.Id, a => a.Ignore());
         }
     }
 }

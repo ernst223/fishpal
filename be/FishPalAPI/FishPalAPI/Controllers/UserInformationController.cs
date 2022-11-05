@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FishPalAPI.Models;
+using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
 using FishPalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,19 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> updateMedicalInformation([FromBody] MedicalInformationDTO medicalInformationDTO, int profileId)
         {
             userInformationService.updateMedicalAid(medicalInformationDTO, profileId);
+            return Ok();
+        }
+
+        [HttpGet("clubinformation/{profileId}")]
+        public async Task<IActionResult> getClubInformation(int profileId)
+        {
+            return Ok(userInformationService.getClubInformation(profileId));
+        }
+
+        [HttpPut("clubinformation/{profileId}")]
+        public async Task<IActionResult> updateClubInformation([FromBody] ClubInformationDTO clubInformationDTO, int profileId)
+        {
+            userInformationService.updateClubInformation(clubInformationDTO, profileId);
             return Ok();
         }
 

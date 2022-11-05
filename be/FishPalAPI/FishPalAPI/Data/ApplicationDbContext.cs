@@ -20,8 +20,8 @@ namespace FishPalAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //optionsBuilder.UseMySql("datasource = localhost; port = 7777; username = root; password = AWE7; database = fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
 
@@ -44,5 +44,8 @@ namespace FishPalAPI.Data
         public DbSet<MedicalInformationEmergencyContacts> MedicalInformationEmergencyContacts { get; set; }
         public DbSet<MedicalInformationMedicalConditions> MedicalInformationMedicalConditions { get; set; }
         public DbSet<MedicalInformationAllergies> MedicalInformationAllergies { get; set; }
+        public DbSet<ClubInformation> ClubInformation { get; set; }
+        public DbSet<ClubInformationComitteeMembers> ClubInformationComitteeMembers { get; set; }
+        public DbSet<ClubInformationPriorPeriods> ClubInformationPriorPeriods { get; set; }
     }
 }

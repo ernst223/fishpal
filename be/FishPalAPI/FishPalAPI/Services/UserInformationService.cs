@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FishPalAPI.Data;
 using FishPalAPI.Models;
+using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +22,94 @@ namespace FishPalAPI.Services
             _mapper = mapper;
             context = new ApplicationDbContext();
             userService = new UserService();
+        }
+
+        public ClubInformationDTO getClubInformation(int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.clubInformation)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(currentProfile)).FirstOrDefault();
+            if (currentProfile.userInformation == null)
+            {
+                currentProfile.userInformation = userService.getDefaultUserInformation();
+                context.SaveChanges();
+
+                // Refetching
+                currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.medicalInformation)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            }
+
+            var currentClubInformation = context.ClubInformation
+                .Include(a => a.PriorPeriods).Include(a => a.ComitteeMembers)
+                .Where(a => a.Id == currentProfile.userInformation.clubInformation.Id).FirstOrDefault();
+
+            List<ClubInformationComitteeMembersDTO> comitteeMembers = new List<ClubInformationComitteeMembersDTO>();
+            foreach (var entry in currentClubInformation.ComitteeMembers)
+            {
+                comitteeMembers.Add(_mapper.Map<ClubInformationComitteeMembersDTO>(entry));
+            }
+
+            List<ClubInformationPriorPeriodsDTO> priorPeriods = new List<ClubInformationPriorPeriodsDTO>();
+            foreach (var entry in currentClubInformation.PriorPeriods)
+            {
+                priorPeriods.Add(_mapper.Map<ClubInformationPriorPeriodsDTO>(entry));
+            }
+
+            return new ClubInformationDTO()
+            {
+                ClubName = currentClubInformation.ClubName,
+                ClubPeriod = currentClubInformation.ClubPeriod,
+                ClubConstitutionRecieved = currentClubInformation.ClubConstitutionRecieved,
+                ClubConstitutionDateAccepted = currentClubInformation.ClubConstitutionDateAccepted,
+                ClubCodeOfConductRecieved = currentClubInformation.ClubCodeOfConductRecieved,
+                ClubCodeOfConductDateAccepted = currentClubInformation.ClubCodeOfConductDateAccepted,
+                ClubDisciplinaryCodeRecieved = currentClubInformation.ClubDisciplinaryCodeRecieved,
+                ClubDisciplinaryCodeDateAccepted = currentClubInformation.ClubDisciplinaryCodeDateAccepted,
+                ComitteeMembers = comitteeMembers,
+                PriorPeriods = priorPeriods
+            };
+        }
+
+        public void updateClubInformation(ClubInformationDTO clubInformation, int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.clubInformation)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            var currentClubInformation = context.ClubInformation
+                .Include(a => a.ComitteeMembers).Include(a => a.PriorPeriods)
+                .Where(a => a.Id == currentProfile.userInformation.clubInformation.Id).FirstOrDefault();
+
+            List<ClubInformationComitteeMembers> comitteeMembers = new List<ClubInformationComitteeMembers>();
+            foreach (var entry in clubInformation.ComitteeMembers)
+            {
+                comitteeMembers.Add(_mapper.Map<ClubInformationComitteeMembers>(entry));
+            }
+            foreach (var deleteEntry in currentClubInformation.ComitteeMembers)
+            {
+                context.Remove(deleteEntry);
+            }
+
+            List<ClubInformationPriorPeriods> priorPeriods = new List<ClubInformationPriorPeriods>();
+            foreach (var entry in clubInformation.PriorPeriods)
+            {
+                priorPeriods.Add(_mapper.Map<ClubInformationPriorPeriods>(entry));
+            }
+            foreach (var deleteEntry in currentClubInformation.PriorPeriods)
+            {
+                context.Remove(deleteEntry);
+            }
+
+            currentClubInformation.ClubName = clubInformation.ClubName;
+            currentClubInformation.ClubPeriod = clubInformation.ClubPeriod;
+            currentClubInformation.ClubConstitutionRecieved = clubInformation.ClubConstitutionRecieved;
+            currentClubInformation.ClubConstitutionDateAccepted = clubInformation.ClubConstitutionDateAccepted;
+            currentClubInformation.ClubCodeOfConductRecieved = clubInformation.ClubCodeOfConductRecieved;
+            currentClubInformation.ClubCodeOfConductDateAccepted = currentClubInformation.ClubCodeOfConductDateAccepted;
+            currentClubInformation.ClubDisciplinaryCodeRecieved = currentClubInformation.ClubDisciplinaryCodeRecieved;
+            currentClubInformation.ClubDisciplinaryCodeDateAccepted = currentClubInformation.ClubDisciplinaryCodeDateAccepted;
+            currentClubInformation.ComitteeMembers = comitteeMembers;
+            currentClubInformation.PriorPeriods = priorPeriods;
+
+            context.SaveChanges();
         }
 
         public MedicalInformationDTO getMedicalInformation(int profileId)
@@ -101,11 +190,19 @@ namespace FishPalAPI.Services
             {
                 allergies.Add(_mapper.Map<MedicalInformationAllergies>(entry));
             }
+            foreach(var deleteEntry in currentMedicalInformation.MedicalInformationAllergies)
+            {
+                context.Remove(deleteEntry);
+            }
 
             List<MedicalInformationEmergencyContacts> emergencyContacts = new List<MedicalInformationEmergencyContacts>();
             foreach (var entry in medicalInformation.MedicalInformationEmergencyContacts)
             {
                 emergencyContacts.Add(_mapper.Map<MedicalInformationEmergencyContacts>(entry));
+            }
+            foreach (var deleteEntry in currentMedicalInformation.MedicalInformationEmergencyContacts)
+            {
+                context.Remove(deleteEntry);
             }
 
             List<MedicalInformationMedicalConditions> medicalConditions = new List<MedicalInformationMedicalConditions>();
@@ -113,17 +210,29 @@ namespace FishPalAPI.Services
             {
                 medicalConditions.Add(_mapper.Map<MedicalInformationMedicalConditions>(entry));
             }
+            foreach (var deleteEntry in currentMedicalInformation.MedicalInformationMedicalConditions)
+            {
+                context.Remove(deleteEntry);
+            }
 
             List<MedicalInformationPharmacies> pharmacies = new List<MedicalInformationPharmacies>();
             foreach (var entry in medicalInformation.MedicalInformationPharmacies)
             {
                 pharmacies.Add(_mapper.Map<MedicalInformationPharmacies>(entry));
             }
+            foreach (var deleteEntry in currentMedicalInformation.MedicalInformationPharmacies)
+            {
+                context.Remove(deleteEntry);
+            }
 
             List<MedicalInformationPhysicians> physicians = new List<MedicalInformationPhysicians>();
             foreach (var entry in medicalInformation.MedicalInformationPhysicians)
             {
                 physicians.Add(_mapper.Map<MedicalInformationPhysicians>(entry));
+            }
+            foreach (var deleteEntry in currentMedicalInformation.MedicalInformationPhysicians)
+            {
+                context.Remove(deleteEntry);
             }
 
             currentMedicalInformation.MedicalAidContactNumber = medicalInformation.MedicalAidContactNumber;

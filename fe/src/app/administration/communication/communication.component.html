@@ -1,4 +1,4 @@
-<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)">New Message &nbsp; <i
+<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)" *ngIf="management || chair">New Message &nbsp; <i
         class="fa fa-commenting-o" aria-hidden="true"></i></button>
 
 
@@ -111,8 +111,8 @@
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Roles</mat-label>
                 <mat-select [(ngModel)]="selectedRoles" multiple>
-                    <mat-option *ngFor="let role of roles" [value]="role">
-                        {{role}}
+                    <mat-option *ngFor="let role of rolesToDisplay" [value]="role.theValue">
+                        {{role.displayValue}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

@@ -1,4 +1,7 @@
 ﻿using FishPalAPI.Data.Communication;
+using FishPalAPI.Data.Member_Information.Boat_Information;
+using FishPalAPI.Data.Member_Information.Geo_Province_Information;
+using FishPalAPI.Data.Member_Information.Training;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -39,6 +42,12 @@ namespace FishPalAPI.Data
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
         public DbSet<MedicalInformation> MedicalInformation { get; set; }
+
+        public DbSet<GeoProvinceInformation> GeoProvinecInformation { get; set; }
+
+        public DbSet<BoatInformation> BoatInformation { get; set; }
+        public DbSet<Training> Training { get; set; }
+
         public DbSet<MedicalInformationPhysicians> MedicalInformationPhysicians { get; set; }
         public DbSet<MedicalInformationPharmacies> MedicalInformationPharmacies { get; set; }
         public DbSet<MedicalInformationEmergencyContacts> MedicalInformationEmergencyContacts { get; set; }

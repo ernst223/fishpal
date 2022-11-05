@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ClubDTO, FacetDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, UploadDocumentMessage } from './shared.models';
+import { BoatInformationDTO, ClubDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -100,5 +100,44 @@ export class SharedService {
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
+  }
+
+  public getGeoProvinceInformation(profileId: number): Observable<GeoProvinceInformationDTO> {
+    return this.httpClient.get(this.connectionstring + 'api/geoProvince/getGeoProvinceInformation/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateGeoProvinceInformation(data: GeoProvinceInformationDTO, profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/geoProvince/updateGeoProvinceInformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => console.log(res)));
+  }
+
+  public getTrainingInformation(profileId: number): Observable<TrainingDTO> {
+    return this.httpClient.get(this.connectionstring + 'api/training/getTrainingInformation/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateTrainingInformation(data: TrainingDTO, profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/training/updateTrainingInformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => console.log(res)));
+  }
+
+  public getBoatInformation(profileId: number): Observable<BoatInformationDTO> {
+    return this.httpClient.get(this.connectionstring + 'api/boatInformation/getBoatInformation/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateBoatInformation(data: BoatInformationDTO, profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/boatInformation/updateBoatInformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => console.log(res)));
   }
 }

@@ -136,6 +136,12 @@ export interface MedicalInformationDTO {
   medicalInformationMedicalConditions: MedicalInformationMedicalConditionsDTO[];
   medicalInformationAllergies: MedicalInformationAllergiesDTO[];
 }
+export interface GeoProvinceInformationDTO {
+  id: number;
+  geoProvince: string;
+  provincialSasaccManagement: string;
+  position: string;
+}
 export interface MobileUserInfoDTO {
   ProfileId : number;
   UserId : string;
@@ -152,3 +158,31 @@ export interface MobileUserInfoDTO {
   FacetLogoBase64: string;
 }
 
+
+export interface BoatInformationDTO {
+  id: number;
+  boatOwner: string;
+  boatNumber: string;
+  hullType: string;
+  hullColour: string;
+  motorMake: string;
+  horsePower: string;
+  towVehicleRegistrationNumber: string;
+  trailerRegistrationNumber: string;
+  cofNumber: string;
+  cofExpiryDate: Date;
+}
+
+export interface TrainingDTO {
+  id: number;
+  managerYearCompleted: string;
+  managerPointsReceived: string;
+  coachLvl1YearCompleted: string;
+  coachLvl1PointsReceived: string;
+  coachLvl2YearCompleted: string;
+  coachLvl2PointsReceived: string;
+  captainYearCompleted: string;
+  captainPointsReceived: string;
+  adminYearCompleted: string;
+  adminPointsReceived: string;
+}

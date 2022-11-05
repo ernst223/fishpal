@@ -1,4 +1,3 @@
-<!--
 <div>
     <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
     </mat-progress-spinner>
@@ -14,7 +13,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; GEO Province
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="geoProvinceInformation.geoProvince" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -22,7 +21,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Provincial SASACC Management
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="geoProvinceInformation.provincialSasaccManagement" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -30,17 +29,16 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Position
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="geoProvinceInformation.position" matInput>
             </mat-form-field>
         </mat-grid-tile>
     </mat-grid-list>
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+            <button color="primary" mat-raised-button class="registerButton" (click)=update()>Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
 <div class="fillerDiv"></div>
 
--->

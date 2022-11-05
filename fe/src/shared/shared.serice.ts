@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { BoatInformationDTO, ClubDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
+import { BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()

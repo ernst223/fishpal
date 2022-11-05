@@ -12,7 +12,9 @@ namespace FishPalAPI.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; }
         public List<Province> Provinces { get; set; }
+        public string Federation { get; set; }
+        public string Base64String { get; set; }
     }
 }

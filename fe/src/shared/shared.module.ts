@@ -4,7 +4,7 @@ import { NgModule  } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialComponentsModule } from './material-components.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatBottomSheetModule, MatChipsModule, MatGridListModule } from '@angular/material';
+import { MatBottomSheetModule, MatChipsModule, MatFormFieldModule, MatGridListModule, MatInputModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 

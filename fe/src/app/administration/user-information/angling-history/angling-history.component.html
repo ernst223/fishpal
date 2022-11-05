@@ -1,0 +1,677 @@
+<!--<div>
+    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+    </mat-progress-spinner>
+
+    <h2 class="RegisterHeader">Angling History Page</h2>
+
+    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>Date Started with Artlure Angling</mat-label>
+                <input matInput [matDatepicker]="picker1">
+                <mat-hint>YYYY/MM/DD</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Age Started with Artlure Angling
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Highest Colours for Artlure Angling
+                </mat-label>
+                <input [(ngModel)]="MAName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <h4 class="SecondHeader">Provincial Colours</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <h4 class="SecondHeader">SAALAA Colours</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <h4 class="SecondHeader">PROTEA Colours</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <h4 class="SecondHeader">SAALAA Development Colours</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <h4 class="SecondHeader">National Tournament Attended</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <h4 class="SecondHeader">International Tournament</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as angler
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Manager
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Coach
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">assignment</mat-icon>&nbsp; Number of times obtained as Captain
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div style="margin-top: 2em;"></div>
+    <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">card_travel</mat-icon>&nbsp; Capacity
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
+                </mat-label>
+                <input [(ngModel)]="PhysicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
+                </mat-label>
+                <input [(ngModel)]="PhysicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 2em;"></div>
+
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>-->

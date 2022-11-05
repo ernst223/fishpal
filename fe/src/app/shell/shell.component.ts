@@ -31,6 +31,7 @@ export class ShellComponent implements OnInit {
 
   signOut() {
     this.router.navigate(['']);
+    localStorage.clear();
   }
 
   onClick() {

@@ -21,6 +21,7 @@ namespace FishPalAPI.Controllers
         private IPasswordHasher<User> hasher;
         private IConfiguration config;
         private UserService userService;
+        public static string loggedInUserEmail { get; set; }
 
         public TokenController(UserManager<User> userMgr, IPasswordHasher<User> hasher, IConfiguration config)
         {
@@ -48,30 +49,40 @@ namespace FishPalAPI.Controllers
                            signingCredentials: creds
                            );
 
-                        var role = userService.getUserRole(user);
+                        var profiles = userService.getUserProfiles(user);
 
-                        return Ok(new
+
+                        var isEmailConfirmed = await userMgr.IsEmailConfirmedAsync(user);
+
+                        if(isEmailConfirmed)
                         {
-                            token = new JwtSecurityTokenHandler().WriteToken(token),
-                            expiration = token.ValidTo,
-                            userId = user.Id,
-                            role = role,
-                            userName = user.UserName,
-                        });
+                            return Ok(new
+                            {
+                                token = new JwtSecurityTokenHandler().WriteToken(token),
+                                expiration = token.ValidTo,
+                                userId = user.Id,
+                                profiles = profiles,
+                                userName = user.UserName,
+                            });
+                        } else
+                        {
+                            return BadRequest();
+                        }
+                        
                     }
                     else
                     {
-                        return Unauthorized();
+                        return BadRequest();
                     }
                 }
                 else
                 {
-                    return Unauthorized();
+                    return BadRequest();
                 }
             }
             catch (Exception e)
             {
-                return BadRequest("failed to generate token");
+                return Unauthorized("failed to generate token");
             }
         }
 
@@ -157,7 +168,7 @@ namespace FishPalAPI.Controllers
         public async Task<ActionResult> DeleteUserd(string userName)
         {
             var user = await userMgr.FindByEmailAsync(userName);
-            userService.removeUserClubs(user.Id);
+            userService.removeUserProfiles(user.Id);
             await userMgr.DeleteAsync(user);
             return Ok();
         }

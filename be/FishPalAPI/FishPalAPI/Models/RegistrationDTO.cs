@@ -13,5 +13,7 @@ namespace FishPalAPI.Models
         public string Surname { get; set; }
         public string PhoneNumber { get; set; }
         public List<int> clubs { get; set; }
+
+        public List<int> federations { get; set; }
     }
 }

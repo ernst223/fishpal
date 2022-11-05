@@ -1,0 +1,136 @@
+<button mat-raised-button class="newMessage" (click)="openModal(myOpentemplate)" *ngIf="management || chair">New Message &nbsp; <i
+        class="fa fa-commenting-o" aria-hidden="true"></i></button>
+
+
+<mat-tab-group>
+
+    <mat-tab label="Inbox" *ngIf="member">
+        <mat-card class="example-card" *ngFor="let card of obsInBox | async">
+
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
+
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="openModal(mytemplate, card)">
+                <mat-icon aria-label="">remove_red_eye</mat-icon>
+            </button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+
+
+    <mat-tab label="Outbox" *ngIf="management">
+        <mat-card class="example-card" *ngFor="let card of obsOutBox | async">
+
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
+
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="openModal(mytemplate, card)">
+                <mat-icon aria-label="">remove_red_eye</mat-icon>
+            </button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+
+
+    <mat-tab label="Message Requests" *ngIf="chair">
+        <mat-card class="example-card" *ngFor="let card of obsPending | async">
+
+            <i class="fa fa-info-circle" aria-hidden="true"
+                style="font-size: 30px;font-weight: bold;vertical-align:middle"></i>
+
+            &nbsp;
+
+            <label maxlength="5">{{card.message}}</label>
+
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;margin-left: 5px;"
+                (click)="openModal(mytemplate, card)">
+                <mat-icon aria-label="">remove_red_eye</mat-icon>
+            </button>
+
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;margin-left: 5px;"
+                (click)="approveDeclineMessage(2, card.id)">
+                <mat-icon aria-label="">check</mat-icon>
+            </button>
+
+            <button mat-raised-button style="float: right; background-color: white;color: #005b8f;"
+                (click)="approveDeclineMessage(0, card.id)">
+                <mat-icon aria-label="">close</mat-icon>
+            </button>
+
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" style="margin-bottom: 50px;margin-top: 15px;">
+        </mat-paginator>
+    </mat-tab>
+</mat-tab-group>
+
+
+<ng-template #myConfirmApprovaltemplate>
+    <span>Your message will be sent for approval by the chairperson, are you sure you want to continue?</span>
+    <button mat-raised-button class="newMessageModal" (click)="generateProfile()">Yes &nbsp; <i class="fa fa-pencil"
+            aria-hidden="true"></i></button>
+    <button mat-raised-button class="deleteMessage" (click)="closeModal()">No &nbsp; <i class="fa fa-trash-o"
+            aria-hidden="true"></i></button>
+</ng-template>
+
+<ng-template #mytemplate>
+    <textarea matInput placeholder="No Message..." value="{{message.message}}"
+        style="height: 200px;width: 600px;"></textarea>
+    <button mat-raised-button class="deleteMessage" (click)="deleteMessage(message.id)">Delete &nbsp; <i class="fa fa-trash-o"
+            aria-hidden="true"></i></button>
+</ng-template>
+
+<ng-template #myOpentemplate style="height: 300px;">
+    <h1 class="newMessageTitle">New Message</h1>
+    <div class="card-body">
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <mat-form-field appearance="fill" class="messageInputs">
+                <mat-label>Federation</mat-label>
+                <mat-select [(ngModel)]="selectedFacet" (selectionChange)="setSelectedFacet()">
+                    <mat-option *ngFor="let federation of facet" [value]="federation.id">
+                        {{federation.federation}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <mat-form-field appearance="fill" class="messageInputs">
+                <mat-label>Roles</mat-label>
+                <mat-select [(ngModel)]="selectedRoles" multiple>
+                    <mat-option *ngFor="let role of rolesToDisplay" [value]="role.theValue">
+                        {{role.displayValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <mat-form-field appearance="fill" class="messageInputs">
+                <mat-label>
+                    <i class="fa fa-comment" aria-hidden="true"></i>
+                    &nbsp; Message
+                </mat-label>
+                <textarea [(ngModel)]="typedMessage" matInput placeholder="Type New Message..."
+                    style="height: 100px;width: 600px;" type="text" class="form-control"></textarea>
+
+            </mat-form-field>
+        </div>
+    </div>
+    <button mat-raised-button class="newMessageSendButton" (click)="sendMessages()">Send &nbsp; <i class="fa fa-pencil"
+            aria-hidden="true"></i></button>
+</ng-template>

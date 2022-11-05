@@ -56,8 +56,6 @@ export class ResetPasswordComponent implements OnInit {
         this.snackBar.open('Could not Reset Password! Make sure your Reset Email is not older than 24hours', '', {
           duration: 2000,
         }).afterDismissed().subscribe(() => { });
-
-        console.log(result);
       }
     },
     error => {
@@ -65,8 +63,6 @@ export class ResetPasswordComponent implements OnInit {
       this.snackBar.open('Could not Reset Password! Make sure your Reset Email is not older than 24hours', '', {
         duration: 2000,
       }).afterDismissed().subscribe(() => { });
-
-      console.log(error);
     });
   }
 

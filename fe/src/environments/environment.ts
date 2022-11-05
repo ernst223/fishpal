@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // Ernst Local API
-   apiUrl: 'https://localhost:44357/',
+   apiUrl: 'https://localhost:5001/',
 };
 
 /*

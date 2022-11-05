@@ -1,0 +1,21 @@
+<mat-card class="example-card" >
+    <div id="profilePDFCard" style="padding: 30px;">
+        <mat-card-title-group>
+            <mat-card-title><img src="{{profileCard?.facetLogoBase64}}" class="cardLogo">{{profileCard?.facetName}}</mat-card-title>
+            <mat-card-subtitle><strong>Name:</strong>{{name}}{{surname}}</mat-card-subtitle>
+            <mat-card-subtitle><strong>Facet:</strong>{{profileCard?.typeName}}</mat-card-subtitle>
+            <mat-card-subtitle><strong>Province:</strong>{{profileCard?.province}}</mat-card-subtitle>
+            <mat-card-subtitle><strong>Club:</strong>{{profileCard?.clubName}}</mat-card-subtitle>
+            <mat-card-subtitle><strong>Expiry:</strong>{{getExpiryDate(profileCard?.profileCreationDate)}}</mat-card-subtitle>
+            <qr-code [value]="QRcode" size="200"></qr-code>
+        </mat-card-title-group>
+        <mat-card-content style="margin-top: 30px;">
+           
+        </mat-card-content>
+       
+    </div>
+    <mat-card-actions>
+        <button mat-raised-button class="PDFButton" (click)="convertToPDF()" style="margin: 20px;">Export To PDF &nbsp;<i
+                class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+    </mat-card-actions>
+</mat-card>

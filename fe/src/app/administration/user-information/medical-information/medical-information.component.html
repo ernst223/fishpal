@@ -1,0 +1,311 @@
+<div>
+
+    <h2 class="RegisterHeader">Medical Information Page</h2>
+
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Name
+                </mat-label>
+                <input [(ngModel)]="medicalInformation.medicalAidName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Plan
+                </mat-label>
+                <input [(ngModel)]="medicalInformation.medicalAidPlan" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medical Aid Number
+                </mat-label>
+                <input [(ngModel)]="medicalInformation.medicalAidNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Medical Aid Contact Number
+                </mat-label>
+                <input [(ngModel)]="medicalInformation.medicalAidContactNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="MedicalFile.click()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
+                Attach Copy of Medical Aid...
+            </button>
+            <input hidden type="file" accept=".pdf" id="File" #MedicalFile>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <h4 class="SecondHeader">Physician(s)</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Physician Name
+                </mat-label>
+                <input [(ngModel)]="physicianName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Physician Contact Number
+                </mat-label>
+                <input [(ngModel)]="physicianContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button (click)=addToPhysicians() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let physician of physicians;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{physician.physicianName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{physician.physicianContactNumber}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromPhysicians(physician) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
+
+    <h4 class="SecondHeader">Pharmacy(s)</h4>
+    <hr class="splitLine">
+    
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Pharmacy name
+                </mat-label>
+                <input [(ngModel)]="pharmacyName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Pharmacy Contact Number
+                </mat-label>
+                <input [(ngModel)]="pharmacyContact" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button (click)=addToPharmacies() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let pharmacie of pharmacies;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{pharmacie.pharmacyName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{pharmacie.pharmacyContactNumber}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromPharmacies(pharmacie) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
+
+
+    <h4 class="SecondHeader">Emergency Contacts(s)</h4>
+    <hr class="splitLine">
+    
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Name
+                </mat-label>
+                <input [(ngModel)]="emname" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Relationship
+                </mat-label>
+                <input [(ngModel)]="emrelationship" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Contact Number Cell
+                </mat-label>
+                <input [(ngModel)]="emcontactNumberCell" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Contact Number Work/Home
+                </mat-label>
+                <input [(ngModel)]="emcontactNumberHome" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button (click)=addToEmergencyContacts() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let emergencyContact of emergencyContacts;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{emergencyContact.name}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.relationship}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.contactNumberCell}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{emergencyContact.contactNumberHome}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromEmergencyContacts(emergencyContact) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
+
+    <h4 class="SecondHeader">Medical Condition(s)</h4>
+    <hr class="splitLine">
+    
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Condition Name
+                </mat-label>
+                <input [(ngModel)]="conditionName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medication Name
+                </mat-label>
+                <input [(ngModel)]="conditionMed" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Medication Dosage
+                </mat-label>
+                <input [(ngModel)]="conditionDosage" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">query_builder</mat-icon>&nbsp; Medication Frequency
+                </mat-label>
+                <input [(ngModel)]="conditionFreq" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button (click)=addToMedicalConditions() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let medicalCondition of medicalConditions;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{medicalCondition.conditionName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationDosage}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{medicalCondition.medicationFrequency}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromMedicalConditions(medicalCondition) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
+
+    <h4 class="SecondHeader">Allergie(s)</h4>
+    <hr class="splitLine">
+    
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Name
+                </mat-label>
+                <input [(ngModel)]="allergyName" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Reaction
+                </mat-label>
+                <input [(ngModel)]="allergyReaction" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">spa</mat-icon>&nbsp; Allergy Medication
+                </mat-label>
+                <input [(ngModel)]="allergyMedication" matInput>
+            </mat-form-field>
+            <div class="example-button-container">
+                <button (click)=addToAllergies() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let allergie of allergies;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{allergie.allergyName}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{allergie.allergyReaction}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{allergie.allergyMedication}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromAllergies(allergie) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
+
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button (click)=update() color="primary" mat-raised-button class="registerButton">Save Changes</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>

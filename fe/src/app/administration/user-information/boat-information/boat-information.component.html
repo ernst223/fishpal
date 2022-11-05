@@ -1,0 +1,113 @@
+<div>
+    <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
+    </mat-progress-spinner>
+
+    <h2 class="RegisterHeader">Boat Information Page</h2>
+
+    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Boat Owner
+                </mat-label>
+                <input [(ngModel)]="boatInformation.boatOwner" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">credit_card</mat-icon>&nbsp; Boat number
+                </mat-label>
+                <input [(ngModel)]="boatInformation.boatNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">linear_scale</mat-icon>&nbsp; Hull Type
+                </mat-label>
+                <input [(ngModel)]="boatInformation.hullType" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">linear_scale</mat-icon>&nbsp; Hull Colour
+                </mat-label>
+                <input [(ngModel)]="boatInformation.hullColour" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">directions_boat</mat-icon>&nbsp; Motor Make
+                </mat-label>
+                <input [(ngModel)]="boatInformation.motorMake" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">directions_boat</mat-icon>&nbsp; Horsepower
+                </mat-label>
+                <input [(ngModel)]="boatInformation.horsePower" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">dashboard</mat-icon>&nbsp; Two Vehicle registration number
+                </mat-label>
+                <input [(ngModel)]="boatInformation.towVehicleRegistrationNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">dashboard</mat-icon>&nbsp; Trailer Registration Number
+                </mat-label>
+                <input [(ngModel)]="boatInformation.trailerRegistrationNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <h4 class="SecondHeader">COF</h4>
+    <hr class="splitLine">
+
+    <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">credit_card</mat-icon>&nbsp; COF Number
+                </mat-label>
+                <input [(ngModel)]="boatInformation.cofNumber" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>COF Expiry Date</mat-label>
+                <input matInput [matDatepicker]="picker2" [(ngModel)]="boatInformation.cofExpiryDate" >
+                <mat-hint>YYYY/MM/DD</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="FILE.click()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
+                Attach a COF Copy...
+            </button>
+            <input hidden type="file" accept=".pdf" id="File" #FILE (change)="OpenFile($event)">
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols="1" rowHeight="90px">
+        <mat-grid-tile>
+            <button color="primary" mat-raised-button class="registerButton" (click)=update()>Save Changes</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="fillerDiv"></div>

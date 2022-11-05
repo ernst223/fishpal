@@ -1,5 +1,40 @@
-<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
-    <h2 mat-dialog-tile>
-        User information
-    </h2>
+<div class="rightside-content-holder" fxLayout="column wrap" fxLayoutAlign="start start">
+    <mat-form-field appearance="fill" style="width: 450px;">
+        <mat-label>Select User-Information Page</mat-label>
+        <mat-select [(ngModel)]="selectedPage">
+            <mat-option *ngFor="let userInfoPage of userInfoPages" [value]="userInfoPage.value">
+                {{userInfoPage.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-personal-information'">
+        <app-personal-information></app-personal-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-medical-information'">
+        <app-medical-information></app-medical-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-club-information'">
+        <app-club-information></app-club-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-provincial-information'">
+        <app-provincial-information></app-provincial-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-geo-province-information'">
+        <app-geo-province-information></app-geo-province-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-training'">
+        <app-training></app-training>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-boat-information'">
+        <app-boat-information></app-boat-information>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-angling-history'">
+        <app-angling-history></app-angling-history>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-angling-administration-history'">
+        <app-angling-administration-history></app-angling-administration-history>
+    </div>
+    <div class="pageDiv" *ngIf="selectedPage === 'app-other-angling-achievements'">
+        <app-other-angling-achievements></app-other-angling-achievements>
+    </div>
 </div>

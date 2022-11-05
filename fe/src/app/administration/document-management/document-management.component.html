@@ -1,0 +1,218 @@
+<button mat-raised-button *ngIf="management" class="newMessage" (click)="openModal(myOpentemplate)">Send document &nbsp; <i
+        class="fa fa-commenting-o" aria-hidden="true"></i></button>
+
+<!--this is the Tabs only inbox is for normal members, inbox and outbox is for one of the management (excluding chariperson), inbox, outbox and messages request is for chairpeople-->
+<mat-tab-group>
+    <!--everything for the inbox-->
+    <mat-tab label="Inbox" *ngIf="member">
+        <mat-card class="mat-card tab-row" fxFlex="100">
+            <mat-card-content fxFlex="100" fxLayout="row wrap">
+                <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+                </div>
+                <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyInboxFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                </div>
+                <mat-table fxFlex="100" #inboxTable [dataSource]="inboxDataSource" matSort>
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SendFrom">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Title">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Note">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Actions">
+                        <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                            <button matTooltip="View Document" mat-icon-button color="primary"
+                                (click)="openDocument(element.id)">
+                                <mat-icon aria-label="">remove_red_eye</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div fxFlex="grow">
+                    <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+
+    <!--everything for the outbox-->
+    <mat-tab label="Outbox" *ngIf="management">
+        <mat-card class="mat-card tab-row" fxFlex="100">
+            <mat-card-content fxFlex="100" fxLayout="row wrap">
+                <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+                </div>
+                <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyOutboxFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                </div>
+                <mat-table fxFlex="100" #outboxTable [dataSource]="outboxDataSource" matSort>
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SendFrom">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Title">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Note">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Actions">
+                        <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                            <button matTooltip="View Document" mat-icon-button color="primary"
+                                (click)="openDocument(element.id)">
+                                <mat-icon aria-label="">remove_red_eye</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div fxFlex="grow">
+                    <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+
+    <!--everything for the pending-->
+    <mat-tab label="Message Requests" *ngIf="chair">
+        <mat-card class="mat-card tab-row" fxFlex="100">
+            <mat-card-content fxFlex="100" fxLayout="row wrap">
+                <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+                </div>
+                <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyPendingFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                </div>
+                <mat-table fxFlex="100" #pendingTable [dataSource]="pendingDataSource" matSort>
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SendFrom">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Send From </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.sendFrom}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Title">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Note">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.note}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Actions">
+                        <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                            <button matTooltip="View Document" mat-icon-button color="primary"
+                                (click)="openDocument(element.id)">
+                                <mat-icon aria-label="">remove_red_eye</mat-icon>
+                            </button>
+                            <button matTooltip="Aprove Document" mat-icon-button color="primary"
+                                (click)="aproveDocument(element.id)">
+                                <mat-icon aria-label="">check</mat-icon>
+                            </button>
+                            <button matTooltip="Decline Document" mat-icon-button color="primary"
+                                (click)="declineDocument(element.id)">
+                                <mat-icon aria-label="">close</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div fxFlex="grow">
+                    <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+</mat-tab-group>
+
+<ng-template #myOpentemplate style="height: 300px;">
+    <h1 class="newMessageTitle">New Message</h1>
+    <div class="card-body">
+        <!--Federation-->
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group">
+                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                    <mat-label>Send to:</mat-label>
+                    <select [(ngModel)]="selectedSendOption" matNativeControl required>
+                        <option value=0>Send to all in same role</option>
+                        <option value=1>Send to all in lower roles</option>
+                    </select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group">
+                <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="DocumentFile.click()">
+                    <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
+                    Attach Document File...
+                </button>
+                <input hidden type="file" accept=".pdf" id="File" #DocumentFile (change)="OpenFile($event)">
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group">
+                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                    <mat-label>
+                        Document Title
+                    </mat-label>
+                    <input [(ngModel)]="title" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!--Message-->
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group">
+                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                    <mat-label>
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        &nbsp; Document Note
+                    </mat-label>
+                    <textarea matInput placeholder="Type document note..." style="height: 100px;width: 600px;"
+                        type="text" [(ngModel)]="note" class="form-control"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <button mat-raised-button class="newMessageSendButton" (click)="sendMessage()">Send &nbsp; <i class="fa fa-pencil"
+            aria-hidden="true"></i></button>
+
+</ng-template>

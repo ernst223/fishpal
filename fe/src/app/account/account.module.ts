@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from './account.service';
 import { MatSnackBarModule } from '@angular/material';
 import { SharedModule } from 'src/shared/shared.module';
-import { LoginComponent } from './login/login.component';
+import { ChooseProfileDialog, LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { SharedService } from 'src/shared/shared.serice';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
@@ -28,14 +28,16 @@ import { AddClubDialog } from './register/add-club-dialog/add-club-dialog';
     RegisterComponent,
     ConfirmEmailComponent,
     ResetPasswordComponent,
-    AddClubDialog
+    AddClubDialog,
+    ChooseProfileDialog
   ],
   providers: [
     AccountService,
     SharedService
   ],
   entryComponents: [
-    AddClubDialog
+    AddClubDialog,
+    ChooseProfileDialog
   ]
 })
 export class AccountModule { }

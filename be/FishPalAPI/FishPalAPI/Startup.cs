@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FishPalAPI
@@ -39,6 +40,9 @@ namespace FishPalAPI
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews();
 
             services.AddCors(options =>
             {

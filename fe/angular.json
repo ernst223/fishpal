@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "vacation-booker-UI": {
+    "fishpal-UI": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/vacation-booker-UI",
+            "outputPath": "dist/fishpal-UI",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "vacation-booker-UI:build"
+            "browserTarget": "fishpal-UI:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "vacation-booker-UI:build:production"
+              "browserTarget": "fishpal-UI:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "vacation-booker-UI:build"
+            "browserTarget": "fishpal-UI:build"
           }
         },
         "test": {
@@ -111,15 +111,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "vacation-booker-UI:serve"
+            "devServerTarget": "fishpal-UI:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "vacation-booker-UI:serve:production"
+              "devServerTarget": "fishpal-UI:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "vacation-booker-UI"
+  "defaultProject": "fishpal-UI"
 }

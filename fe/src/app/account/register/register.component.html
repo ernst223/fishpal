@@ -10,7 +10,7 @@
         </mat-label>
         <mat-select [(ngModel)]="selectedFacet" (selectionChange)="facetSelected()">
           <mat-option *ngFor="let facet of facets" [value]="facet.id">
-            {{facet.description}}
+            {{facet.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -22,7 +22,7 @@
         </mat-label>
         <mat-select [(ngModel)]="selectedProvince" (selectionChange)="getFacetClubsByProvince()">
           <mat-option *ngFor="let province of provinces" [value]="province.id">
-            {{province.description}}
+            {{province.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -34,7 +34,7 @@
         </mat-label>
         <mat-select [(ngModel)]="selectedClub">
           <mat-option *ngFor="let club of clubs" [value]="club.id">
-            {{club.description}}
+            {{club.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -53,7 +53,7 @@
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+      <mat-form-field appearance="fill" class="registerInputsPersonalRight">
         <mat-label>
           <mat-icon aria-hidden="false" class="theIcon">person</mat-icon>&nbsp; Surname
         </mat-label>
@@ -69,7 +69,7 @@
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+      <mat-form-field appearance="fill" class="registerInputsPersonalRight">
         <mat-label>
           <mat-icon aria-hidden="false" class="theIcon">phone</mat-icon>&nbsp; Phone
         </mat-label>
@@ -85,7 +85,7 @@
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+      <mat-form-field appearance="fill" class="registerInputsPersonalRight">
         <mat-label>
           <mat-icon aria-hidden="false" class="theIcon">lock</mat-icon>&nbsp; Confirm Password
         </mat-label>

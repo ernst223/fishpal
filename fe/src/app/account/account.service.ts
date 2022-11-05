@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { RegistrationDTO, ResetPasswordDTO } from 'src/shared/shared.models';
+import { LoginProfilesDTO, MobileUserInfoDTO, RegistrationDTO, ResetPasswordDTO } from 'src/shared/shared.models';
 
 @Injectable()
 export class AccountService {
 
+    loginProfiles: LoginProfilesDTO[];
     constructor(private httpClient: HttpClient) { }
 
     connectionstring = environment.apiUrl;
 
-    public login(username: string, password: string): Observable<Boolean> {
+    public login(username: string, password: string): Observable<LoginProfilesDTO[]> {
         const body = '{ "UserName": "' + username + '","Password": "' + password + '"}';
         const headers = new HttpHeaders()
             .append('Content-Type', 'application/json')
@@ -20,15 +21,28 @@ export class AccountService {
             return this.httpClient.post(this.connectionstring + 'api/auth/token', body, { headers }).pipe(
             map((res: any) => {
                 if (res.err == 'err') {
-                    return false;
+                    return undefined;
                 }
                 if (typeof res.token !== 'undefined') {
                     // Stores access token & refresh token.
+                    this.loginProfiles = res.profiles;
+                    
+                    if (this.loginProfiles.length > 1) {
+                        localStorage.setItem('multipleProfiles', '1');
+                    } else {
+                        localStorage.setItem('multipleProfiles', '0');
+                        localStorage.setItem('role', res.profiles[0].role);
+                        localStorage.setItem('profileId', res.profiles[0].id);
+                        localStorage.setItem('club', res.profiles[0].club);
+                        localStorage.setItem('federation', res.profiles[0].federation);
+                        localStorage.setItem('profileName', res.profiles[0].name);
+                        localStorage.setItem('federationId', res.profiles[0].federationId);
+                    }
                     localStorage.setItem('access_token', res.token);
-                    localStorage.setItem('role', res.role);
-                    return true;
+                    localStorage.setItem('loggedInUserEmail', res.userName);
+                    return this.loginProfiles;
                 } else {
-                    return false;
+                    return undefined;
                 }
             }));
     }
@@ -55,7 +69,6 @@ export class AccountService {
                 if (res.err == 'err') {
                     return false;
                 }
-                console.log(res);
                 return true;
             }));
     }
@@ -89,5 +102,12 @@ export class AccountService {
     public logout() {
         localStorage.clear();
         return this.httpClient.get('auth/logout');
+    }
+
+    public getAllUserInfo(username: string, federationID?: number): Observable<MobileUserInfoDTO> {
+        const headers = new HttpHeaders()
+            .append('Content-Type', 'application/json')
+            .append('Access-Control-Allow-Methods', '*');
+            return this.httpClient.get(this.connectionstring + 'api/general/allUserInfo/' + username + "/" + federationID, { headers }).pipe(map((res: any) => res));
     }
 }

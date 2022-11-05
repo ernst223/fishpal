@@ -49,7 +49,7 @@ export class BoatInformationComponent implements OnInit {
       Number(this.currentProfile)
     ).subscribe((a) => {
       this.setupDataStream();
-      this.openSnackBar("Geo Province Information Updated", "close");
+      this.openSnackBar("Boat Information Updated", "close");
     });
   }
 

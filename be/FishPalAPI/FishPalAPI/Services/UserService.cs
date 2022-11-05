@@ -176,7 +176,7 @@ namespace FishPalAPI.Services
                 personalInformation = personalInfo,
                 medicalInformation = medicalInformation,
                 boatInformation = boatInformation,
-                training = training
+                training = training,
                 clubInformation = clubInformation
             };
         }

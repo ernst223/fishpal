@@ -215,7 +215,7 @@ console.log("you are a C role and this method fire with data",provinceArray);
   }
   
   sendMessages() {
-    this.message.Message = this.typedMessage;
+    this.message.message = this.typedMessage;
     this.message.rolesToSendTo = this.selectedRoles;
 
     this.message.selectedProvince = this.selectedProvince;

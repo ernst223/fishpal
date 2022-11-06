@@ -62,14 +62,14 @@ export interface ClubDTO {
 }
 
 export interface MessageDTO {
-  Id: number;
-  Message: string,
-  CreationDate: Date,
-  Status: number,
-  CreatorUserProfileId:number,
+  id: number;
+  message: string,
+  creationDate: Date,
+  status: number,
+  creatorUserProfileId:number,
   rolesToSendTo: string[],
-  StatusChangeDate?: Date,
-  ApproverRequired?: number,
+  statusChangeDate?: Date,
+  approverRequired?: number,
   selectedProvince?: number[],
   selectedClubs?: number[],
 }

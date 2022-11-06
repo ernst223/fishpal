@@ -12,8 +12,8 @@ namespace FishPalAPI.Data.Communication
         public int Id { get; set; }
         public string Message { get; set; }
         public DateTime? CreationDate { get; set; }
-
         public int Status { get; set; }
+        public bool SendEmail { get; set; }
         public int CreatorUserProfileId { get; set; }
         public DateTime? StatusChangeDate { get; set; }
         public int? ApproverRequired { get; set; }

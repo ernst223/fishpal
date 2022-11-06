@@ -6,6 +6,7 @@ using FishPalAPI.Models.MessagesModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PostmarkDotNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -151,6 +152,15 @@ namespace FishPalAPI.Services
                 if (approveDecline == 2)
                 {
                     recordToApproveOrDecline.Status = 2;
+                    var recipients = context.MessageReceivers.Include(a => a.Messages).Where(a => a.MessagesFKId == recordToApproveOrDecline.Id).ToList();
+                    foreach(var entity in recipients)
+                    {
+                        if(entity.Messages.SendEmail == true)
+                        {
+                            sendEmailMessageToRecipientAsync(entity.Messages, 
+                                context.UserProfiles.Where(a => a.Id == entity.AssignedUserProfileId).FirstOrDefault());
+                        }
+                    }
                 }
 
                 context.Messages.Update(recordToApproveOrDecline);
@@ -230,7 +240,7 @@ namespace FishPalAPI.Services
             }
         }
 
-        public void sendMessages(MessageDTO message, int federationId, int profileId)
+        public void sendMessages(MessageDTO message, int federationId, int profileId, bool sendEmail)
         {
 
             UserProfile currentProfile = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
@@ -320,6 +330,7 @@ namespace FishPalAPI.Services
                 newMessage.Status = message.Status;
                 newMessage.CreatorUserProfileId = profileId;
                 newMessage.ApproverRequired = approverId;
+                newMessage.SendEmail = sendEmail;
 
                 context.Messages.Add(newMessage);
                 context.SaveChanges();
@@ -333,8 +344,39 @@ namespace FishPalAPI.Services
                      AssignedUserProfileId = item.Id,
                      MessagesFKId = newMessage.Id
                     });
+                    if (message.Status == 2 && newMessage.SendEmail == true)
+                    {
+                        sendEmailMessageToRecipientAsync(newMessage, item);
+                    }
                 }
                 context.SaveChanges();
+            }
+        }
+
+        public async Task sendEmailMessageToRecipientAsync(Messages messageToSend, UserProfile userProfile)
+        {
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            if(currentUser != null)
+            {
+                var message = new TemplatedPostmarkMessage
+                {
+                    From = "admin@fishpal.co.za",
+                    To = currentUser.UserName,
+                    TemplateAlias = "NewMessage",
+                    TemplateModel = new Dictionary<string, object> {
+                    { "name", currentUser.Name },
+                    { "message", messageToSend.Message },
+                  },
+                };
+
+                var client = new PostmarkClient("fc1530d0-ed32-488f-8f40-33fb54be4801");
+
+                var response = await client.SendMessageAsync(message);
+
+                if (response.Status != PostmarkStatus.Success)
+                {
+                    Console.WriteLine("Response was: " + response.Message);
+                }
             }
         }
 

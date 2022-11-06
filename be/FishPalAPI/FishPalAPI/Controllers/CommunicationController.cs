@@ -118,10 +118,10 @@ namespace FishPalAPI.Controllers
         /// sends the message to all the selected roles inside your/selected federation
         /// </summary>
         /// <returns></returns>
-        [HttpPost("getAll/sendMessages/{federationId}/{profileId}")]
-        public async Task<IActionResult> sendMessages([FromBody] MessageDTO message, int federationId, int profileId)
+        [HttpPost("getAll/sendMessages/{federationId}/{profileId}/{sendEmail}")]
+        public async Task<IActionResult> sendMessages([FromBody] MessageDTO message, int federationId, int profileId, bool sendEmail)
         {
-            communicationService.sendMessages(message, federationId, profileId);
+            communicationService.sendMessages(message, federationId, profileId, sendEmail);
             return Ok();
         }
         

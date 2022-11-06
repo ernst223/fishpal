@@ -1,6 +1,7 @@
 ﻿using FishPalAPI.Data.Communication;
 using FishPalAPI.Data.Member_Information.Boat_Information;
 using FishPalAPI.Data.Member_Information.Geo_Province_Information;
+using FishPalAPI.Data.Member_Information.Provincial_Information;
 using FishPalAPI.Data.Member_Information.Training;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +24,8 @@ namespace FishPalAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //optionsBuilder.UseMySql("datasource = localhost; port = 7777; username = root; password = AWE7; database = fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server=localhost;user id = root; Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
 
@@ -42,12 +43,9 @@ namespace FishPalAPI.Data
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
         public DbSet<MedicalInformation> MedicalInformation { get; set; }
-
         public DbSet<GeoProvinceInformation> GeoProvinecInformation { get; set; }
-
         public DbSet<BoatInformation> BoatInformation { get; set; }
         public DbSet<Training> Training { get; set; }
-
         public DbSet<MedicalInformationPhysicians> MedicalInformationPhysicians { get; set; }
         public DbSet<MedicalInformationPharmacies> MedicalInformationPharmacies { get; set; }
         public DbSet<MedicalInformationEmergencyContacts> MedicalInformationEmergencyContacts { get; set; }
@@ -56,5 +54,8 @@ namespace FishPalAPI.Data
         public DbSet<ClubInformation> ClubInformation { get; set; }
         public DbSet<ClubInformationComitteeMembers> ClubInformationComitteeMembers { get; set; }
         public DbSet<ClubInformationPriorPeriods> ClubInformationPriorPeriods { get; set; }
+        public DbSet<ProvincialInformation> ProvincialInformation { get; set; }
+        public DbSet<ProvincialInformationPriorPeriods> ProvincialInformationPriorPeriods { get; set; }
+        public DbSet<ProvincialInformationComtteeMembers> ProvincialInformationComtteeMembers { get; set; }
     }
 }

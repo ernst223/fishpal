@@ -3,8 +3,6 @@
     </mat-progress-spinner>
 
     <h2 class="RegisterHeader">Provincial Information Page</h2>
-
-    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
     <hr class="splitLine">
 
     <mat-grid-list cols="2" rowHeight="90px">
@@ -13,7 +11,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Province name
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="provincialInformation.provinceName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -21,7 +19,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Period
                 </mat-label>
-                <input [(ngModel)]="MAName" matInput>
+                <input [(ngModel)]="provincialInformation.provincePeriod" matInput>
             </mat-form-field>
         </mat-grid-tile>
     </mat-grid-list>
@@ -35,7 +33,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Province Name
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedPriorPeriodsName" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -43,15 +41,30 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Period
                 </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
+                <input [(ngModel)]="selectedpriorPeriodsPeriod" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToPriorPeriods() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let priorPeriod of priorPeriods;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{priorPeriod.name}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{priorPeriod.period}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromPriorPeriods(priorPeriod) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <h4 class="SecondHeader">Constitution</h4>
     <hr class="splitLine">
@@ -62,13 +75,13 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Provincial Constitution Received
                 </mat-label>
-                <input [(ngModel)]="PharmacyName" matInput>
+                <input [(ngModel)]="provincialInformation.provinceConstitutionRecieved" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Date accepted</mat-label>
-                <input matInput [matDatepicker]="picker">
+                <input [(ngModel)]="provincialInformation.provinceConstitutionDate" matInput [matDatepicker]="picker">
                 <mat-hint>YYYY/MM/DD</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -85,13 +98,13 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Code of Conduct Received
                 </mat-label>
-                <input [(ngModel)]="PharmacyName" matInput>
+                <input [(ngModel)]="provincialInformation.provinceCodeOfCoductRecieved" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Date accepted</mat-label>
-                <input matInput [matDatepicker]="picker1">
+                <input [(ngModel)]="provincialInformation.provinceCodeOfCoductDate" matInput [matDatepicker]="picker1">
                 <mat-hint>YYYY/MM/DD</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
@@ -108,13 +121,13 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Dress Code Received
                 </mat-label>
-                <input [(ngModel)]="PharmacyName" matInput>
+                <input [(ngModel)]="provincialInformation.provinceDressCodeRecieved" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Date accepted</mat-label>
-                <input matInput [matDatepicker]="picker2">
+                <input [(ngModel)]="provincialInformation.provinceDressCodeDate" matInput [matDatepicker]="picker2">
                 <mat-hint>YYYY/MM/DD</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
@@ -131,13 +144,13 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Disciplinary Code Received
                 </mat-label>
-                <input [(ngModel)]="PharmacyName" matInput>
+                <input [(ngModel)]="provincialInformation.provinceDisciplinaryCodeRecieved" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>Date accepted</mat-label>
-                <input matInput [matDatepicker]="picker3">
+                <input [(ngModel)]="provincialInformation.provinceDisciplinaryCodeDate" matInput [matDatepicker]="picker3">
                 <mat-hint>YYYY/MM/DD</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                 <mat-datepicker #picker3></mat-datepicker>
@@ -154,7 +167,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Position
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedComitteeMembersPosition" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -162,19 +175,34 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Period
                 </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
+                <input [(ngModel)]="selectedComitteeMembersPeriod" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToComittee() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let comitteeMember of comitteeMembers;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{comitteeMember.position}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{comitteeMember.period}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromCommittee(comitteeMember) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+            <button color="primary" mat-raised-button class="registerButton" (click)=update()>Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

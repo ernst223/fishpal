@@ -212,3 +212,31 @@ export interface ClubInformationDTO {
   comitteeMembers: ClubInformationComitteeMembersDTO[];
   priorPeriods: ClubInformationPriorPeriodsDTO[];
 }
+
+export interface ProvincialInformationComteeMembersDTO{
+  id: number;
+  position: string;
+  period: string;
+}
+
+export interface ProvincialInformationPriorPeriodsDTO {
+  id: number;
+  name: string;
+  period: string;
+}
+
+export interface ProvincialInformationDTO {
+  id: number;
+  provinceName: string;
+  provincePeriod: string;
+  provinceConstitutionRecieved: string;
+  provinceConstitutionDate: Date;
+  provinceCodeOfCoductRecieved: string;
+  provinceCodeOfCoductDate: Date;
+  provinceDressCodeRecieved: string;
+  provinceDressCodeDate: Date;
+  provinceDisciplinaryCodeRecieved: string;
+  provinceDisciplinaryCodeDate: Date;
+  priorPeriods: ProvincialInformationPriorPeriodsDTO[];
+  comitteeMembers: ProvincialInformationComteeMembersDTO[];
+}

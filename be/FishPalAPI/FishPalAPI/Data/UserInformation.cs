@@ -1,5 +1,6 @@
 ﻿using FishPalAPI.Data.Member_Information.Boat_Information;
 using FishPalAPI.Data.Member_Information.Geo_Province_Information;
+using FishPalAPI.Data.Member_Information.Provincial_Information;
 using FishPalAPI.Data.Member_Information.Training;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,8 @@ namespace FishPalAPI.Data
         public MedicalInformation medicalInformation { get; set; }
         public ClubInformation clubInformation { get; set; }
         public GeoProvinceInformation geoProvinceInformation { get; set; }
-
         public BoatInformation boatInformation { get; set; }
-
         public Training training { get; set; }
+        public ProvincialInformation provincialInformation { get; set; }
     }
 }

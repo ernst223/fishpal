@@ -2,7 +2,9 @@
 using FishPalAPI.Models;
 using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
+using FishPalAPI.Models.UserInformation.Provincial_Information;
 using FishPalAPI.Services;
+using FishPalAPI.Services.Member_Information.Provincial_Information;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -12,12 +14,14 @@ namespace FishPalAPI.Controllers
     public class UserInformationController: Controller
     {
         private UserInformationService userInformationService;
+        private ProvincialInformationService provincialInformationService;
         private readonly IMapper _mapper;
 
         public UserInformationController(IMapper mapper)
         {
             _mapper = mapper;
             userInformationService = new UserInformationService(_mapper);
+            provincialInformationService = new ProvincialInformationService(_mapper);
         }
 
         [HttpGet("personalinformation/{profileId}")]
@@ -56,6 +60,19 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> updateClubInformation([FromBody] ClubInformationDTO clubInformationDTO, int profileId)
         {
             userInformationService.updateClubInformation(clubInformationDTO, profileId);
+            return Ok();
+        }
+
+        [HttpGet("provincialinformation/{profileId}")]
+        public async Task<IActionResult> getProvincialInformation(int profileId)
+        {
+            return Ok(provincialInformationService.getProvincialInformation(profileId));
+        }
+
+        [HttpPut("provincialinformation/{profileId}")]
+        public async Task<IActionResult> updateProvincialInformation([FromBody] ProvincialInformationDTO provincialInformationDTO, int profileId)
+        {
+            provincialInformationService.updateProvincialInformation(provincialInformationDTO, profileId);
             return Ok();
         }
 

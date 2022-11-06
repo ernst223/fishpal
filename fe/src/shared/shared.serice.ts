@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
+import { BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, ProvincialInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -149,6 +149,19 @@ export class SharedService {
 
   public updateClubInformation(data: ClubInformationDTO, profileId: number): Observable<any> {
     return this.httpClient.put(this.connectionstring + 'api/userinformation/clubinformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getProvincialInformation(profileId: number): Observable<ProvincialInformationDTO> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/provincialinformation/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateProvincialInformation(data: ProvincialInformationDTO, profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/userinformation/provincialinformation/' + profileId,
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));

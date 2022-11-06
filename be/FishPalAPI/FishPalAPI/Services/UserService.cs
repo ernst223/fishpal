@@ -10,6 +10,7 @@ using FishPalAPI.Models.MobileAppModels;
 using FishPalAPI.Data.Member_Information.Geo_Province_Information;
 using FishPalAPI.Data.Member_Information.Boat_Information;
 using FishPalAPI.Data.Member_Information.Training;
+using FishPalAPI.Data.Member_Information.Provincial_Information;
 
 namespace FishPalAPI.Services
 {
@@ -154,6 +155,9 @@ namespace FishPalAPI.Services
             GeoProvinceInformation geoProvinceInformation = new GeoProvinceInformation();
             BoatInformation boatInformation = new BoatInformation();
             Training training = new Training();
+            ProvincialInformation provincialInformation = new ProvincialInformation();
+            List<ProvincialInformationComtteeMembers> provincialInformationComtteeMembers = new List<ProvincialInformationComtteeMembers>();
+            List<ProvincialInformationPriorPeriods> provincialInformationPriorPeriods = new List<ProvincialInformationPriorPeriods>();
             List<MedicalInformationAllergies> medicalInformationAllergies = new List<MedicalInformationAllergies>();
             List<MedicalInformationEmergencyContacts> medicalInformationEmergencyContacts = new List<MedicalInformationEmergencyContacts>();
             List<MedicalInformationMedicalConditions> medicalInformationMedicalConditions = new List<MedicalInformationMedicalConditions>();
@@ -164,6 +168,8 @@ namespace FishPalAPI.Services
             List<ClubInformationPriorPeriods> priorPeriods = new List<ClubInformationPriorPeriods>();
             clubInformation.ComitteeMembers = comitteeMembers;
             clubInformation.PriorPeriods = priorPeriods;
+            provincialInformation.PriorPeriods = provincialInformationPriorPeriods;
+            provincialInformation.ComitteeMembers = provincialInformationComtteeMembers;
             medicalInformation.MedicalInformationEmergencyContacts = medicalInformationEmergencyContacts;
             medicalInformation.MedicalInformationAllergies = medicalInformationAllergies;
             medicalInformation.MedicalInformationMedicalConditions = medicalInformationMedicalConditions;
@@ -177,7 +183,8 @@ namespace FishPalAPI.Services
                 medicalInformation = medicalInformation,
                 boatInformation = boatInformation,
                 training = training,
-                clubInformation = clubInformation
+                clubInformation = clubInformation,
+                provincialInformation = provincialInformation
             };
         }
 

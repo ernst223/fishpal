@@ -51,6 +51,7 @@ export interface FederationDTO {
 export interface ProvinceDTO {
   id: number;
   name: string;
+  selectedProvinceIds:number[];
 }
 
 export interface ClubDTO {

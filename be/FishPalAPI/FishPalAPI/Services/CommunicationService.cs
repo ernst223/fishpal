@@ -175,8 +175,6 @@ namespace FishPalAPI.Services
 
         public List<Facet> getAllFederations(string role)
         {
-            List<Facet> federations = new List<Facet>();
-
             if (role == "A1" || role == "A0")
             {
                 return  context.Facets.ToList();
@@ -185,6 +183,25 @@ namespace FishPalAPI.Services
                 return null;
             }
         }
+
+        public List<Province> getAllProvincesForSelectedFederation(string role, int federationId)
+        {
+            if (role == "A1" || role == "A0" || role == "B1" || role == "B0" || role == "C1" || role == "C0" || role == "D1" || role == "D0")
+            {
+                var provinces = context.Clubs.Include(x => x.Province).Include(x => x.Facet).Where(x => x.Facet.Id == federationId).Select(x=>x.Province).Distinct().ToList();
+                return provinces;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public List<Club> getAllClubsForSelectedProvinces(ProvinceDTO provinces)
+        {
+            var clubs = context.Clubs.Include(x => x.Province).Where(x => provinces.SelectedProvinceIds.Contains(x.Province.Id)).ToList();
+            return clubs;
+        }
+
 
         public List<string> RolesCurrentRoleCanSendTo(string role)
         {

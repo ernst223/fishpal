@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { FacetDTO, FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
+import { ClubDTO, FacetDTO, FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
 import { InsertClothesOrderModel } from './models/add-clothes-order-form-model';
 
 @Injectable()
@@ -26,11 +26,11 @@ export class AdministrationService {
             }));
     }
     
-    public sendMessages(body: MessageDTO, federationId:number, profileId:number): Observable<any> {
+    public sendMessages(body: MessageDTO, federationId:number, profileId:number, sendEmail:boolean): Observable<any> {
       const headers = new HttpHeaders()
           .append('Content-Type', 'application/json')
           .append('Access-Control-Allow-Methods', '*');
-          return this.httpClient.post(this.connectionstring + 'api/communication/getAll/sendMessages/' + federationId + "/" + profileId, body, { headers }).pipe(
+          return this.httpClient.post(this.connectionstring + 'api/communication/getAll/sendMessages/' + federationId + "/" + profileId + "/" + sendEmail, body, { headers }).pipe(
           map((res: any) => {
              console.log("message sent response", res);
           }));
@@ -77,4 +77,20 @@ export class AdministrationService {
                 .append('Access-Control-Allow-Methods', '*');
         return this.httpClient.post(this.connectionstring + 'api/communication/approveDeclineMessage/' + approveDecline + "/" + messageId, { headers }).pipe(map((res: any) => res));
       }
+
+      public getAllProvincesForSelectedFederation(userRole:string, federationId:number): Observable<Array<ProvinceDTO>> {
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.get(this.connectionstring + 'api/communication/getAll/getAllProvincesForSelectedFederation/' + userRole + '/' + federationId, { headers }).pipe(map((res: any) => res));
+      }  
+      
+      public getAllClubsForSelectedProvinces(province:ProvinceDTO): Observable<Array<ClubDTO>> {
+        console.log("this is iside the post method for the clubs",province);
+        province.id = 0;
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.post(this.connectionstring + 'api/communication/getAll/getAllClubsForSelectedProvinces',province, { headers }).pipe(map((res: any) => res));
+      }  
 }

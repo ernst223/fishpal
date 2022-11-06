@@ -4,7 +4,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
-import { FacetDTO, FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
+import { ClubDTO, FacetDTO, FederationDTO, MessageDTO, ProvinceDTO } from 'src/shared/shared.models';
 import { AdministrationService } from '../administration.service';
 
 @Component({
@@ -34,20 +34,12 @@ export class CommunicationComponent implements OnInit {
   Clbs = new FormControl();
   membrs = new FormControl();
 
-  allFederations: any[] = [{ fed: "default" }];
-  allProvinces: any[] = [{ provc: "default" }];
-  allClubs: any[] = [{ clb: "default" }];
-  allMembers: any[] = [{ mmber: "default" }];
-
-  filteredFederations: any[] = this.allFederations;
-  filteredProvinces: any[] = this.allFederations;
-  filteredClubs: any[] = this.allFederations;
-  filteredMembers: any[] = this.allFederations;
-
   selectedFederations: FederationDTO[];
   selectedProvinces: ProvinceDTO[] = [];
   selectedClubs: any[] = [];
   selectedMembers: any[] = [];
+  provincesForFederation:ProvinceDTO[] = [];
+  clubsForSelectedprovince:ClubDTO[] = [];
 
   federations: FederationDTO[];
   message: MessageDTO = {} as any;
@@ -63,6 +55,15 @@ export class CommunicationComponent implements OnInit {
   typedMessage: string;
   newRoles = {} as any;
   rolesToDisplay = [];
+  sendEmail: boolean = false;
+  selectedProvince:number[];
+
+  selectedProvincesForClubs:ProvinceDTO = {
+    id:null,
+    name:null,
+    selectedProvinceIds:[]
+  };
+
   constructor(public snackBar: MatSnackBar, private adminService: AdministrationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -109,6 +110,7 @@ export class CommunicationComponent implements OnInit {
         console.log("this is the returned facets", this.facet);
         if (this.facet == null) {
           this.federationId = Number(localStorage.getItem('federationId'));
+          this.getAllProvincesForSelectedFederation();
         }
         this.getRolesCurrentRoleCanSendTo();
       });
@@ -117,15 +119,34 @@ export class CommunicationComponent implements OnInit {
     }
   }
 
-  getRolesCurrentRoleCanSendTo() {
-    
-    this.adminService.getAllRolesCurrentRoleCanSendTo(this.userRole).subscribe(feds => {
-    
+  setSelectedProvince(){
+    console.log("this is the selected province",this.selectedProvince);
+    this.getAllClubsForSelectedProvinces();
+  }
 
+  getAllProvincesForSelectedFederation() {
+     this.adminService.getAllProvincesForSelectedFederation(this.userRole, this.federationId).subscribe(provs => {
+      this.provincesForFederation = provs;
+      console.log("this is the returned provinces", this.provincesForFederation);
+    });
+  }
+
+  getAllClubsForSelectedProvinces() {
+    this.selectedProvincesForClubs.selectedProvinceIds = this.selectedProvince;
+
+     this.adminService.getAllClubsForSelectedProvinces(this.selectedProvincesForClubs).subscribe(provs => {
+      this.clubsForSelectedprovince = provs;
+      console.log("this is the returned clubs", this.provincesForFederation);
+    });
+  }
+
+  getRolesCurrentRoleCanSendTo() {
+
+    this.adminService.getAllRolesCurrentRoleCanSendTo(this.userRole).subscribe(feds => {
       this.roles = feds;
       this.roles.forEach(value => {
         var _displayValue = this.getNewDisplayValue(value);
- 
+
         this.newRoles = {
           theValue: value,
           displayValue: _displayValue
@@ -138,13 +159,14 @@ export class CommunicationComponent implements OnInit {
 
   setSelectedFacet() {
     this.federationId = this.selectedFacet;
+    this.getAllProvincesForSelectedFederation();
   }
-
+  
   sendMessages() {
     this.message.Message = this.typedMessage;
     this.message.rolesToSendTo = this.selectedRoles;
 
-    this.adminService.sendMessages(this.message, this.federationId, this.profileId).subscribe(result => {
+    this.adminService.sendMessages(this.message, this.federationId, this.profileId, this.sendEmail).subscribe(result => {
       this.getInboxMessages();
       this.dialog.closeAll();
       this.openSnackBar("Message sent successfully", "Close");

@@ -107,6 +107,28 @@
             </mat-form-field>
         </div>
 
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <mat-form-field appearance="fill" class="messageInputs">
+                <mat-label>Province</mat-label>
+                <mat-select [(ngModel)]="selectedProvince" (selectionChange)="setSelectedProvince()" multiple>
+                    <mat-option *ngFor="let province of provincesForFederation" [value]="province.id">
+                        {{province.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <mat-form-field appearance="fill" class="messageInputs">
+                <mat-label>Clubs</mat-label>
+                <mat-select [(ngModel)]="selectedRoles" multiple>
+                    <mat-option *ngFor="let role of rolesToDisplay" [value]="role.theValue">
+                        {{role.displayValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <div class="col-sm-12 col-md-4 col-lg-4">
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Roles</mat-label>
@@ -131,6 +153,9 @@
             </mat-form-field>
         </div>
     </div>
+
+    <mat-slide-toggle class="sendEmailToggle" [(ngModel)]="sendEmail">Also Send Email</mat-slide-toggle>
+
     <button mat-raised-button class="newMessageSendButton" (click)="sendMessages()">Send &nbsp; <i class="fa fa-pencil"
             aria-hidden="true"></i></button>
 </ng-template>

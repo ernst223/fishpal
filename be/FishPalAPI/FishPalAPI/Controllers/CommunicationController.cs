@@ -105,6 +105,26 @@ namespace FishPalAPI.Controllers
         }
 
         /// <summary>
+        /// gets all the provinces for a specific federation
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getAll/getAllProvincesForSelectedFederation/{role}/{federationId}")]
+        public async Task<IActionResult> getAllProvincesForSelectedFederation(string role, int federationId)
+        {
+            return Ok(communicationService.getAllProvincesForSelectedFederation(role, federationId));
+        }
+
+        /// <summary>
+        /// gets all the clubs for a specific province
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("getAll/getAllClubsForSelectedProvinces")]
+        public async Task<IActionResult> getAllClubsForSelectedProvinces([FromBody] ProvinceDTO provinces)
+        {
+            return Ok(communicationService.getAllClubsForSelectedProvinces(provinces));
+        }
+        
+        /// <summary>
         /// gets all the Federations including sasacc for communication
         /// </summary>
         /// <returns></returns>

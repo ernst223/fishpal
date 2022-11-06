@@ -15,5 +15,9 @@ namespace FishPalAPI.Models.MessagesModels
         public int CreatorUserProfileId { get; set; }
         public DateTime? StatusChangeDate { get; set; }
         public int? ApproverRequired { get; set; }
+
+        public int?[] selectedProvince { get; set; }
+        public int?[] selectedClubs { get; set; }
+
     }
 }

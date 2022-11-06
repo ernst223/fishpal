@@ -31,7 +31,13 @@ namespace FishPalAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    new MySqlServerVersion(new Version(8,0,28))));
+                    new MySqlServerVersion(new Version(8,0,28)),
+                    options => options.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null)
+                    ));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddIdentity<User, IdentityRole>(options =>

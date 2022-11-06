@@ -96,7 +96,7 @@
     <h1 class="newMessageTitle">New Message</h1>
     <div class="card-body">
 
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="canSeeFederationDropDown">
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Federation</mat-label>
                 <mat-select [(ngModel)]="selectedFacet" (selectionChange)="setSelectedFacet()">
@@ -107,7 +107,7 @@
             </mat-form-field>
         </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="canSeeProvinceDropDown">
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Province</mat-label>
                 <mat-select [(ngModel)]="selectedProvince" (selectionChange)="setSelectedProvince()" multiple>
@@ -118,18 +118,18 @@
             </mat-form-field>
         </div>
 
-        <div class="col-sm-12 col-md-4 col-lg-4">
+        <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="canSeeClubsDropDown">
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Clubs</mat-label>
-                <mat-select [(ngModel)]="selectedRoles" multiple>
-                    <mat-option *ngFor="let role of rolesToDisplay" [value]="role.theValue">
-                        {{role.displayValue}}
+                <mat-select [(ngModel)]="selectedClubs" multiple>
+                    <mat-option *ngFor="let club of clubsForSelectedprovince" [value]="club.id">
+                        {{club.name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
 
-        <div class="col-sm-12 col-md-4 col-lg-4">
+        <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="canSeeRolesDropDown">
             <mat-form-field appearance="fill" class="messageInputs">
                 <mat-label>Roles</mat-label>
                 <mat-select [(ngModel)]="selectedRoles" multiple>

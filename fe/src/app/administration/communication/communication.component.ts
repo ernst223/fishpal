@@ -27,6 +27,11 @@ export class CommunicationComponent implements OnInit {
   member: boolean = true;
   management: boolean = true;
   chair: boolean = true;
+  sendEmail: boolean = false;
+  canSeeFederationDropDown:boolean = false;
+  canSeeProvinceDropDown:boolean = false;
+  canSeeClubsDropDown:boolean = false;
+  canSeeRolesDropDown:boolean = false;
 
   newMessageForm!: FormGroup;
   feders = new FormControl();
@@ -36,27 +41,29 @@ export class CommunicationComponent implements OnInit {
 
   selectedFederations: FederationDTO[];
   selectedProvinces: ProvinceDTO[] = [];
-  selectedClubs: any[] = [];
   selectedMembers: any[] = [];
   provincesForFederation:ProvinceDTO[] = [];
   clubsForSelectedprovince:ClubDTO[] = [];
-
   federations: FederationDTO[];
-  message: MessageDTO = {} as any;
-  userRole: string;
-  userEmail: string;
-  selectedFederation: string;
+  selectedProvince:number[];
+  selectedClubs: number[];
   facet: FacetDTO[] = [];
   roles: string[] = [];
-  selectedFacet: any;
-  selectedRoles: any;
-  federationId: number;
-  profileId: number;
-  typedMessage: string;
+  message: MessageDTO = {} as any;
   newRoles = {} as any;
   rolesToDisplay = [];
-  sendEmail: boolean = false;
-  selectedProvince:number[];
+
+  selectedFederation: string;
+  typedMessage: string;
+  userRole: string;
+  userEmail: string;
+  userProvinceId:number;
+
+  selectedFacet: any;
+  selectedRoles: any;
+
+  federationId: number;
+  profileId: number;
 
   selectedProvincesForClubs:ProvinceDTO = {
     id:null,
@@ -70,11 +77,44 @@ export class CommunicationComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
     this.userRole = localStorage.getItem('role');
     this.testWhichTypeOfUserIsLoggedIn(this.userRole);
+    this.testWhichDropdownsUserSees(this.userRole);
     this.userEmail = localStorage.getItem('loggedInUserEmail');
+    this.userProvinceId = Number(localStorage.getItem('provinceId'));
     this.profileId = Number(localStorage.getItem('profileId'));
     this.createForm();
     this.getInboxMessages();
     this.getFederations();
+
+  }
+
+  testWhichDropdownsUserSees(theUserRole: string){
+    if (theUserRole == "A0" || theUserRole == "A1") {
+      this.canSeeFederationDropDown = true;
+      this.canSeeProvinceDropDown = true;
+      this.canSeeClubsDropDown = true;
+      this.canSeeRolesDropDown = true;
+    }else if(theUserRole == "B0" || theUserRole == "B1"){
+      this.canSeeFederationDropDown = false;
+      this.canSeeProvinceDropDown = true;
+      this.canSeeClubsDropDown = true;
+      this.canSeeRolesDropDown = true;
+    }else if(theUserRole == "C0" || theUserRole == "C1"){
+      this.canSeeFederationDropDown = false;
+      this.canSeeProvinceDropDown = false;
+      this.canSeeClubsDropDown = true;
+      this.canSeeRolesDropDown = true;
+      this.getAllClubsForSelectedProvinces(this.userProvinceId);
+    }else if(theUserRole == "D0" || theUserRole == "D1"){
+      this.canSeeFederationDropDown = false;
+      this.canSeeProvinceDropDown = false;
+      this.canSeeClubsDropDown = false;
+      this.canSeeRolesDropDown = true;
+    }else{
+      this.canSeeFederationDropDown = false;
+      this.canSeeProvinceDropDown = false;
+      this.canSeeClubsDropDown = false;
+      this.canSeeRolesDropDown = false;
+    }
   }
 
   testWhichTypeOfUserIsLoggedIn(theUserRole: string) {
@@ -131,12 +171,19 @@ export class CommunicationComponent implements OnInit {
     });
   }
 
-  getAllClubsForSelectedProvinces() {
+  getAllClubsForSelectedProvinces(_userProvinceId?:number) {
     this.selectedProvincesForClubs.selectedProvinceIds = this.selectedProvince;
+
+    if(_userProvinceId != null){
+      var provinceArray:number[] = [];
+      provinceArray[0] =_userProvinceId;
+console.log("you are a C role and this method fire with data",provinceArray);
+      this.selectedProvincesForClubs.selectedProvinceIds = provinceArray;
+    }
 
      this.adminService.getAllClubsForSelectedProvinces(this.selectedProvincesForClubs).subscribe(provs => {
       this.clubsForSelectedprovince = provs;
-      console.log("this is the returned clubs", this.provincesForFederation);
+      console.log("this is the returned clubs", this.clubsForSelectedprovince);
     });
   }
 
@@ -144,6 +191,9 @@ export class CommunicationComponent implements OnInit {
 
     this.adminService.getAllRolesCurrentRoleCanSendTo(this.userRole).subscribe(feds => {
       this.roles = feds;
+      if(this.roles == undefined){
+        return;
+      }
       this.roles.forEach(value => {
         var _displayValue = this.getNewDisplayValue(value);
 
@@ -166,6 +216,9 @@ export class CommunicationComponent implements OnInit {
     this.message.Message = this.typedMessage;
     this.message.rolesToSendTo = this.selectedRoles;
 
+    this.message.selectedProvince = this.selectedProvince;
+    this.message.selectedClubs = this.selectedClubs;
+
     this.adminService.sendMessages(this.message, this.federationId, this.profileId, this.sendEmail).subscribe(result => {
       this.getInboxMessages();
       this.dialog.closeAll();
@@ -179,25 +232,6 @@ export class CommunicationComponent implements OnInit {
       duration: 2000,
     });
   }
-
-  validateAllFormFields(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  componentIsInvalid(control: string): boolean {
-    return (this.newMessageForm.get(control)!.touched || this.newMessageForm.get(control)!.dirty) && !this.newMessageForm.get(control)!.valid;
-  }
-
-  public validationMessages = {
-    required: 'Please complete required field.',
-  };
 
   getInboxMessages() {
     this.adminService.getAllMessages(0, this.profileId).subscribe(message => {

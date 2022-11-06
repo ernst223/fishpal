@@ -272,25 +272,79 @@ namespace FishPalAPI.Services
             {
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
                     .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
-              
-                recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
-                    .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
+
+                if ((message.selectedClubs != null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && (message.rolesToSendTo.Contains(a.role.Description)) 
+                    && (message.selectedClubs.Contains(a.club.Id))).ToList();
+                }
+                else {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                       .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
+                }
+                    
             }
             else if (new string[] { "C0", "C1" }.Contains(userRole)) //province
             {
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
                     .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
+
+                if (message.selectedClubs != null) //newly added test
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
+                    a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description)) 
+                    && (message.selectedClubs.Contains(a.club.Id))).ToList();
+                } else {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
+                    a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
+                }
                 
-                recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
-                a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
             }
             else if (new string[] { "B0", "B1" }.Contains(userRole)) //federation/facet
-            {              
-                recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
+            {
+                if ((message.selectedClubs != null) && (message.selectedProvince != null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
+                       && (message.selectedProvince.Contains(a.club.Province.Id)) 
+                       && (message.selectedClubs.Contains(a.club.Id))).ToList();
+                }
+                else if ((message.selectedClubs != null) && (message.selectedProvince == null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
+                       && (message.selectedClubs.Contains(a.club.Id))).ToList();
+                }
+                else if ((message.selectedClubs == null) && (message.selectedProvince != null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
+                       && (message.selectedProvince.Contains(a.club.Province.Id))).ToList();
+                }
+                else
+                {
+                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
+                }
+                    
             }
             else if (new string[] { "A0", "A1" }.Contains(userRole)) //sasacc
             {
-                recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId).ToList();
+                if ((message.selectedClubs != null) && (message.selectedProvince != null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
+                    && message.selectedProvince.Contains(a.club.Province.Id) && message.selectedClubs.Contains(a.club.Id)).ToList();
+                }
+                else if ((message.selectedClubs != null) && (message.selectedProvince == null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
+                    && message.selectedClubs.Contains(a.club.Id)).ToList();
+                }
+                else if ((message.selectedClubs == null) && (message.selectedProvince != null))
+                {
+                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
+                    && message.selectedProvince.Contains(a.club.Province.Id)).ToList();
+                }
+                else {
+                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId).ToList();
+                }              
             }
 
             if (recipients != null) {

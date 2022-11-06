@@ -37,6 +37,7 @@ export class AccountService {
                         localStorage.setItem('federation', res.profiles[0].federation);
                         localStorage.setItem('profileName', res.profiles[0].name);
                         localStorage.setItem('federationId', res.profiles[0].federationId);
+                        localStorage.setItem('provinceId', res.profiles[0].provinceId);
                     }
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('loggedInUserEmail', res.userName);

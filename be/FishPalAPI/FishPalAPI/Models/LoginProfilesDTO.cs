@@ -14,5 +14,7 @@ namespace FishPalAPI.Models
         public string federation { get; set; }
 
         public int federationId { get; set; }
+
+        public int provinceId { get; set; }
     }
 }

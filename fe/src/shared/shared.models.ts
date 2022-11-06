@@ -69,7 +69,9 @@ export interface MessageDTO {
   CreatorUserProfileId:number,
   rolesToSendTo: string[],
   StatusChangeDate?: Date,
-  ApproverRequired?: number
+  ApproverRequired?: number,
+  selectedProvince?: number[],
+  selectedClubs?: number[],
 }
 
 export interface PersonalInformationDTO {

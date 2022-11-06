@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('profileName', result.name);
       localStorage.setItem('profileId', result.id);
       localStorage.setItem('federationId', result.federationId);
+      localStorage.setItem('provinceId', result.provinceId);
       this.router.navigate(['dashboard']);
     });
   }

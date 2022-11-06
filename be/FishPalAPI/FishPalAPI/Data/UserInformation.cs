@@ -23,5 +23,7 @@ namespace FishPalAPI.Data
         public BoatInformation boatInformation { get; set; }
         public Training training { get; set; }
         public ProvincialInformation provincialInformation { get; set; }
+        public List<AnglishAdministrationHistory> anglishAdministrationHistories { get; set; }
+        public List<OtherAnglingAchievements> otherAnglingAchievements { get; set; }
     }
 }

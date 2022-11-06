@@ -240,3 +240,19 @@ export interface ProvincialInformationDTO {
   priorPeriods: ProvincialInformationPriorPeriodsDTO[];
   comitteeMembers: ProvincialInformationComteeMembersDTO[];
 }
+
+export interface OtherAnglingAchievementsDTO {
+  id: number;
+  achievement: string;
+  year: string;
+  team: string;
+  teamMembers: string;
+  tournament: string;
+  venue: string;
+}
+
+export interface AnglishAdministrationHistoryDTO {
+  id: number;
+  capacity: string;
+  year: string;
+}

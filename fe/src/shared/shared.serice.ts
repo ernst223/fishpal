@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, PersonalInformationDTO, ProvincialInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
+import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -162,6 +162,32 @@ export class SharedService {
 
   public updateProvincialInformation(data: ProvincialInformationDTO, profileId: number): Observable<any> {
     return this.httpClient.put(this.connectionstring + 'api/userinformation/provincialinformation/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getOtherAnglingAchievements(profileId: number): Observable<Array<OtherAnglingAchievementsDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/otheranglingachievements/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateOtherAnglingAchievements(data: OtherAnglingAchievementsDTO[], profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/userinformation/otheranglingachievements/' + profileId,
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getAnglishAdministrationHistory(profileId: number): Observable<Array<AnglishAdministrationHistoryDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/anglishadministrationaistory/' + profileId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateAnglishAdministrationHistory(data: AnglishAdministrationHistoryDTO[], profileId: number): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/userinformation/anglishadministrationaistory/' + profileId,
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));

@@ -1,11 +1,9 @@
-<!--
+
 <div>
     <mat-progress-spinner class="loader" [diameter]="40" color="warn" mode="indeterminate" *ngIf="isLoading">
     </mat-progress-spinner>
 
     <h2 class="RegisterHeader">Other Angling Achievements Page</h2>
-
-    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
     <h4 class="SecondHeader">Achievements</h4>
     <hr class="splitLine">
 
@@ -15,7 +13,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Achievement
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedAchievement" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -23,7 +21,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedYear" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -31,7 +29,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedTeam" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -39,7 +37,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedTeamMembers" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -47,7 +45,7 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
                 </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
+                <input [(ngModel)]="selectedTournament" matInput>
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -55,79 +53,39 @@
                 <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
                 </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
+                <input [(ngModel)]="selectedVenue" matInput>
             </mat-form-field>
             <div class="example-button-container">
-                <button style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <button (click)=addToList() style="background-color: lightgreen; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
-    <div style="margin-top: 2em;"></div>
-
-    <mat-grid-list cols="3" rowHeight="70px">
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">stars</mat-icon>&nbsp; Achievement
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">date_range</mat-icon>&nbsp; Year
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">people</mat-icon>&nbsp; Team members
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">group_work</mat-icon>&nbsp; Tournament
-                </mat-label>
-                <input [(ngModel)]="PhysicianName" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp; Venue
-                </mat-label>
-                <input [(ngModel)]="PhysicianContact" matInput>
-            </mat-form-field>
-            <div class="example-button-container">
-                <button style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-              </div>
-        </mat-grid-tile>
-    </mat-grid-list>
+    <div style="max-height: 200px; overflow-y: scroll; width: 90%; margin-left: 5%;">
+        <ul *ngFor="let otherAnglingAchievement of otherAnglingAchievements;">
+            <div style="display: inline-block;">
+                <span style="display: inline-block; margin-right: 20px;">•  {{otherAnglingAchievement.achievement}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{otherAnglingAchievement.year}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{otherAnglingAchievement.team}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{otherAnglingAchievement.tournament}}</span>
+                <span style="display: inline-block; margin-right: 20px;">{{otherAnglingAchievement.venue}}</span>
+                <span style="display: inline-block;">
+                    <div class="example-button-container;">
+                        <button (click)=removeFromList(otherAnglingAchievement) style="background-color: red; margin-bottom: 2em;" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </div>
+                </span>
+            </div> 
+        </ul>
+    </div>
     <div style="margin-top: 2em;"></div>
 
     <mat-grid-list cols="1" rowHeight="90px">
         <mat-grid-tile>
-            <button color="primary" mat-raised-button class="registerButton" (click)=save()>Save Changes</button>
+            <button color="primary" mat-raised-button class="registerButton" (click)=update()>Save Changes</button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
 <div class="fillerDiv"></div>
--->

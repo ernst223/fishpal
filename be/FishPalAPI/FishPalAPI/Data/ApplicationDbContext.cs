@@ -57,5 +57,7 @@ namespace FishPalAPI.Data
         public DbSet<ProvincialInformation> ProvincialInformation { get; set; }
         public DbSet<ProvincialInformationPriorPeriods> ProvincialInformationPriorPeriods { get; set; }
         public DbSet<ProvincialInformationComtteeMembers> ProvincialInformationComtteeMembers { get; set; }
+        public DbSet<AnglishAdministrationHistory> AnglishAdministrationHistories { get; set; }
+        public DbSet<OtherAnglingAchievements> OtherAnglingAchievements { get; set; }
     }
 }

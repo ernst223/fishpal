@@ -156,6 +156,8 @@ namespace FishPalAPI.Services
             BoatInformation boatInformation = new BoatInformation();
             Training training = new Training();
             ProvincialInformation provincialInformation = new ProvincialInformation();
+            List<OtherAnglingAchievements> otherAnglingAchievements = new List<OtherAnglingAchievements>();
+            List<AnglishAdministrationHistory> anglishAdministrationHistories = new List<AnglishAdministrationHistory>();
             List<ProvincialInformationComtteeMembers> provincialInformationComtteeMembers = new List<ProvincialInformationComtteeMembers>();
             List<ProvincialInformationPriorPeriods> provincialInformationPriorPeriods = new List<ProvincialInformationPriorPeriods>();
             List<MedicalInformationAllergies> medicalInformationAllergies = new List<MedicalInformationAllergies>();
@@ -184,7 +186,9 @@ namespace FishPalAPI.Services
                 boatInformation = boatInformation,
                 training = training,
                 clubInformation = clubInformation,
-                provincialInformation = provincialInformation
+                provincialInformation = provincialInformation,
+                otherAnglingAchievements = otherAnglingAchievements,
+                anglishAdministrationHistories = anglishAdministrationHistories
             };
         }
 

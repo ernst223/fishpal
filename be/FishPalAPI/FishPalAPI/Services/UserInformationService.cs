@@ -3,6 +3,7 @@ using FishPalAPI.Data;
 using FishPalAPI.Models;
 using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
+using FishPalAPI.Models.UserInformation.Other;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,92 @@ namespace FishPalAPI.Services
             _mapper = mapper;
             context = new ApplicationDbContext();
             userService = new UserService();
+        }
+
+        public List<OtherAnglingAchievementsDTO> getOtherAnglingAchievements(int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.otherAnglingAchievements)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            if (currentProfile.userInformation == null)
+            {
+                currentProfile.userInformation = userService.getDefaultUserInformation();
+                context.SaveChanges();
+
+                // Refetching
+                currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.otherAnglingAchievements)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            }
+
+            List<OtherAnglingAchievementsDTO> otherAnglingAchievements = new List<OtherAnglingAchievementsDTO>();
+            foreach (var entry in currentProfile.userInformation.otherAnglingAchievements)
+            {
+                otherAnglingAchievements.Add(_mapper.Map<OtherAnglingAchievementsDTO>(entry));
+            }
+
+            return otherAnglingAchievements;
+        }
+
+        public void updateOtherAnglingAchievements(List<OtherAnglingAchievementsDTO> otherAnglingAchievementsDTO, int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.otherAnglingAchievements)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+
+            List<OtherAnglingAchievements> otherAnglingAchievements = new List<OtherAnglingAchievements>();
+            foreach (var entry in otherAnglingAchievementsDTO)
+            {
+                otherAnglingAchievements.Add(_mapper.Map<OtherAnglingAchievements>(entry));
+            }
+            foreach (var deleteEntry in currentProfile.userInformation.otherAnglingAchievements)
+            {
+                context.Remove(deleteEntry);
+            }
+
+            currentProfile.userInformation.otherAnglingAchievements = otherAnglingAchievements;
+
+            context.SaveChanges();
+        }
+
+        public List<AnglishAdministrationHistoryDTO> getAnglishAdministrationHistory(int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.anglishAdministrationHistories)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            if (currentProfile.userInformation == null)
+            {
+                currentProfile.userInformation = userService.getDefaultUserInformation();
+                context.SaveChanges();
+
+                // Refetching
+                currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.anglishAdministrationHistories)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+            }
+
+            List<AnglishAdministrationHistoryDTO> anglishAdministrationHistories = new List<AnglishAdministrationHistoryDTO>();
+            foreach (var entry in currentProfile.userInformation.anglishAdministrationHistories)
+            {
+                anglishAdministrationHistories.Add(_mapper.Map<AnglishAdministrationHistoryDTO>(entry));
+            }
+
+            return anglishAdministrationHistories;
+        }
+
+        public void updateAnglishAdministrationHistories(List<AnglishAdministrationHistoryDTO> anglishAdministrationHistoriesDTO, int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.anglishAdministrationHistories)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+
+            List<AnglishAdministrationHistory> anglishAdministrationHistories = new List<AnglishAdministrationHistory>();
+            foreach (var entry in anglishAdministrationHistoriesDTO)
+            {
+                anglishAdministrationHistories.Add(_mapper.Map<AnglishAdministrationHistory>(entry));
+            }
+            foreach (var deleteEntry in currentProfile.userInformation.anglishAdministrationHistories)
+            {
+                context.Remove(deleteEntry);
+            }
+
+            currentProfile.userInformation.anglishAdministrationHistories = anglishAdministrationHistories;
+
+            context.SaveChanges();
         }
 
         public ClubInformationDTO getClubInformation(int profileId)

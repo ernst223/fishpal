@@ -2,10 +2,12 @@
 using FishPalAPI.Models;
 using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
+using FishPalAPI.Models.UserInformation.Other;
 using FishPalAPI.Models.UserInformation.Provincial_Information;
 using FishPalAPI.Services;
 using FishPalAPI.Services.Member_Information.Provincial_Information;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FishPalAPI.Controllers
@@ -76,5 +78,30 @@ namespace FishPalAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("otheranglingachievements/{profileId}")]
+        public async Task<IActionResult> getOtherAnglingAchievements(int profileId)
+        {
+            return Ok(userInformationService.getOtherAnglingAchievements(profileId));
+        }
+
+        [HttpPut("otheranglingachievements/{profileId}")]
+        public async Task<IActionResult> updateOtherAnglingAchievements([FromBody] List<OtherAnglingAchievementsDTO> otherAnglingAchievementsDTO, int profileId)
+        {
+            userInformationService.updateOtherAnglingAchievements(otherAnglingAchievementsDTO, profileId);
+            return Ok();
+        }
+
+        [HttpGet("anglishadministrationaistory/{profileId}")]
+        public async Task<IActionResult> getAnglishAdministrationHistory(int profileId)
+        {
+            return Ok(userInformationService.getAnglishAdministrationHistory(profileId));
+        }
+
+        [HttpPut("anglishadministrationaistory/{profileId}")]
+        public async Task<IActionResult> updateAnglishAdministrationHistory([FromBody] List<AnglishAdministrationHistoryDTO> anglishAdministrationHistoryDTO, int profileId)
+        {
+            userInformationService.updateAnglishAdministrationHistories(anglishAdministrationHistoryDTO, profileId);
+            return Ok();
+        }
     }
 }

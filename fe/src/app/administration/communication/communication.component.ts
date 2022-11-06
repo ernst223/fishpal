@@ -75,11 +75,11 @@ export class CommunicationComponent implements OnInit {
 
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
+    this.userProvinceId = Number(localStorage.getItem('provinceId'));
     this.userRole = localStorage.getItem('role');
     this.testWhichTypeOfUserIsLoggedIn(this.userRole);
     this.testWhichDropdownsUserSees(this.userRole);
     this.userEmail = localStorage.getItem('loggedInUserEmail');
-    this.userProvinceId = Number(localStorage.getItem('provinceId'));
     this.profileId = Number(localStorage.getItem('profileId'));
     this.createForm();
     this.getInboxMessages();
@@ -103,6 +103,7 @@ export class CommunicationComponent implements OnInit {
       this.canSeeProvinceDropDown = false;
       this.canSeeClubsDropDown = true;
       this.canSeeRolesDropDown = true;
+      console.log("this is inside the c role setter",this.userProvinceId);
       this.getAllClubsForSelectedProvinces(this.userProvinceId);
     }else if(theUserRole == "D0" || theUserRole == "D1"){
       this.canSeeFederationDropDown = false;
@@ -172,6 +173,7 @@ export class CommunicationComponent implements OnInit {
   }
 
   getAllClubsForSelectedProvinces(_userProvinceId?:number) {
+    console.log("you are a C role and this method fire with data",_userProvinceId);
     this.selectedProvincesForClubs.selectedProvinceIds = this.selectedProvince;
 
     if(_userProvinceId != null){

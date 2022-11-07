@@ -1,9 +1,9 @@
 <div class="WelcomePageBlock">
     <div class="BGImageWithItemsOnTop">
-      <img src="../../assets/images/welcomepageblock.jpg" class="mainPageImage1">
+      <img src="../../assets/images/welcomepageblock.jpg" class="cover fade-in">
       <div class="mainPageTitleAndButtons">
         <div class="MainPageTitle">
-          <!--Welcome To FishPal!-->
+          <!--Welcome To SASACC!-->
         </div>
         <div class="mainPageLoginRegisterButtonContainer">
           <!--<button mat-button class="mainPageLoginRegisterButtons" routerLink="../login">Login</button>
@@ -27,16 +27,19 @@
   
     <div class="DisciplinesBlock" id="Disciplines">
       <h2 class="facetsHeader">OUR DISCIPLINES</h2>
-      <mat-grid-list cols="2" rowHeight="150px">
-        <mat-grid-tile>
-          <mat-card class="facetCard"><img class="FacetsLogo" src="../../assets/images/SASSAC_logo.png">
+      <mat-grid-list cols="1" rowHeight="150px">
+        <mat-grid-tile style="text-align: center;">
+          <mat-card class="sasaccFacetCard"><img class="sasaccFacetsLogo" src="../../assets/images/SASSAC_logo.png">
             <div class="facetCardTitleAndDescription">
               <div class="facetCardTitle">SASACC</div>
               <div class="facetCardDescription">South African Sport Anglers & Casting Confederation</div>
             </div>
           </mat-card>
         </mat-grid-tile>
-  
+      </mat-grid-list>
+
+      <mat-grid-list cols="2" rowHeight="150px">
+       
         <mat-grid-tile>
           <mat-card class="facetCard"><img class="FacetsLogo" src="../../assets/images/saalaa_logo.png">
             <div class="facetCardTitleAndDescription">
@@ -129,8 +132,7 @@
     </div>
   
     <div class="GetInTouchBlock" id="ContactUs">
-      <h2 class="GetInTouchHeader">Get In Touch</h2>
-      
+      <h2 class="latestNewsHeader">Get In Touch</h2>
     </div>
   
     <div class="SignUpNowBlock">
@@ -155,16 +157,6 @@
           <mat-list-item role="listitem"><a class="footerItems" href="#ContactUs">Contact Us</a></mat-list-item>
         </mat-list>
       </mat-grid-tile>
-  
-      <mat-grid-tile>
-        <mat-list role="list">
-          <mat-list-item role="listitem">
-            <img src="../../assets/images/logo.png" class="getInTouchImage">&nbsp;
-            <h2 class="footerItems">Get In Touch</h2>
-          </mat-list-item>
-          <mat-list-item role="listitem"><a class="footerItems"><mat-icon aria-hidden="false" class="theIcon">mail</mat-icon>&nbsp;fishpalhelp@gmail.com</a></mat-list-item>
-        </mat-list>
-      </mat-grid-tile>
     </mat-grid-list>
   </div>
   
@@ -180,16 +172,6 @@
           <mat-list-item role="listitem"><a class="footerItems" href="#News">News</a></mat-list-item>
           <mat-list-item role="listitem"><a class="footerItems" href="#Events">Events</a></mat-list-item>
           <mat-list-item role="listitem"><a class="footerItems" href="#ContactUs">Contact Us</a></mat-list-item>
-        </mat-list>
-      </mat-grid-tile>
-   
-      <mat-grid-tile>
-        <mat-list role="list">
-          <mat-list-item role="listitem">
-            <img src="../../assets/images/logo.png" class="getInTouchImage">&nbsp;
-            <h2 class="footerItems">Get In Touch</h2>
-          </mat-list-item>
-          <mat-list-item role="listitem"><a class="footerItems"><mat-icon aria-hidden="false" class="theIcon">mail</mat-icon>&nbsp;fishpalhelp@gmail.com</a></mat-list-item>
         </mat-list>
       </mat-grid-tile>
     </mat-grid-list>

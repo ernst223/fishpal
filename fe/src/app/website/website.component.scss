@@ -69,6 +69,12 @@
       background-color: white;
       height: auto;
     }
+    .sasaccFacetsLogo{
+      height: 100px;
+      width: 100px;
+      vertical-align: middle;
+      border-radius: 50%;
+    }
     .FacetsLogo{
       height: 100px;
       width: 100px;
@@ -125,6 +131,12 @@
       color: #005b8f;
     }
     
+    .sasaccFacetCard{
+      width: 50%;
+      color: #005b8f;
+      background-color: #FECD00;
+    }
+
     .facetCard{
       width: 93%;
       color: #005b8f;
@@ -153,6 +165,68 @@
     .toggleDetailBlockAboveFooterForMobile{
       display: none;
     }
+
+    .cover {
+      object-fit: cover;
+      width: 100%;
+      height: auto;
+    }
+
+
+.fade-in {
+  animation: fadeIn ease 6s;
+  -webkit-animation: fadeIn ease 6s;
+  -moz-animation: fadeIn ease 6s;
+  -o-animation: fadeIn ease 6s;
+  -ms-animation: fadeIn ease 6s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+}
+}
+
+
+
     
       @media (max-width:700px) {
         .SignUpNowHeader{
@@ -246,4 +320,6 @@
           padding-bottom: 30px;
           }
       }
+
+      
       

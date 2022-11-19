@@ -146,19 +146,20 @@ export interface GeoProvinceInformationDTO {
   position: string;
 }
 export interface MobileUserInfoDTO {
-  ProfileId : number;
-  UserId : string;
-  Name : string;
-  Surname: string;
-  FacetName: string; 
-  TypeName: string; 
-  FacetId : number;
-  ProfileCreationDate :Date
-  ClubName : string;
-  ClubId : number;
-  Province : string;
-  ProvinceId : number;
-  FacetLogoBase64: string;
+  profileId : number;
+  userId : string;
+  name : string;
+  surname: string;
+  facetName: string; 
+  typeName: string; 
+  facetId : number;
+  profileCreationDate :Date
+  clubName : string;
+  clubId : number;
+  province : string;
+  provinceId : number;
+  profileExpiryDate: Date;
+  facetLogoBase64: string;
 }
 
 export interface ClubInformationComitteeMembersDTO {

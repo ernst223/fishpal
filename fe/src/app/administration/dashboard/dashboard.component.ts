@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {  MatSnackBar } from '@angular/material';
 import { SharedService } from 'src/shared/shared.serice';
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -9,14 +10,10 @@ import { SharedService } from 'src/shared/shared.serice';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private snackBar: MatSnackBar, private service: SharedService) { }
+  _number:number = 7;
+  
+  constructor() {};
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-    });
-  }
 }

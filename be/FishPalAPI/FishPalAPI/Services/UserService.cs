@@ -11,6 +11,7 @@ using FishPalAPI.Data.Member_Information.Geo_Province_Information;
 using FishPalAPI.Data.Member_Information.Boat_Information;
 using FishPalAPI.Data.Member_Information.Training;
 using FishPalAPI.Data.Member_Information.Provincial_Information;
+using FishPalAPI.Models.UserInformation.Boat_Information;
 
 namespace FishPalAPI.Services
 {
@@ -23,24 +24,47 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
-        public List<mobileUserInfoDTO> allUserInfo(string userName, int? federationId)
+        public List<mobileUserInfoDTO> allUserInfo(int profileId, bool returnAll)
         {
-            var currentUser = context.Users.Include(x => x.profiles).ThenInclude(x => x.club).ThenInclude(x => x.Province).ThenInclude(x => x.Facets).Where(x => x.UserName == userName).FirstOrDefault();
-
+            var currentProfile = context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.boatInformation).Include(a => a.club).ThenInclude(a => a.Province)
+                        .ThenInclude(a => a.Facets).Where(a => a.Id == profileId).FirstOrDefault();
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(currentProfile)).FirstOrDefault();
             List<UserProfile> specificProfile = new List<UserProfile>();
-
-            if (federationId != null)
+            if (returnAll == true)
             {
-                specificProfile = currentUser.profiles.Where(x => x.club.Facet.Id == federationId).ToList();
-            }else{
-                specificProfile = currentUser.profiles;
+                foreach(var entry in currentUser.profiles)
+                {
+                    specificProfile.Add(context.UserProfiles.Include(a => a.userInformation).ThenInclude(a => a.boatInformation).Include(a => a.club).ThenInclude(a => a.Province)
+                        .ThenInclude(a => a.Facets).Where(a => a.Id == entry.Id).FirstOrDefault());
+                }
+            }
+            else
+            {
+                specificProfile.Add(currentProfile);
             }
 
-            List<mobileUserInfoDTO> result = new List<mobileUserInfoDTO>();
+            BoatInformationDTO boatInformation;
+
+        List<mobileUserInfoDTO> result = new List<mobileUserInfoDTO>();
             foreach (var profile in specificProfile)
             {
-                result.Add(new mobileUserInfoDTO()
+                boatInformation = new BoatInformationDTO()
                 {
+                    BoatOwner = profile.userInformation.boatInformation.BoatOwner,
+                    BoatNumber = profile.userInformation.boatInformation.BoatNumber,
+                    HullType = profile.userInformation.boatInformation.HullType,
+                    HullColour = profile.userInformation.boatInformation.HullColour,
+                    MotorMake = profile.userInformation.boatInformation.MotorMake,
+                    HorsePower = profile.userInformation.boatInformation.HorsePower,
+                    TowVehicleRegistrationNumber = profile.userInformation.boatInformation.TowVehicleRegistrationNumber,
+                    TrailerRegistrationNumber = profile.userInformation.boatInformation.TrailerRegistrationNumber,
+                    CofNumber = profile.userInformation.boatInformation.CofNumber,
+                    CofExpiryDate = profile.userInformation.boatInformation.CofExpiryDate
+                };
+
+            result.Add(new mobileUserInfoDTO()
+                {
+                    ProfileExpiryDate = profile.expiryDate,
                     ProfileId = profile.Id,
                     UserId = currentUser.Id,
                     Name = currentUser.Name,
@@ -53,8 +77,9 @@ namespace FishPalAPI.Services
                     Province = profile.club.Province.Name,
                     ProvinceId = profile.club.Province.Id,
                     ProfileCreationDate = profile.creationTime,
-                    FacetLogoBase64 = profile.club.Facet.Base64String
-                });
+                    FacetLogoBase64 = profile.club.Facet.Base64String,
+                    BoatInfo = boatInformation
+            });
             }
             return result;
         }

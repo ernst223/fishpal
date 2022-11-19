@@ -10,8 +10,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./membership-cards.component.scss']
 })
 export class MembershipCardsComponent implements OnInit {
-  loggedInUserName: string;
-  loggedInFederationId: number;
+  loggedInProfileId: number;
   profileCard: any;
   name: string;
   surname: string;
@@ -24,14 +23,14 @@ export class MembershipCardsComponent implements OnInit {
   from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
   originally bred for hunting.`;
 
-  ngOnInit() {
-    this.loggedInUserName = localStorage.getItem('loggedInUserEmail');
-    this.loggedInFederationId = Number(localStorage.getItem('federationId'));
-    this.getFullDetailsForPerson(this.loggedInUserName, this.loggedInFederationId);
+  ngOnInit() { 
+    this.loggedInProfileId = Number(localStorage.getItem('profileId'));
+    this.getFullDetailsForPerson(this.loggedInProfileId, false);
   }
 
-  getFullDetailsForPerson(userName: string, federationID?: number) {
-    this.accountService.getAllUserInfo(userName, federationID).subscribe((result: any) => {
+  getFullDetailsForPerson(profileId: number, returnAll:boolean) {
+    this.accountService.getAllUserInfo(profileId, returnAll).subscribe((result: any) => {
+      console.log("this is the result for the web fron end",result);
       this.profileCard = result[0];
 
       this.name = result[0].name;
@@ -42,10 +41,9 @@ export class MembershipCardsComponent implements OnInit {
   }
 
   createBarcode() {
-    var barcodeString = this.loggedInUserName + "^"
-      + this.loggedInFederationId + "^";
-
-    this.QRcode = barcodeString;
+    var barcodeString = this.loggedInProfileId;
+    this.QRcode = String(barcodeString);
+    console.log("barcode string",barcodeString);
   }
 
   getExpiryDate(date: Date) {

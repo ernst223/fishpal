@@ -105,10 +105,10 @@ export class AccountService {
         return this.httpClient.get('auth/logout');
     }
 
-    public getAllUserInfo(username: string, federationID?: number): Observable<MobileUserInfoDTO> {
+    public getAllUserInfo(profileId: number, returnAll:boolean): Observable<MobileUserInfoDTO> {
         const headers = new HttpHeaders()
             .append('Content-Type', 'application/json')
             .append('Access-Control-Allow-Methods', '*');
-            return this.httpClient.get(this.connectionstring + 'api/general/allUserInfo/' + username + "/" + federationID, { headers }).pipe(map((res: any) => res));
+            return this.httpClient.get(this.connectionstring + 'api/general/allUserInfo/' + profileId + "/" + returnAll, { headers }).pipe(map((res: any) => res));
     }
 }

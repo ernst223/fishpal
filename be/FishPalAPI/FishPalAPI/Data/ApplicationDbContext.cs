@@ -25,8 +25,7 @@ namespace FishPalAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                //optionsBuilder.UseMySql("datasource = localhost; port = 7777; username = root; password = AWE7; database = fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //var connectionString = Configuration.GetConnectionString("DefaultConnection");       
                 optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
                 //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }

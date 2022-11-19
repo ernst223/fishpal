@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishPalAPI.Models.UserInformation.Boat_Information;
+using System;
 using System.Collections.Generic;
 
 namespace FishPalAPI.Models.MobileAppModels
@@ -18,6 +19,8 @@ namespace FishPalAPI.Models.MobileAppModels
         public string Province { get; set; }
         public int ProvinceId { get; set; }
 
+        public DateTime ProfileExpiryDate { get; set; }
+        public BoatInformationDTO BoatInfo { get; set; }
         public string FacetLogoBase64 { get; set; }
     }
 }

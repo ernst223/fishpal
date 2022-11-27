@@ -276,7 +276,7 @@ console.log("you are a C role and this method fire with data",provinceArray);
     }
 
     let dialogRef = this.dialog.open(templateRef, {
-      width: '550px',
+      width: '1400px',
     });
 
     dialogRef.afterClosed().subscribe(result => {

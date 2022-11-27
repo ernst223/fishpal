@@ -158,6 +158,7 @@ export interface MobileUserInfoDTO {
   clubId : number;
   province : string;
   provinceId : number;
+  boatInformation: BoatInformationDTO[];
   profileExpiryDate: Date;
   facetLogoBase64: string;
 }

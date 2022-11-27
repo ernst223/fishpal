@@ -1,21 +1,45 @@
-<mat-card class="example-card" >
-    <div id="profilePDFCard" style="padding: 30px;">
-        <mat-card-title-group>
-            <mat-card-title><img src="{{profileCard?.facetLogoBase64}}" class="cardLogo">{{profileCard?.facetName}}</mat-card-title>
-            <mat-card-subtitle><strong>Name:</strong>{{name}}{{surname}}</mat-card-subtitle>
-            <mat-card-subtitle><strong>Facet:</strong>{{profileCard?.typeName}}</mat-card-subtitle>
-            <mat-card-subtitle><strong>Province:</strong>{{profileCard?.province}}</mat-card-subtitle>
-            <mat-card-subtitle><strong>Club:</strong>{{profileCard?.clubName}}</mat-card-subtitle>
-            <mat-card-subtitle><strong>Expiry:</strong>{{getExpiryDate(profileCard?.profileCreationDate)}}</mat-card-subtitle>
-            <qr-code [value]="QRcode" size="200"></qr-code>
-        </mat-card-title-group>
-        <mat-card-content style="margin-top: 30px;">
-           
-        </mat-card-content>
-       
+<mat-card class="example-card">
+    <div id="profilePDFCard">
+        <div style="padding: 30px;">
+            <mat-card-title-group>
+                <mat-card-title><img src="{{profileCard?.facetLogoBase64}}" class="cardLogo">{{profileCard?.facetName}}
+                </mat-card-title>
+                <mat-card-subtitle><strong>Name:</strong>{{name}}{{surname}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>Facet:</strong>{{profileCard?.typeName}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>Province:</strong>{{profileCard?.province}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>Club:</strong>{{profileCard?.clubName}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>Expiry:</strong>{{getExpiryDate(profileCard?.profileCreationDate)}}
+                </mat-card-subtitle>
+                <qr-code [value]="QRcode" size="200"></qr-code>
+            </mat-card-title-group>
+            <mat-card-content style="margin-top: 30px;">
+
+            </mat-card-content>
+
+        </div>
+
+        <div style="padding: 30px;">
+            <mat-card-title-group>
+                <mat-card-title><i class="fa fa-anchor"></i> Boat Information</mat-card-title>
+                <mat-card-subtitle><strong>boatOwner:</strong> {{profileCard?.boatInfo.boatOwner}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>boatNumber:</strong> {{profileCard?.boatInfo.boatNumber}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>hullType:</strong> {{profileCard?.boatInfo.hullType}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>hullColour:</strong> {{profileCard?.boatInfo.hullColour}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>motorMake:</strong> {{profileCard?.boatInfo.motorMake}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>horsePower:</strong> {{profileCard?.boatInfo.horsePower}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>towVehicleRegistrationNumber:</strong>{{profileCard?.boatInfo.towVehicleRegistrationNumber}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>trailerRegistrationNumber:</strong>{{profileCard?.boatInfo.trailerRegistrationNumber}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>cofNumber:</strong> {{profileCard?.boatInfo.cofNumber}}</mat-card-subtitle>
+                <mat-card-subtitle><strong>cofExpiryDate:</strong> {{profileCard?.boatInfo.cofExpiryDate | date:'dd/MM/yyyy'}}</mat-card-subtitle>
+            </mat-card-title-group>
+            <mat-card-content style="margin-top: 30px;">
+
+            </mat-card-content>
+
+        </div>
     </div>
     <mat-card-actions>
-        <button mat-raised-button class="PDFButton" (click)="convertToPDF()" style="margin: 20px;">Export To PDF &nbsp;<i
-                class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        <button mat-raised-button class="PDFButton" (click)="convertToPDF()" style="margin: 20px;">Export To PDF
+            &nbsp;<i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
     </mat-card-actions>
 </mat-card>

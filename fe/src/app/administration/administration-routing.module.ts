@@ -19,7 +19,7 @@ const routes: Routes = [{
   path: '',
   component: AdministrationComponent,
   children: [
-    { path: '', redirectTo: 'role-management', pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' } },
     { path: 'user-information', component: UserInformationComponent, data: { breadcrumb: 'UserInformation' } },
     { path: 'calendar-of-events', component: CalendarOfEventsComponent, data: { breadcrumb: 'CalendarOfEvents' } },

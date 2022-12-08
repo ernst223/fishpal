@@ -1,5 +1,4 @@
 ﻿using FishPalAPI.Data;
-using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
@@ -22,76 +21,6 @@ namespace FishPalAPI.Controllers
         {
             this.userMgr = userMgr;
             communicationService = new CommunicationService(this.userMgr);
-        }
-
-        /// <summary>
-        /// Insert a new Item that can be ordered
-        /// </summary>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        [HttpPost("insertMessage")]
-        public async Task<IActionResult> insertMessage([FromBody] Messages T)
-        {
-            try
-            {
-                bool result = communicationService.insertMessages(T);
-                if (result)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
-        /// <summary>
-        /// Get all inbox messages
-        /// </summary>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        [HttpGet("getAllMessage/{messageTypeToReturn}/{profileId}")]
-        public async Task<IActionResult> getAllMessage(int messageTypeToReturn, int profileId)
-        {
-            try
-            {
-                return Ok(communicationService.getAllMessages(messageTypeToReturn, profileId));
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
-        /// <summary>
-        /// Message Approval/declining
-        /// </summary>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        [HttpPost("approveDeclineMessage/{approveDecline}/{messageId}")]
-        public async Task<IActionResult> approveDeclineMessage(int approveDecline, int messageId)
-        {
-            try
-            {
-                bool result = communicationService.approveDeclineMessages(approveDecline, messageId);
-                if (result)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
         }
 
         /// <summary>
@@ -132,17 +61,6 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> RolesCurrentRoleCanSendTo(string role)
         {
             return Ok(communicationService.RolesCurrentRoleCanSendTo(role));
-        }
-
-        /// <summary>
-        /// sends the message to all the selected roles inside your/selected federation
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("getAll/sendMessages/{federationId}/{profileId}/{sendEmail}")]
-        public async Task<IActionResult> sendMessages([FromBody] MessageDTO message, int federationId, int profileId, bool sendEmail)
-        {
-            communicationService.sendMessages(message, federationId, profileId, sendEmail);
-            return Ok();
         }
 
         [HttpGet("accessableprofiles/{profileId}")]
@@ -196,30 +114,49 @@ namespace FishPalAPI.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Delete a message
-        /// </summary>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        [HttpDelete("deleteMessage/{messageId}")]
-        public async Task<IActionResult> deleteMessage(int messageId)
+        [HttpGet("message/send/{profileId}/{sendTo}")]
+        public async Task<IActionResult> uploadCommunicationMessage(int profileId, string sendTo)
         {
-            try
-            {
-                bool result = communicationService.deleteMessage(messageId);
-                if (result)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
+            return Ok(await communicationService.uploadMessageAsync(profileId, sendTo));
+        }
+
+        [HttpPut("message/update")]
+        public async Task<IActionResult> updateCommunicationMessage([FromBody] UploadDocumentMessageDTO uploadDocumentMessageDTO)
+        {
+            communicationService.updateCommunication(uploadDocumentMessageDTO);
+            return Ok();
+        }
+
+        [HttpGet("message/inbox/{profileId}")]
+        public async Task<IActionResult> getCommunicationMessageInbox(int profileId)
+        {
+            return Ok(communicationService.getInboxCommunicationMessages(profileId));
+        }
+
+        [HttpGet("message/outbox/{profileId}")]
+        public async Task<IActionResult> getCommunicationMessageOutbox(int profileId)
+        {
+            return Ok(communicationService.getOutboxCommunicationMessages(profileId));
+        }
+
+        [HttpGet("message/pending/{profileId}")]
+        public async Task<IActionResult> getCommunicationMessagePending(int profileId)
+        {
+            return Ok(communicationService.getPendingCommunicationMessages(profileId));
+        }
+
+        [HttpGet("message/aprove/{id}")]
+        public async Task<IActionResult> aprovePendingCommunication(int id)
+        {
+            communicationService.aproveCommunicationMessage(id);
+            return Ok();
+        }
+
+        [HttpGet("message/decline/{id}")]
+        public async Task<IActionResult> declinePendingCommunication(int id)
+        {
+            communicationService.declineCommunicationMessage(id);
+            return Ok();
         }
     }
 }

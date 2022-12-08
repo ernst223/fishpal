@@ -1,5 +1,4 @@
 ﻿using FishPalAPI.Data;
-using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
@@ -30,153 +29,6 @@ namespace FishPalAPI.Services
         public CommunicationService()
         {
             context = new ApplicationDbContext();
-        }
-
-        public bool insertMessages(Messages T)
-        {
-            try
-            {
-                context.Messages.Add(T);
-                context.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        public List<MessageDTO> getAllMessages(int messageTypeToReturn, int profileId)
-        {          
-            if (messageTypeToReturn == 0)//inbox
-            {
-                var _messagesReceivers = context.MessageReceivers.Where(x => x.AssignedUserProfileId == profileId).Include(x => x.Messages).Where(y => y.Messages.Status == 2).ToList();
-
-                List<MessageDTO> inboxResult = new List<MessageDTO>();
-                foreach (var entry in _messagesReceivers)
-                {
-                    inboxResult.Add(new MessageDTO()
-                    {
-                        Id = entry.Messages.Id,
-                        Message = entry.Messages.Message,
-                        CreationDate = entry.Messages.CreationDate,
-                        Status = entry.Messages.Status,
-                        CreatorUserProfileId = entry.Messages.CreatorUserProfileId,
-                        StatusChangeDate = entry.Messages.StatusChangeDate,
-                        ApproverRequired = entry.Messages.ApproverRequired
-                    });
-                }
-                return inboxResult;
-
-            }
-
-            List<Messages> _messages;
-
-            if (messageTypeToReturn == 1)//outbox   
-            {
-                 _messages = context.Messages.Where(x => x.CreatorUserProfileId == profileId).ToList();
-
-                    List<MessageDTO> outboxResult = new List<MessageDTO>();
-                    foreach (var entry in _messages)
-                    {
-                    outboxResult.Add(new MessageDTO()
-                        {
-                            Id = entry.Id,
-                            Message = entry.Message,
-                            CreationDate = entry.CreationDate,
-                            Status = entry.Status,
-                            CreatorUserProfileId = entry.CreatorUserProfileId,
-                            StatusChangeDate = entry.StatusChangeDate,
-                            ApproverRequired = entry.ApproverRequired
-                        });
-                    }
-                return outboxResult;
-            }
-
-            if (messageTypeToReturn == 2)//pending/to be approved 
-            {
-                 _messages = context.Messages.Where(x => x.ApproverRequired == profileId && x.Status == 1).ToList(); 
-                    List<MessageDTO> pendingResult = new List<MessageDTO>();
-                    foreach (var entry in _messages)
-                    {
-                    pendingResult.Add(new MessageDTO()
-                        {
-                            Id = entry.Id,
-                            Message = entry.Message,
-                            CreationDate = entry.CreationDate,
-                            Status = entry.Status,
-                            CreatorUserProfileId = entry.CreatorUserProfileId,
-                            StatusChangeDate = entry.StatusChangeDate,
-                            ApproverRequired = entry.ApproverRequired
-                        });
-                    }
-                return pendingResult;
-            }
-
-            return null;
-        }
-
-        public List<MessageReceiversDTO> getMessageAssignedToDTO(List<MessageReceivers> messageRecievers)
-        {
-            List<MessageReceiversDTO> result = new List<MessageReceiversDTO>();
-            foreach (var entry in messageRecievers)
-            {
-                result.Add(new MessageReceiversDTO()
-                {
-                    Id = entry.Id,
-                    AssignedUserProfileId = entry.AssignedUserProfileId
-                });
-            }
-            return result;
-        }
-
-        public bool deleteMessage(int messageId)
-        {
-            try
-            {
-                var recordToDelete = context.Messages.Where(y => y.Id == messageId).FirstOrDefault();
-                context.Messages.Remove(recordToDelete);
-                context.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        public bool approveDeclineMessages(int approveDecline, int messageId)
-        {
-            try
-            {
-                var recordToApproveOrDecline = context.Messages.Where(y => y.Id == messageId).FirstOrDefault();
-
-                if (approveDecline == 0) {
-                    recordToApproveOrDecline.Status = 0;
-                }
-
-                if (approveDecline == 2)
-                {
-                    recordToApproveOrDecline.Status = 2;
-                    var recipients = context.MessageReceivers.Include(a => a.Messages).Where(a => a.MessagesFKId == recordToApproveOrDecline.Id).ToList();
-                    foreach(var entity in recipients)
-                    {
-                        if(entity.Messages.SendEmail == true)
-                        {
-                            sendEmailMessageToRecipientAsync(entity.Messages, 
-                                context.UserProfiles.Where(a => a.Id == entity.AssignedUserProfileId).FirstOrDefault());
-                        }
-                    }
-                }
-
-                context.Messages.Update(recordToApproveOrDecline);
-                context.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
         }
 
         public List<Facet> getAllFederations(string role)
@@ -263,205 +115,19 @@ namespace FishPalAPI.Services
             }
         }
 
-        public void sendMessages(MessageDTO message, int federationId, int profileId, bool sendEmail)
-        {
-
-            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
-
-            var userClub = currentProfile.club.Name;
-            var userRole = currentProfile.role.Description;
-
-
-            List<UserProfile> recipients = new List<UserProfile>();
-
-            if (new string[] { "D0", "D1" }.Contains(userRole)) //club
-            {
-                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
-                    .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
-
-                if ((message.selectedClubs != null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
-                    .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && (message.rolesToSendTo.Contains(a.role.Description)) 
-                    && (message.selectedClubs.Contains(a.club.Id))).ToList();
-                }
-                else {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
-                       .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
-                }
-                    
-            }
-            else if (new string[] { "C0", "C1" }.Contains(userRole)) //province
-            {
-                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
-                    .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
-
-                if (message.selectedClubs != null) //newly added test
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
-                    a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description)) 
-                    && (message.selectedClubs.Contains(a.club.Id))).ToList();
-                } else {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
-                    a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
-                }
-                
-            }
-            else if (new string[] { "B0", "B1" }.Contains(userRole)) //federation/facet
-            {
-                if ((message.selectedClubs != null) && (message.selectedProvince != null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
-                       && (message.selectedProvince.Contains(a.club.Province.Id)) 
-                       && (message.selectedClubs.Contains(a.club.Id))).ToList();
-                }
-                else if ((message.selectedClubs != null) && (message.selectedProvince == null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
-                       && (message.selectedClubs.Contains(a.club.Id))).ToList();
-                }
-                else if ((message.selectedClubs == null) && (message.selectedProvince != null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))
-                       && (message.selectedProvince.Contains(a.club.Province.Id))).ToList();
-                }
-                else
-                {
-                    recipients = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == federationId && (message.rolesToSendTo.Contains(a.role.Description))).ToList();
-                }
-                    
-            }
-            else if (new string[] { "A0", "A1" }.Contains(userRole)) //sasacc
-            {
-                if ((message.selectedClubs != null) && (message.selectedProvince != null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
-                    && message.selectedProvince.Contains(a.club.Province.Id) && message.selectedClubs.Contains(a.club.Id)).ToList();
-                }
-                else if ((message.selectedClubs != null) && (message.selectedProvince == null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
-                    && message.selectedClubs.Contains(a.club.Id)).ToList();
-                }
-                else if ((message.selectedClubs == null) && (message.selectedProvince != null))
-                {
-                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId 
-                    && message.selectedProvince.Contains(a.club.Province.Id)).ToList();
-                }
-                else {
-                    recipients = context.UserProfiles.Include(a => a.role).Include(a => a.club).ThenInclude(a => a.Facet).Where(a => message.rolesToSendTo.Contains(a.role.Description) && a.club.Facet.Id == federationId).ToList();
-                }              
-            }
-
-            if (recipients != null) {
-
-                Messages newMessage = new Messages();
-
-                if (new string[] { "A0", "B0", "C0", "D0" }.Contains(currentProfile.role.Description)) {
-                    message.Status = 1; //pending
-                } else if (new string[] { "A1", "B1", "C1", "D1" }.Contains(currentProfile.role.Description)) {
-                    message.Status = 2; //Allready approved
-                }
-
-                int approverId = 0;
-
-                if (currentProfile.role.Description == "A0") {
-                    approverId = context.UserProfiles.Include(a => a.role)
-                       .Where(a => a.role.Description == "A1").Select(a=>a.Id).FirstOrDefault();
-
-                }                 
-                else if (currentProfile.role.Description == "B0") {
-                    approverId = context.UserProfiles.Include(a => a.role)
-                        .Include(a => a.club)
-                        .ThenInclude(a => a.Facet)
-                        .Include(a => a.role)
-                        .Where(a => a.club.Facet.Id == federationId && a.role.Description == "B1").Select(a => a.Id).FirstOrDefault();
-                }
-                else if (currentProfile.role.Description == "C0")
-                {
-                    var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
-                    .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
-
-                    approverId = context.UserProfiles.Include(a => a.role)
-                       .Include(a => a.club)
-                        .ThenInclude(a => a.Facet)
-                        .ThenInclude(a=>a.Provinces)
-                        .Include(a => a.role)
-                        .Where(a => a.club.Province.Id == userProvince.Id && a.club.Facet.Id == federationId && a.role.Description == "C1").Select(a => a.Id).FirstOrDefault();
-                }
-                else if (currentProfile.role.Description == "D0")
-                {
-                    var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
-                    .Where(a => a.Id == currentProfile.Id).FirstOrDefault().club.Province;
-
-                    approverId = context.UserProfiles.Include(a => a.role)
-                       .Include(a => a.club)
-                        .ThenInclude(a => a.Facet)
-                        .Include(a => a.role)
-                        .Where(a => a.club.Name == userClub && a.club.Facet.Id == federationId && a.club.Province.Id == userProvince.Id && a.role.Description == "D1").Select(a => a.Id).FirstOrDefault();
-                }
-
-
-                newMessage.Message = message.Message;
-                newMessage.CreationDate = DateTime.Now;
-                newMessage.Status = message.Status;
-                newMessage.CreatorUserProfileId = profileId;
-                newMessage.ApproverRequired = approverId;
-                newMessage.SendEmail = sendEmail;
-
-                context.Messages.Add(newMessage);
-                context.SaveChanges();
-
-                //Get Newly created message
-                newMessage = context.Messages.Where(a => a.Message == newMessage.Message).OrderByDescending(a=>a.Id).FirstOrDefault();
-
-                //Add emssages to receipients
-                foreach (var item in recipients) {
-                    context.MessageReceivers.Add(new MessageReceivers{
-                     AssignedUserProfileId = item.Id,
-                     MessagesFKId = newMessage.Id
-                    });
-                    if (message.Status == 2 && newMessage.SendEmail == true)
-                    {
-                        sendEmailMessageToRecipientAsync(newMessage, item);
-                    }
-                }
-                context.SaveChanges();
-            }
-        }
-
-        public async Task sendEmailMessageToRecipientAsync(Messages messageToSend, UserProfile userProfile)
-        {
-            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
-            if(currentUser != null)
-            {
-                var message = new TemplatedPostmarkMessage
-                {
-                    From = "admin@fishpal.co.za",
-                    To = currentUser.UserName,
-                    TemplateAlias = "NewMessage",
-                    TemplateModel = new Dictionary<string, object> {
-                    { "name", currentUser.Name },
-                    { "message", messageToSend.Message },
-                  },
-                };
-
-                var client = new PostmarkClient("fc1530d0-ed32-488f-8f40-33fb54be4801");
-
-                var response = await client.SendMessageAsync(message);
-
-                if (response.Status != PostmarkStatus.Success)
-                {
-                    Console.WriteLine("Response was: " + response.Message);
-                }
-            }
-        }
-
         public void updateDocument(UploadDocumentMessageDTO T)
         {
             var document = context.Documents.Where(a => a.Id == T.documentId).FirstOrDefault();
             document.Title = T.title;
             document.Note = T.note;
+            context.SaveChanges();
+        }
+
+        public void updateCommunication(UploadDocumentMessageDTO T)
+        {
+            var communication = context.Communications.Where(a => a.Id == T.documentId).FirstOrDefault();
+            communication.Title = T.title;
+            communication.Note = T.note;
             context.SaveChanges();
         }
 
@@ -562,6 +228,33 @@ namespace FishPalAPI.Services
             return documentToAdd.Id;
         }
 
+        public async Task<int> uploadMessageAsync(int profileId, string sendTo)
+        {
+            // Saving the document meta data
+            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
+            Communication communicationToAdd = new Communication();
+            communicationToAdd.Aproved = false;
+            communicationToAdd.CreatedDate = DateTime.Now;
+            communicationToAdd.CreatedBy = currentProfile;
+            context.Communications.Add(communicationToAdd);
+            context.SaveChanges();
+
+            // Store file on server
+            communicationToAdd = context.Communications.OrderByDescending(a => a.Id).FirstOrDefault();
+
+            foreach (var profile in getProfilesToSendTo(sendTo))
+            {
+                context.CommunicationMessages.Add(new CommunicationMessage()
+                {
+                    Communication = communicationToAdd,
+                    Recipient = profile
+                });
+            }
+
+            context.SaveChanges();
+            return communicationToAdd.Id;
+        }
+
         private List<UserProfile> getProfilesToSendTo(string sendTo)
         {
             string[] profiles = sendTo.Split(',');
@@ -609,12 +302,53 @@ namespace FishPalAPI.Services
             return messages;
         }
 
+        public List<DocumentMessageDTO> getInboxCommunicationMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.CommunicationMessages.Include(a => a.Communication).Include(a => a.Recipient)
+                .Where(a => a.Recipient.Id == profileId && a.Communication.Aproved == true).OrderByDescending(a => a.Id).ToList();
+
+            foreach (var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Communication.Id,
+                    note = entry.Communication.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Communication.Title
+                });
+            }
+            return messages;
+        }
+
         public List<DocumentMessageDTO> getOutboxDocumentMessages(int profileId)
         {
             List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
             var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
             var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
             var tempMessages = context.Documents.Where(a => a.CreatedBy == userProfile).ToList();
+
+            foreach (var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Id,
+                    note = entry.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Title
+                });
+            }
+            return messages;
+        }
+
+        public List<DocumentMessageDTO> getOutboxCommunicationMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.Communications.Where(a => a.CreatedBy == userProfile).ToList();
 
             foreach (var entry in tempMessages)
             {
@@ -650,11 +384,40 @@ namespace FishPalAPI.Services
             return messages;
         }
 
+        public List<DocumentMessageDTO> getPendingCommunicationMessages(int profileId)
+        {
+            List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempMessages = context.Communications
+                .Where(a => a.Aproved == false).OrderByDescending(a => a.Id).ToList();
+
+            foreach (var entry in tempMessages)
+            {
+                messages.Add(new DocumentMessageDTO()
+                {
+                    id = entry.Id,
+                    note = entry.Note,
+                    sendFrom = user.UserName,
+                    title = entry.Title
+                });
+            }
+            return messages;
+        }
+
         public void aproveDocumentMessage(int id)
         {
             var documentMessage = context.DocumentMessages.Include(a => a.Document).Where(a => a.Document.Id == id).FirstOrDefault();
             documentMessage.Document.AprovalDate = DateTime.Now;
             documentMessage.Document.Aproved = true;
+            context.SaveChanges();
+        }
+
+        public void aproveCommunicationMessage(int id)
+        {
+            var communicationMessage = context.CommunicationMessages.Include(a => a.Communication).Where(a => a.Communication.Id == id).FirstOrDefault();
+            communicationMessage.Communication.AprovalDate = DateTime.Now;
+            communicationMessage.Communication.Aproved = true;
             context.SaveChanges();
         }
 
@@ -664,6 +427,16 @@ namespace FishPalAPI.Services
             var document = documentMessage.Document;
             context.Remove(document);
             context.Remove(documentMessage);
+            context.SaveChanges();
+        }
+
+        public void declineCommunicationMessage(int id)
+        {
+            var communicationMessage = context.CommunicationMessages.Include(a => a.Communication).Where(a => a.Communication.Id == id).FirstOrDefault();
+            var communication = communicationMessage.Communication;
+            context.Remove(communication);
+            context.Remove(communicationMessage);
+            context.SaveChanges();
         }
 
         public List<UserProfile> getLowerPresidentProfiles(UserProfile profile)

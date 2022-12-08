@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
     ngOnInit() { }
 
     myProfileImage() {
-        return environment.apiUrl + "profilePicture/" + localStorage.getItem('profileId') + ".jpg"
+        return environment.apiUrl + "profilePicture/" + localStorage.getItem('userId') + ".jpg"
     }
 
     OpenProfile(event: any) {

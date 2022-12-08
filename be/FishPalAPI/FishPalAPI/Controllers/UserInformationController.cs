@@ -136,7 +136,7 @@ namespace FishPalAPI.Controllers
         }
 
         [HttpPost("upload/profilePicture/{profileId}")]
-        public async Task<IActionResult> uploadProfilePicture(IFormFile file, int profileId)
+        public async Task<IActionResult> uploadProfilePicture(IFormFile file, string profileId)
         {
             return Ok(await userInformationService.UploadProfilePicture(file, profileId));
         }

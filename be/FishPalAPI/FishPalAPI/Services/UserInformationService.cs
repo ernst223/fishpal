@@ -496,11 +496,11 @@ namespace FishPalAPI.Services
             return false;
         }
 
-        public async Task<bool> UploadProfilePicture(IFormFile ufile, int documentId)
+        public async Task<bool> UploadProfilePicture(IFormFile ufile, string documentId)
         {
             if (ufile != null && ufile.Length > 0)
             {
-                var fileName = Path.GetFileName(documentId.ToString() + ".jpg");
+                var fileName = Path.GetFileName(documentId + ".jpg");
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\profilePicture", fileName);
                 if (File.Exists(filePath))
                 {

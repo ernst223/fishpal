@@ -1,5 +1,4 @@
-﻿using FishPalAPI.Data.Communication;
-using FishPalAPI.Data.Member_Information.Boat_Information;
+﻿using FishPalAPI.Data.Member_Information.Boat_Information;
 using FishPalAPI.Data.Member_Information.Geo_Province_Information;
 using FishPalAPI.Data.Member_Information.Provincial_Information;
 using FishPalAPI.Data.Member_Information.Training;
@@ -25,8 +24,9 @@ namespace FishPalAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //var connectionString = Configuration.GetConnectionString("DefaultConnection");       
-                optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //var connectionString = Configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=AWE7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
                 //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
@@ -37,11 +37,11 @@ namespace FishPalAPI.Data
         public DbSet<Facet> Facets { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<OrderItems> OrderItems { get; set; }
-        public DbSet<Messages> Messages { get; set; }
-        public DbSet<MessageReceivers> MessageReceivers { get; set; }
         public DbSet<Federation> Federation { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentMessage> DocumentMessages { get; set; }
+        public DbSet<Communication> Communications { get; set; }
+        public DbSet<CommunicationMessage> CommunicationMessages { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
         public DbSet<MedicalInformation> MedicalInformation { get; set; }

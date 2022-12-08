@@ -1,0 +1,21 @@
+<mat-grid-list cols="2">
+
+    <h3 style="text-align: center;">Update User Profile Role</h3>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <div>
+            <mat-form-field style="width: 410px; margin-top: 30px;" appearance="fill">
+                <mat-label>Select role</mat-label>
+                <mat-select [(ngModel)]="selectedRole" style="width: 390px;">
+                  <mat-option *ngFor="let role of roles" [value]="role.value">
+                    {{role.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field><br>
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="updateRole()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">save</mat-icon>
+                Save Role
+            </button>
+        </div>
+    </div>
+
+</mat-grid-list>

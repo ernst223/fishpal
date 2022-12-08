@@ -1,0 +1,15 @@
+<mat-grid-list cols="2">
+
+    <h2>Settings</h2>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <div>
+            <img [src]="myProfileImage()" height="200" style="border-radius: 50px;"/><br>
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="FILE.click()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
+                Upload Profile Picture
+            </button>
+            <input hidden type="file" accept=".jpg" id="File" #FILE (change)="OpenProfile($event)">
+        </div>
+    </div>
+
+</mat-grid-list>

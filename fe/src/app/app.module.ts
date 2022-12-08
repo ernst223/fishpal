@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AccountModule } from './account/account.module';
+import { RoleChangeDialogComponent } from './administration/role-change-dialog/role-change-dialog.component';
+import { SettingsComponent } from './administration/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
@@ -25,7 +27,9 @@ import { WebsiteComponent } from './website/website.component';
     ShellNavListComponent,
     ShellComponent,
     WebsiteComponent,
-    NavbarpageComponent
+    NavbarpageComponent,
+    SettingsComponent,
+    RoleChangeDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +45,8 @@ import { WebsiteComponent } from './website/website.component';
     MenuService,
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [SettingsComponent, RoleChangeDialogComponent]
 })
 export class AppModule {
   constructor(router: Router) {

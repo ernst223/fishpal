@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RoleManagementComponent } from '../role-management/role-management.component';
 import { AdministrationComponent } from './administration.component';
 import { CalendarOfEventsComponent } from './calendar-of-events/calendar-of-events.component';
 import { ClothesOrderComponent } from './clothes-order/clothes-order.component';
@@ -18,7 +19,7 @@ const routes: Routes = [{
   path: '',
   component: AdministrationComponent,
   children: [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'role-management', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' } },
     { path: 'user-information', component: UserInformationComponent, data: { breadcrumb: 'UserInformation' } },
     { path: 'calendar-of-events', component: CalendarOfEventsComponent, data: { breadcrumb: 'CalendarOfEvents' } },
@@ -30,7 +31,8 @@ const routes: Routes = [{
     { path: 'mobile-app', component: MobileAppComponent, data: { breadcrumb: 'MobileApp' } },
     { path: 'payments', component: PaymentsComponent, data: { breadcrumb: 'Payments' } },
     { path: 'protea-colors', component: ProteaColorsComponent, data: { breadcrumb: 'ProteaColors' } },
-    { path: 'reporting', component: ReportingComponent, data: { breadcrumb: 'Reporting' } }
+    { path: 'reporting', component: ReportingComponent, data: { breadcrumb: 'Reporting' } },
+    { path: 'role-management', component: RoleManagementComponent, data: { breadcrumb: 'RoleManagement' }}
   ],
   data: { breadcrumb: 'Administration' }
 }];

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
+import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -28,7 +28,7 @@ export class SharedService {
   }
 
   // Uploading a document File
-  public uploadDocumentMessage(data: File, sendTo: number): Observable<any> {
+  public uploadDocumentMessage(data: File, sendTo: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', data);
 
@@ -71,6 +71,24 @@ export class SharedService {
 
   public declinePendingDocumentMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/decline/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getRoleManagementUsers(): Observable<Array<RoleManagementUsersDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/rolemanagement/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getAccessableUsersToMessage(): Observable<Array<RoleManagementUsersDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/accessableprofiles/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateUserRole(profileId: number, role: string): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/userinformation/updateuserrole/' + profileId + '/' + role, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -189,6 +207,66 @@ export class SharedService {
   public updateAnglishAdministrationHistory(data: AnglishAdministrationHistoryDTO[], profileId: number): Observable<any> {
     return this.httpClient.put(this.connectionstring + 'api/userinformation/anglishadministrationaistory/' + profileId,
     data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadIdDocument(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/id/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadPassportDocument(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/passport/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadSkippersDocument(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/skippers/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadMedicalDocument(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/medicalaid/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadCOFDocument(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/cof/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public uploadProfilePicture(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/userinformation/upload/profilePicture/' + localStorage.getItem('profileId'),
+    formData, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }

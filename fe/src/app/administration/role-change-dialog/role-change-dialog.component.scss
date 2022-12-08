@@ -1,0 +1,45 @@
+.edit-class {
+    padding-top: 20px;
+    padding-bottom: 15px;
+    border: #2bc52b70;
+    border-style: solid;
+    border-width: 0.2px;
+    background: #f9f8f8a6;
+  }
+  
+  .facetCard {
+    width: 93%;
+    color: white;
+    height: auto;
+  }
+  
+  .cardHeader {
+    font-size: 30px;
+    position: absolute;
+    right: 40px;
+    float: right;
+  }
+  
+  .facetCardTitle {
+    font-size: 30px;
+  }
+  
+  .numberStyle {
+    font-weight: bold;
+    font-size: 30px;
+  }
+  
+  .circle {
+    background-color: rgb(0, 0, 255);
+    opacity: 0.8;
+    display: block;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 3px solid rgb(255, 0, 0);
+    margin: auto;
+    color: #fff;
+    line-height: 50px;
+    text-align: center
+  }
+  

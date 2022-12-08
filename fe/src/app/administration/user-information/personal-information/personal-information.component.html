@@ -41,9 +41,14 @@
         <mat-grid-tile>
             <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="CSVFile.click()">
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                Attach Copy of ID...
+                Upload ID
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #CSVFile>
+            <input hidden type="file" accept=".pdf" id="File" #CSVFile (change)="OpenId($event)">
+
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="downloadId()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">cloud_download</mat-icon>
+                Download ID
+            </button>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
@@ -98,9 +103,14 @@
         <mat-grid-tile>
             <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="PASSPORTFile.click()">
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                Attach Copy of Passport...
+                Upload Passport
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #PASSPORTFile>
+            <input hidden type="file" accept=".pdf" id="File" #PASSPORTFile (change)="OpenPassport($event)">
+
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="downloadPassport()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">cloud_download</mat-icon>
+                Download Passport
+            </button>
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
@@ -161,9 +171,14 @@
         <mat-grid-tile>
             <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="SKIPPERFile.click()">
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                Attach Copy of Skippers License...
+                Upload Skippers License
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #SKIPPERFile>
+            <input hidden type="file" accept=".pdf" id="File" #SKIPPERFile (change)="OpenSkippersLicense($event)">
+
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="downloadSkippersLicense()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">cloud_download</mat-icon>
+                Download Skippers License
+            </button>
         </mat-grid-tile>
     </mat-grid-list>
 

@@ -6,6 +6,7 @@ using FishPalAPI.Models.UserInformation.Other;
 using FishPalAPI.Models.UserInformation.Provincial_Information;
 using FishPalAPI.Services;
 using FishPalAPI.Services.Member_Information.Provincial_Information;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -102,6 +103,54 @@ namespace FishPalAPI.Controllers
         {
             userInformationService.updateAnglishAdministrationHistories(anglishAdministrationHistoryDTO, profileId);
             return Ok();
+        }
+
+        [HttpPost("upload/id/{profileId}")]
+        public async Task<IActionResult> uploadIdDocument(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadId(file, profileId));
+        }
+
+        [HttpPost("upload/passport/{profileId}")]
+        public async Task<IActionResult> uploadPassport(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadPassport(file, profileId));
+        }
+
+        [HttpPost("upload/skippers/{profileId}")]
+        public async Task<IActionResult> uploadSkippers(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadSkipperLicense(file, profileId));
+        }
+
+        [HttpPost("upload/medicalaid/{profileId}")]
+        public async Task<IActionResult> uploadMedicalAid(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadMedicalAid(file, profileId));
+        }
+
+        [HttpPost("upload/cof/{profileId}")]
+        public async Task<IActionResult> uploadCOF(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadCOF(file, profileId));
+        }
+
+        [HttpPost("upload/profilePicture/{profileId}")]
+        public async Task<IActionResult> uploadProfilePicture(IFormFile file, int profileId)
+        {
+            return Ok(await userInformationService.UploadProfilePicture(file, profileId));
+        }
+
+        [HttpGet("rolemanagement/{profileId}")]
+        public async Task<IActionResult> getUsersForRoleManagement(int profileId)
+        {
+            return Ok(userInformationService.getRoleManagementUsers(profileId));
+        }
+
+        [HttpGet("updateuserrole/{profileId}/{role}")]
+        public async Task<IActionResult> updateUserRole(int profileId, string role)
+        {
+            return Ok(userInformationService.updateUserProfileRole(profileId, role));
         }
     }
 }

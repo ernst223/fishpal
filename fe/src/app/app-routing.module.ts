@@ -22,6 +22,7 @@ const routes: Routes = [
       { path: 'protea-colors', loadChildren: './administration/administration.module#AdministrationModule'},
       { path: 'reporting', loadChildren: './administration/administration.module#AdministrationModule'},
       { path: 'datasetadministration', loadChildren: './datasetadministration/datasetadministration.module#DatasetadministrationModule'},
+      { path: 'role-management', loadChildren: './administration/administration.module#AdministrationModule'}
     ]
   }
 ];

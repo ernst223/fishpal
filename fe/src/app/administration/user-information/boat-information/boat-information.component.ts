@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { environment } from 'src/environments/environment';
 import { BoatInformationDTO } from 'src/shared/shared.models';
 import { SharedService } from 'src/shared/shared.serice';
 
@@ -14,6 +15,7 @@ export class BoatInformationComponent implements OnInit {
 
   currentProfile = localStorage.getItem("profileId");
   isLoading: any;
+  cofFile: File;
 
   boatInformation: BoatInformationDTO = {
     id: null,
@@ -50,7 +52,21 @@ export class BoatInformationComponent implements OnInit {
     ).subscribe((a) => {
       this.setupDataStream();
       this.openSnackBar("Boat Information Updated", "close");
+      if (this.cofFile) {
+        this.service.uploadCOFDocument(this.cofFile).subscribe(a => {
+          console.log('COF Document uploaded');
+        });
+      }
     });
+  }
+
+  OpenCOF(event: any) {
+    this.cofFile = event.target.files[0];
+    this.openSnackBar('File Ready For Processing', 'Close');
+  }
+
+  downloadCOFFile() {
+    window.open(environment.apiUrl + "cof/" + localStorage.getItem('profileId') + ".pdf", '_blank');
   }
 
   openSnackBar(message: string, action: string) {

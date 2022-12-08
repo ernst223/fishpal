@@ -19,7 +19,13 @@
   <ItemGroup>
     <Folder Include="Data\Item Orders\" />
     <Folder Include="Data\Scripts\" />
+    <Folder Include="wwwroot\idDocuments\" />
+    <Folder Include="wwwroot\medicalAid\" />
+    <Folder Include="wwwroot\cof\" />
     <Folder Include="wwwroot\documents\" />
+    <Folder Include="wwwroot\profilePicture\" />
+    <Folder Include="wwwroot\passports\" />
+    <Folder Include="wwwroot\skippersLicenses\" />
   </ItemGroup>
 
 </Project>

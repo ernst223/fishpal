@@ -40,9 +40,14 @@
         <mat-grid-tile>
             <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="MedicalFile.click()">
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                Attach Copy of Medical Aid...
+                Upload Medical Aid
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #MedicalFile>
+            <input hidden type="file" accept=".pdf" id="File" #MedicalFile (change)="OpenMedicalAid($event)">
+
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="downloadMedicalFile()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">cloud_download</mat-icon>
+                Download Medical Aid
+            </button>
         </mat-grid-tile>
     </mat-grid-list>
 

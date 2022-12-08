@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using FishPalAPI.Data;
 using FishPalAPI.Models;
+using FishPalAPI.Models.RoleManagement;
 using FishPalAPI.Models.UserInformation.ClubInformation;
 using FishPalAPI.Models.UserInformation.MedicalInformation;
 using FishPalAPI.Models.UserInformation.Other;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +19,7 @@ namespace FishPalAPI.Services
     {
         private ApplicationDbContext context;
         private UserService userService;
+        private CommunicationService communicationService;
         private readonly IMapper _mapper;
 
         public UserInformationService(IMapper mapper)
@@ -23,6 +27,7 @@ namespace FishPalAPI.Services
             _mapper = mapper;
             context = new ApplicationDbContext();
             userService = new UserService();
+            communicationService = new CommunicationService();
         }
 
         public List<OtherAnglingAchievementsDTO> getOtherAnglingAchievements(int profileId)
@@ -394,6 +399,178 @@ namespace FishPalAPI.Services
             currentPersonalInformation.skipperLicenseNumber = personalInformationDTO.skipperLicenseNumber;
 
             context.SaveChanges();
+        }
+
+        public async Task<bool> UploadId(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\idDocuments", fileName);
+                if(File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UploadPassport(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\passports", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UploadSkipperLicense(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\skippersLicenses", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UploadMedicalAid(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\medicalAid", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UploadCOF(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\cof", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UploadProfilePicture(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".jpg");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\profilePicture", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public List<RoleManagementUsersDTO> getRoleManagementUsers(int profileId)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+
+            var lowerUserProfiles = communicationService.getProfilesInLowerRoles(currentProfile);
+            var sameRoleProfiles = communicationService.getProfilesInSameRole(currentProfile);
+            foreach(var entry in sameRoleProfiles)
+            {
+                if(lowerUserProfiles.Where(a => a.Id == entry.Id).FirstOrDefault() == null && entry.Id != profileId)
+                {
+                    lowerUserProfiles.Add(entry);
+                }
+            }
+
+            List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
+            foreach(var entry in lowerUserProfiles)
+            {
+                result.Add(new RoleManagementUsersDTO()
+                {
+                    Id = entry.Id,
+                    FullName = getProfileFullName(entry),
+                    Username = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(entry)).FirstOrDefault().UserName,
+                    Facet = getProfileFacetName(entry),
+                    Role = entry.role.Description + " " + entry.role.FullName
+                });
+            }
+            return result;
+        }
+
+        private string getProfileFullName(UserProfile userProfile)
+        {
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            return currentUser.Name + " " + currentUser.Surname;
+        }
+
+        private string getProfileFacetName(UserProfile userProfile)
+        {
+            var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == userProfile.Id).FirstOrDefault().club.Facet;
+            return userFacet.Name + " " + userFacet.Federation;
+        }
+
+        public bool updateUserProfileRole(int profileId, string role)
+        {
+            var currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role)
+                .Where(a => a.Id == profileId).FirstOrDefault();
+
+            var newRole = context.Role.Where(a => a.Description == role).FirstOrDefault();
+            if(newRole == null)
+            {
+                return false;
+            }
+            currentProfile.role = newRole;
+            context.SaveChanges();
+            return true;
         }
     }
 }

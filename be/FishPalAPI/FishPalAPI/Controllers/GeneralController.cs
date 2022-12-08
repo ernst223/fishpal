@@ -37,5 +37,10 @@ namespace FishPalAPI.Controllers
             return Ok(userService.allUserInfo(profileId, returnAll));
         }
 
+        [HttpGet("seed")]
+        public async Task<IActionResult> seedDatabase()
+        {
+            return Ok(userService.seed());
+        }
     }
 }

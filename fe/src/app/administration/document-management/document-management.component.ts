@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, ReplaySubject, Subscriber } from 'rxjs';
-import { MessageDTO, MyDocumentMessages, UploadDocumentMessage } from 'src/shared/shared.models';
+import { MessageDTO, MyDocumentMessages, RoleManagementUsersDTO, UploadDocumentMessage } from 'src/shared/shared.models';
 import { AdministrationService } from '../administration.service';
 import { environment } from 'src/environments/environment';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -25,6 +25,10 @@ export class DocumentManagementComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) inboxPaginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) pendingSort: MatSort;
   @ViewChild(MatPaginator, { static: false }) pendingPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sendSort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) sendPaginator: MatPaginator;
+
+  sendData: RoleManagementUsersDTO[];
 
   inboxData: MyDocumentMessages[];
   outboxData: MyDocumentMessages[];
@@ -32,6 +36,8 @@ export class DocumentManagementComponent implements OnInit {
   inboxDataSource: MatTableDataSource<object> = new MatTableDataSource();
   outboxDataSource: MatTableDataSource<object> = new MatTableDataSource();
   pendingDataSource: MatTableDataSource<object> = new MatTableDataSource();
+  sendDataSource: MatTableDataSource<object> = new MatTableDataSource();
+  displayedSendColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
   displayedColumns = ['Id', 'SendFrom', 'Title', 'Note', 'Actions'];
 
   sendOptions: SendOptions[] = [
@@ -42,6 +48,8 @@ export class DocumentManagementComponent implements OnInit {
   member: boolean = true;
   management: boolean = false;
   chair: boolean = false;
+
+  selectedProfiles: number[] = [];
 
   selectedSendOption: number;
   theFile: File;
@@ -67,17 +75,26 @@ export class DocumentManagementComponent implements OnInit {
 
   setPrivileges() {
     const role = localStorage.getItem('role');
-    if(this.contains(role, ['A0', 'A1', 'B0', 'B1', 'C0', 'C1', 'D0', 'D1'])) {
+    if (this.contains(role, ['A1', 'A2', 'A3', 'A4', 'A5', 'A7', 'A8', 'A9', 'A10', 'A13',
+      'B1', 'B2', 'B3', 'B4', 'B5', 'B7', 'B8', 'B9', 'B10', 'B13',
+      'C1', 'C2', 'C3', 'C4', 'C5', 'C7', 'C8', 'C9', 'C10', 'C13',
+      'D1', 'D2', 'D3', 'D4', 'D5', 'D7', 'D8', 'D9', 'D10', 'D13',])) {
       this.management = true;
     }
-    if(this.contains(role, ['A1', 'B1', 'C1','D1'])) {
+    if (this.contains(role, ['A1', 'B1', 'C1', 'D1'])) {
       this.chair = true;
     }
   }
 
-  contains(str, arr){
+  applySendFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.pendingDataSource.filter = filterValue;
+  }
+
+  contains(str, arr) {
     var value = 0;
-    arr.forEach(function(word){
+    arr.forEach(function (word) {
       value = value + str.includes(word);
     });
     return (value === 1)
@@ -102,10 +119,25 @@ export class DocumentManagementComponent implements OnInit {
         this.pendingDataSource.data = this.pendingData;
       });
     }
+
+    this.service.getAccessableUsersToMessage().subscribe(a => {
+      this.sendData = a;
+      this.sendDataSource.data = this.sendData;
+    });
   }
 
   openDocument(id) {
     window.open(environment.apiUrl + "documents/" + id + ".pdf", '_blank');
+  }
+
+  selectProfile(id: any) {
+
+    let index = this.selectedProfiles.indexOf(id, 0);
+    if (index > -1) {
+      this.selectedProfiles.splice(index, 1);
+    } else {
+      this.selectedProfiles.push(id);
+    }
   }
 
   ngAfterViewInit() {
@@ -115,6 +147,8 @@ export class DocumentManagementComponent implements OnInit {
     this.inboxDataSource.paginator = this.inboxPaginator;
     this.pendingDataSource.sort = this.pendingSort;
     this.pendingDataSource.paginator = this.pendingPaginator;
+    this.sendDataSource.sort = this.sendSort;
+    this.sendDataSource.paginator = this.sendPaginator;
   }
 
   applyInboxFilter(filterValue: string) {
@@ -162,7 +196,8 @@ export class DocumentManagementComponent implements OnInit {
     }
 
     let dialogRef = this.dialog.open(templateRef, {
-      width: '550px',
+      width: '1500px',
+      height: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -189,21 +224,29 @@ export class DocumentManagementComponent implements OnInit {
     this.uploadData.title = this.title;
 
     if (this.title === null || this.title === undefined || this.title === "" ||
-      this.selectedSendOption === null || this.selectedSendOption === undefined ||
       this.theFile === null || this.theFile === undefined) {
       this.openSnackBar("Please fill in all the values", "close");
     } else {
-      this.service.uploadDocumentMessage(this.theFile, this.selectedSendOption).subscribe(a => {
-        console.log(a);
-        this.uploadData.documentId = a;
-        this.service.updateDocumentMessage(this.uploadData).subscribe(a => {
-          this.openSnackBar('Process Completed', 'Close');
-          this.note = "";
-          this.title = "";
-          this.theFile = null;
-          this.dialog.closeAll();
+      let tempText = '';
+      for (var profile of this.selectedProfiles) {
+        tempText = tempText + ',' + profile;
+      }
+      if (tempText.slice(1) == '' || tempText.slice(1) == undefined) {
+        this.openSnackBar("Please fill profiles", "close");
+      } else {
+        this.service.uploadDocumentMessage(this.theFile, tempText.slice(1)).subscribe(a => {
+          console.log(a);
+          this.uploadData.documentId = a;
+          this.service.updateDocumentMessage(this.uploadData).subscribe(a => {
+            this.openSnackBar('Process Completed', 'Close');
+            this.note = "";
+            this.title = "";
+            this.theFile = null;
+            this.dialog.closeAll();
+            this.setupDataStream();
+          });
         });
-      });
+      }
     }
   }
 

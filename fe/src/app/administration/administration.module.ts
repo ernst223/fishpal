@@ -33,6 +33,7 @@ import { OtherAnglingAchievementsComponent } from './user-information/other-angl
 import { PersonalInformationComponent } from './user-information/personal-information/personal-information.component';
 import { AdministrationService } from './administration.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { RoleManagementComponent } from '../role-management/role-management.component';
 @NgModule({
   imports: [
     MatTabsModule,
@@ -71,7 +72,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     AnglingHistoryComponent,
     AnglingAdministrationHistoryComponent,
     OtherAnglingAchievementsComponent,
-    PersonalInformationComponent
+    PersonalInformationComponent,
+    RoleManagementComponent
   ],
   providers: [
     AdministrationService,

@@ -144,9 +144,15 @@ namespace FishPalAPI.Controllers
             communicationService.sendMessages(message, federationId, profileId, sendEmail);
             return Ok();
         }
-        
+
+        [HttpGet("accessableprofiles/{profileId}")]
+        public async Task<IActionResult> getAccessableProfiles(int profileId)
+        {
+            return Ok(communicationService.getAccessableProfiles(profileId));
+        }
+
         [HttpPost("document/send/{profileId}/{sendTo}")]
-        public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, int sendTo)
+        public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, string sendTo)
         {
             return Ok(await communicationService.uploadDocumentAsync(file, profileId, sendTo));
         }

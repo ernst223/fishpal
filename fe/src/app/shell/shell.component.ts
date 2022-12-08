@@ -5,8 +5,9 @@ import { Observable } from 'rxjs';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MatSidenav } from '@angular/material';
+import { MatDialog, MatSidenav } from '@angular/material';
 import { Router } from '@angular/router';
+import { SettingsComponent } from '../administration/settings/settings.component';
 
 @Component({
   selector: 'app-shell',
@@ -23,7 +24,7 @@ export class ShellComponent implements OnInit {
   .pipe(
     map(result => result.matches)
   );
-  constructor(private menuService: MenuService,  private breakpointObserver: BreakpointObserver, private router: Router) { }
+  constructor(private menuService: MenuService,  private breakpointObserver: BreakpointObserver, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.menuItems = this.menuService.getMenuItems();
@@ -32,6 +33,18 @@ export class ShellComponent implements OnInit {
   signOut() {
     this.router.navigate(['']);
     localStorage.clear();
+  }
+
+  settingsPage() {
+    //this.router.navigate(['/settings']);
+    const dialogRef = this.dialog.open(SettingsComponent, {
+      height: '400px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
   onClick() {

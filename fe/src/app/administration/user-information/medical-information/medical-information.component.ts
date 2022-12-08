@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
+import { environment } from "src/environments/environment";
 import {
   MedicalInformationAllergiesDTO,
   MedicalInformationDTO,
@@ -36,6 +37,8 @@ export class MedicalInformationComponent implements OnInit {
     medicalInformationMedicalConditions: [],
     medicalInformationAllergies: [],
   };
+
+  medicalFile: File;
 
   physicianName: string;
   physicianContact: string;
@@ -89,6 +92,11 @@ export class MedicalInformationComponent implements OnInit {
     ).subscribe((a) => {
       this.setupDataStream();
       this.openSnackBar("Medical Information Updated", "close");
+      if (this.medicalFile) {
+        this.service.uploadMedicalDocument(this.medicalFile).subscribe(a => {
+          console.log('Medical Document uploaded');
+        });
+      }
     });
   }
 
@@ -170,6 +178,15 @@ export class MedicalInformationComponent implements OnInit {
       allergyMedication: this.allergyMedication,
       allergyReaction: this.allergyReaction,
     });
+  }
+
+  OpenMedicalAid(event: any) {
+    this.medicalFile = event.target.files[0];
+    this.openSnackBar('File Ready For Processing', 'Close');
+  }
+
+  downloadMedicalFile() {
+    window.open(environment.apiUrl + "medicalAid/" + localStorage.getItem('profileId') + ".pdf", '_blank');
   }
 
   openSnackBar(message: string, action: string) {

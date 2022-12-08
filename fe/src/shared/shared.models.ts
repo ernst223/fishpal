@@ -43,6 +43,15 @@ export interface MyDocumentMessages {
   sendFrom: string;
 }
 
+export interface RoleManagementUsersDTO {
+  id: number;
+  username: string;
+  fullName: string;
+  facet: string;
+  role: string;
+  status: boolean;
+}
+
 export interface FederationDTO {
   Id: number;
   Name: string;

@@ -3,6 +3,7 @@ using FishPalAPI.Data.Communication;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
+using FishPalAPI.Models.RoleManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,11 @@ namespace FishPalAPI.Services
         public CommunicationService(UserManager<User> userMgr)
         {
             this.userMgr = userMgr;
+            context = new ApplicationDbContext();
+        }
+
+        public CommunicationService()
+        {
             context = new ApplicationDbContext();
         }
 
@@ -459,7 +465,76 @@ namespace FishPalAPI.Services
             context.SaveChanges();
         }
 
-        public async Task<int> uploadDocumentAsync(IFormFile document, int profileId, int sendTo)
+        public List<RoleManagementUsersDTO> getAccessableProfiles(int profileId)
+        {
+            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
+            var higherPresidents = getHigerPresidentProfiles(currentProfile);
+            var lowerPresidents = getLowerPresidentProfiles(currentProfile);
+            var sameLevelProfiles = getProfilesInSameRole(currentProfile);
+            List<UserProfile> tempList = new List<UserProfile>();
+            if (higherPresidents != null)
+            {
+                foreach (var entry in higherPresidents)
+                {
+                    if (tempList.Where(a => a.Id == entry.Id).FirstOrDefault() == null)
+                    {
+                        tempList.Add(entry);
+                    }
+                }
+            }
+
+            if(lowerPresidents != null)
+            {
+                foreach (var entry in lowerPresidents)
+                {
+                    if (tempList.Where(a => a.Id == entry.Id).FirstOrDefault() == null)
+                    {
+                        tempList.Add(entry);
+                    }
+                }
+            }
+
+            if (sameLevelProfiles != null)
+            {
+                foreach (var entry in sameLevelProfiles)
+                {
+                    if (tempList.Where(a => a.Id == entry.Id).FirstOrDefault() == null)
+                    {
+                        tempList.Add(entry);
+                    }
+                }
+            }
+
+            List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
+            foreach (var entry in tempList)
+            {
+                result.Add(new RoleManagementUsersDTO()
+                {
+                    Id = entry.Id,
+                    FullName = getProfileFullName(entry),
+                    Username = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(entry)).FirstOrDefault().UserName,
+                    Facet = getProfileFacetName(entry),
+                    Role = entry.role.Description + " " + entry.role.FullName,
+                    Status = false,
+                });
+            }
+            return result;
+        }
+
+        private string getProfileFullName(UserProfile userProfile)
+        {
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            return currentUser.Name + " " + currentUser.Surname;
+        }
+
+        private string getProfileFacetName(UserProfile userProfile)
+        {
+            var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == userProfile.Id).FirstOrDefault().club.Facet;
+            return userFacet.Name + " " + userFacet.Federation;
+        }
+
+        public async Task<int> uploadDocumentAsync(IFormFile document, int profileId, string sendTo)
         {
             // Saving the document meta data
             UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
@@ -474,33 +549,30 @@ namespace FishPalAPI.Services
             documentToAdd = context.Documents.OrderByDescending(a => a.Id).FirstOrDefault();
             await UploadFile(document, documentToAdd.Id);
 
-            // Send to all in same role
-            if (sendTo == 0)
+            foreach (var profile in getProfilesToSendTo(sendTo))
             {
-                foreach (var profile in getProfilesInSameRole(currentProfile))
+                context.DocumentMessages.Add(new DocumentMessage()
                 {
-                    context.DocumentMessages.Add(new DocumentMessage()
-                    {
-                        Document = documentToAdd,
-                        Recipient = profile
-                    });
-                }
+                    Document = documentToAdd,
+                    Recipient = profile
+                });
             }
-            // Send to all in lower roles
-            else if (sendTo == 1)
-            {
-                foreach (var profile in getProfilesInLowerRoles(currentProfile))
-                {
-                    context.DocumentMessages.Add(new DocumentMessage()
-                    {
-                        Document = documentToAdd,
-                        Recipient = profile
-                    });
-                }
-            }
+
             context.SaveChanges();
             return documentToAdd.Id;
         }
+
+        private List<UserProfile> getProfilesToSendTo(string sendTo)
+        {
+            string[] profiles = sendTo.Split(',');
+            List<UserProfile> result = new List<UserProfile>();
+            foreach (var entry in profiles)
+            {
+                result.Add(context.UserProfiles.Where(a => a.Id == int.Parse(entry)).FirstOrDefault());
+            }
+            return result;
+        }
+
         private async Task<bool> UploadFile(IFormFile ufile, int documentId)
         {
             if (ufile != null && ufile.Length > 0)
@@ -594,12 +666,12 @@ namespace FishPalAPI.Services
             context.Remove(documentMessage);
         }
 
-        public List<UserProfile> getProfilesInSameRole(UserProfile profile)
+        public List<UserProfile> getLowerPresidentProfiles(UserProfile profile)
         {
             var userClub = profile.club.Name;
             var userRole = profile.role.Description;
 
-            if (new string[] { "D0", "D1", "D2", "D3" }.Contains(userRole))
+            if (new string[] { "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13" }.Contains(userRole))
             {
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
@@ -608,13 +680,118 @@ namespace FishPalAPI.Services
 
                 return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
                     .Where(a => a.club.Name == userClub && a.club.Facet.Id == userFacet.Id && a.club.Province.Id == userProvince.Id && (
-                a.role.Description == "D0" ||
-                a.role.Description == "D1" ||
-                a.role.Description == "D2" ||
-                a.role.Description == "D3"
+                a.role.Description == "E1"
                 )).ToList();
             }
-            else if (new string[] { "C0", "C1", "C2", "C3" }.Contains(userRole))
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Province == userProvince && a.club.Facet.Id == userFacet.Id && (
+                a.role.Description == "D1"
+                )).ToList();
+            }
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Facet.Id == userFacet.Id && a.role.Description == "C1").ToList();
+            }
+            else if (new string[] { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.role.Description == "B1").ToList();
+            }
+
+            return null;
+        }
+
+        public List<UserProfile> getHigerPresidentProfiles(UserProfile profile)
+        {
+            var userClub = profile.club.Name;
+            var userRole = profile.role.Description;
+
+            if (new string[] { "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Facet.Id == userFacet.Id && a.club.Province.Id == userProvince.Id && (
+                a.role.Description == "C1"
+                )).ToList();
+            }
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Facet.Id == userFacet.Id && (
+                a.role.Description == "B1"
+                )).ToList();
+            }
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.role.Description == "A1").ToList();
+            }
+
+            return null;
+        }
+
+        public List<UserProfile> getProfilesInSameRole(UserProfile profile)
+        {
+            var userClub = profile.club.Name;
+            var userRole = profile.role.Description;
+
+            if (new string[] { "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13" }.Contains(userRole))
+            {
+                var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
+                var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
+                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
+
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).ThenInclude(a => a.Provinces).Include(a => a.role)
+                    .Where(a => a.club.Name == userClub && a.club.Facet.Id == userFacet.Id && a.club.Province.Id == userProvince.Id && (
+                a.role.Description == "D1" ||
+                a.role.Description == "D2" ||
+                a.role.Description == "D3" ||
+                a.role.Description == "D4" ||
+                a.role.Description == "D5" ||
+                a.role.Description == "D6" ||
+                a.role.Description == "D7" ||
+                a.role.Description == "D8" ||
+                a.role.Description == "D9" ||
+                a.role.Description == "D10" ||
+                a.role.Description == "D11" ||
+                a.role.Description == "D12" ||
+                a.role.Description == "D13"
+                )).ToList();
+            }
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13" }.Contains(userRole))
             {
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).ThenInclude(a => a.Facets)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
@@ -623,31 +800,58 @@ namespace FishPalAPI.Services
 
                 return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
                 a.club.Facet.Id == userFacet.Id && (
-                a.role.Description == "C0" ||
                 a.role.Description == "C1" ||
                 a.role.Description == "C2" ||
-                a.role.Description == "C3"
+                a.role.Description == "C3" ||
+                a.role.Description == "C4" ||
+                a.role.Description == "C5" ||
+                a.role.Description == "C6" ||
+                a.role.Description == "C7" ||
+                a.role.Description == "C8" ||
+                a.role.Description == "C9" ||
+                a.role.Description == "C10" ||
+                a.role.Description == "C11" ||
+                a.role.Description == "C12" ||
+                a.role.Description == "C13"
                 )).ToList();
             }
-            else if (new string[] { "B0", "B1", "B2", "B3" }.Contains(userRole))
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13" }.Contains(userRole))
             {
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
                 return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
-                a.role.Description == "B0" ||
                 a.role.Description == "B1" ||
                 a.role.Description == "B2" ||
-                a.role.Description == "B3"
+                a.role.Description == "B3" ||
+                a.role.Description == "B4" ||
+                a.role.Description == "B5" ||
+                a.role.Description == "B6" ||
+                a.role.Description == "B7" ||
+                a.role.Description == "B8" ||
+                a.role.Description == "B9" ||
+                a.role.Description == "B10" ||
+                a.role.Description == "B11" ||
+                a.role.Description == "B12" ||
+                a.role.Description == "B13"
                 )).ToList();
             }
-            else if (new string[] { "A0", "A1", "A2", "A3" }.Contains(userRole))
+            else if (new string[] { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13" }.Contains(userRole))
             {
                 return context.UserProfiles.Include(a => a.role).Where(a =>
-                a.role.Description == "A0" ||
                 a.role.Description == "A1" ||
                 a.role.Description == "A2" ||
-                a.role.Description == "A3"
+                a.role.Description == "A3" ||
+                a.role.Description == "A4" ||
+                a.role.Description == "A5" ||
+                a.role.Description == "A6" ||
+                a.role.Description == "A7" ||
+                a.role.Description == "A8" ||
+                a.role.Description == "A9" ||
+                a.role.Description == "A10" ||
+                a.role.Description == "A11" ||
+                a.role.Description == "A12" ||
+                a.role.Description == "A13"
                 ).ToList();
             }
             return null;
@@ -658,17 +862,17 @@ namespace FishPalAPI.Services
             var userClub = profile.club.Name;
             var userRole = profile.role.Description;
 
-            if (new string[] { "D0", "D1", "D2", "D3" }.Contains(userRole))
+            if (new string[] { "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13" }.Contains(userRole))
             {
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
                 return context.UserProfiles.Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && a.club.Name == userClub &&
-                (a.role.Description == "E0" ||
-                a.role.Description == "E1")
+                (a.role.Description == "E1" ||
+                a.role.Description == "E2")
                 ).ToList();
             }
-            else if (new string[] { "C0", "C1", "C2", "C3" }.Contains(userRole))
+            else if (new string[] { "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13" }.Contains(userRole))
             {
                 var userProvince = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Province;
@@ -678,61 +882,101 @@ namespace FishPalAPI.Services
 
                 return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
                 a.club.Facet.Id == userFacet.Id && (
-                a.role.Description != "C0" &&
                 a.role.Description != "C1" &&
                 a.role.Description != "C2" &&
                 a.role.Description != "C3" &&
-                a.role.Description != "B0" &&
+                a.role.Description != "C4" &&
+                a.role.Description != "C5" &&
+                a.role.Description != "C6" &&
+                a.role.Description != "C7" &&
+                a.role.Description != "C8" &&
+                a.role.Description != "C9" &&
+                a.role.Description != "C10" &&
+                a.role.Description != "C11" &&
+                a.role.Description != "C12" &&
+                a.role.Description != "C13" &&
                 a.role.Description != "B1" &&
                 a.role.Description != "B2" &&
                 a.role.Description != "B3" &&
+                a.role.Description != "B4" &&
+                a.role.Description != "B5" &&
+                a.role.Description != "B6" &&
+                a.role.Description != "B7" &&
+                a.role.Description != "B8" &&
+                a.role.Description != "B9" &&
+                a.role.Description != "B10" &&
+                a.role.Description != "B12" &&
+                a.role.Description != "B13" &&
                 a.role.Description != "A0" &&
                 a.role.Description != "A1" &&
                 a.role.Description != "A2" &&
-                a.role.Description != "A3"
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4" &&
+                a.role.Description != "A5" &&
+                a.role.Description != "A6" &&
+                a.role.Description != "A7" &&
+                a.role.Description != "A8" &&
+                a.role.Description != "A9" &&
+                a.role.Description != "A10" &&
+                a.role.Description != "A11" &&
+                a.role.Description != "A12" &&
+                 a.role.Description != "A13"
                 )).ToList();
             }
-            else if (new string[] { "B0", "B1", "B2", "B3" }.Contains(userRole))
+            else if (new string[] { "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13" }.Contains(userRole))
             {
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
                 return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
-                a.role.Description != "B0" &&
                 a.role.Description != "B1" &&
                 a.role.Description != "B2" &&
                 a.role.Description != "B3" &&
+                a.role.Description != "B4" &&
+                a.role.Description != "B5" &&
+                a.role.Description != "B6" &&
+                a.role.Description != "B7" &&
+                a.role.Description != "B8" &&
+                a.role.Description != "B9" &&
+                a.role.Description != "B10" &&
+                a.role.Description != "B12" &&
+                a.role.Description != "B13" &&
                 a.role.Description != "A0" &&
                 a.role.Description != "A1" &&
                 a.role.Description != "A2" &&
-                a.role.Description != "A3"
-                )).ToList();
-            }
-            else if (new string[] { "A0", "A1", "A2", "A3" }.Contains(userRole))
-            {
-                return context.UserProfiles.Include(a => a.role).Where(a =>
-                a.role.Description != "A0" &&
-                a.role.Description != "A1" &&
-                a.role.Description != "A2" &&
-                a.role.Description != "A3"
-                ).ToList();
-            }
-            return null;
-        }
-
-        public List<UserProfile> getProfilesInLowerRolesInSameFacet(UserProfile profile)
-        {
-            var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
-                    .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
-            var userRole = profile.role.Description;
-            if (new string[] { "A0", "A1", "A2", "A3", "A4" }.Contains(userRole))
-            {
-                return context.UserProfiles.Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id &&
-                (a.role.Description != "A0" &&
                 a.role.Description != "A1" &&
                 a.role.Description != "A2" &&
                 a.role.Description != "A3" &&
-                a.role.Description != "A4")
+                a.role.Description != "A4" &&
+                a.role.Description != "A5" &&
+                a.role.Description != "A6" &&
+                a.role.Description != "A7" &&
+                a.role.Description != "A8" &&
+                a.role.Description != "A9" &&
+                a.role.Description != "A10" &&
+                a.role.Description != "A11" &&
+                a.role.Description != "A12" &&
+                 a.role.Description != "A13"
+                )).ToList();
+            }
+            else if (new string[] { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13" }.Contains(userRole))
+            {
+                return context.UserProfiles.Include(a => a.role).Where(a =>
+                a.role.Description != "A1" &&
+                a.role.Description != "A2" &&
+                a.role.Description != "A3" &&
+                a.role.Description != "A4" &&
+                a.role.Description != "A5" &&
+                a.role.Description != "A6" &&
+                a.role.Description != "A7" &&
+                a.role.Description != "A8" &&
+                a.role.Description != "A9" &&
+                a.role.Description != "A10" &&
+                a.role.Description != "A11" &&
+                a.role.Description != "A12" &&
+                 a.role.Description != "A13"
                 ).ToList();
             }
             return null;

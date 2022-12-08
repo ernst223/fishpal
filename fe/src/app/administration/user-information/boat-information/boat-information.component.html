@@ -97,9 +97,15 @@
         <mat-grid-tile>
             <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="FILE.click()">
                 <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                Attach a COF Copy...
+                Upload COF
             </button>
-            <input hidden type="file" accept=".pdf" id="File" #FILE>
+            <input hidden type="file" accept=".pdf" id="File" #FILE (change)="OpenCOF($event)">
+
+            <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="downloadCOFFile()">
+                <mat-icon style="margin-right: 5px; margin-bottom: 5px;">cloud_download</mat-icon>
+                Download COF
+            </button>
+
         </mat-grid-tile>
     </mat-grid-list>
 

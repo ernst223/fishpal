@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {  MatSnackBar } from '@angular/material';
 import { SharedService } from 'src/shared/shared.serice';
 
@@ -8,10 +8,10 @@ import { SharedService } from 'src/shared/shared.serice';
   styleUrls: ['./user-information.component.scss']
 })
 export class UserInformationComponent implements OnInit {
+  @Input() selectedPage: string;
 
   constructor(private snackBar: MatSnackBar, private service: SharedService) { }
 
-  selectedPage: string;
   userInfoPages: UserInfoPage[] = [
     {value: 'app-personal-information', viewValue: 'Personal Information'},
     {value: 'app-medical-information', viewValue: 'Medical Information'},
@@ -26,6 +26,7 @@ export class UserInformationComponent implements OnInit {
   ];
 
   ngOnInit() {
+    console.log("this is a test for the selected page",this.selectedPage);
   }
 
    openSnackBar(message: string, action: string) {

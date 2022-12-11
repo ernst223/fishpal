@@ -40,12 +40,10 @@ export class BoatInformationComponent implements OnInit {
       .getBoatInformation(Number(this.currentProfile))
       .subscribe((a) => {
         this.boatInformation = a;
-        console.log("returned data", this.boatInformation);
       });
   }
 
   update() {
-    console.log("this is the test", this.boatInformation);
     this.service.updateBoatInformation(
       this.boatInformation,
       Number(this.currentProfile)
@@ -54,7 +52,6 @@ export class BoatInformationComponent implements OnInit {
       this.openSnackBar("Boat Information Updated", "close");
       if (this.cofFile) {
         this.service.uploadCOFDocument(this.cofFile).subscribe(a => {
-          console.log('COF Document uploaded');
         });
       }
     });

@@ -181,6 +181,7 @@ namespace FishPalAPI.Services
                         tempResult.Name = tempResult.federation + " role: " + tempResult.Role;
                         tempResult.federationId = tempProfile.club.Facet.Id;
                         tempResult.provinceId = tempProfile.club.Province.Id;
+                        tempResult.userId = user.Id;
                     }
                     if (tempFacet != null)
                     {

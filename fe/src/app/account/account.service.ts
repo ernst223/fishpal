@@ -26,7 +26,7 @@ export class AccountService {
                 if (typeof res.token !== 'undefined') {
                     // Stores access token & refresh token.
                     this.loginProfiles = res.profiles;
-                    
+                    console.log("test userId",res.profiles[0]);
                     if (this.loginProfiles.length > 1) {
                         localStorage.setItem('multipleProfiles', '1');
                     } else {
@@ -41,6 +41,7 @@ export class AccountService {
                     }
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('loggedInUserEmail', res.userName);
+                    localStorage.setItem('userId', res.profiles[0].userId);
                     return this.loginProfiles;
                 } else {
                     return undefined;

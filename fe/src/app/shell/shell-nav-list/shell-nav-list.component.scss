@@ -2,6 +2,10 @@
 $text-color: mat-contrast($ecp-app-primary, A100);
 $menu-highlight-color: #eceff1;
 
+.member-info-dropdown{
+    height: 250px;
+    overflow-y: scroll;
+}
 
 .menu-item-wrap {
     display: block;

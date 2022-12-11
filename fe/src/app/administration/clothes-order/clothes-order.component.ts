@@ -55,7 +55,7 @@ const NAMES: string[] = [
   styleUrls: ['./clothes-order.component.scss']
 })
 export class ClothesOrderComponent  {
-  /*viewItems: boolean = false;
+  viewItems: boolean = false;
   viewOrders: boolean = false;
 
   viewitemsButton: boolean = true;
@@ -209,6 +209,6 @@ export class ClothesOrderComponent  {
     this.viewitemsButton = true;
     this.viewOrdersButton = true;
   }
-*/
+
 }
 

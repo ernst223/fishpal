@@ -10,6 +10,8 @@ import { AccountModule } from './account/account.module';
 import { RoleChangeDialogComponent } from './administration/role-change-dialog/role-change-dialog.component';
 import { SettingsComponent } from './administration/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
+import { VerifiedFailureComponent } from './app-verification/verified-failure/verified-failure.component';
+import { VerifiedSuccessComponent } from './app-verification/verified-success/verified-success.component';
 import { AppComponent } from './app.component';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
 import { NavbarpageComponent } from './navbarpage/navbarpage.component';
@@ -30,6 +32,8 @@ import { WebsiteComponent } from './website/website.component';
     NavbarpageComponent,
     SettingsComponent,
     RoleChangeDialogComponent,
+    VerifiedSuccessComponent,
+    VerifiedFailureComponent
   ],
   imports: [
     BrowserModule,

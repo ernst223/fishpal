@@ -32,7 +32,6 @@ export class AdministrationService {
           .append('Access-Control-Allow-Methods', '*');
           return this.httpClient.post(this.connectionstring + 'api/communication/getAll/sendMessages/' + federationId + "/" + profileId + "/" + sendEmail, body, { headers }).pipe(
           map((res: any) => {
-             console.log("message sent response", res);
           }));
   }
 
@@ -86,7 +85,6 @@ export class AdministrationService {
       }  
       
       public getAllClubsForSelectedProvinces(province:ProvinceDTO): Observable<Array<ClubDTO>> {
-        console.log("this is iside the post method for the clubs",province);
         province.id = 0;
         const headers = new HttpHeaders()
                 .append('Content-Type', 'application/json')

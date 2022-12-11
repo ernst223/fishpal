@@ -1,5 +1,5 @@
 <div class="rightside-content-holder" fxLayout="column wrap" fxLayoutAlign="start start">
-    <mat-form-field appearance="fill" style="width: 450px;">
+    <!--<mat-form-field appearance="fill" style="width: 450px;">
         <mat-label>Select User-Information Page</mat-label>
         <mat-select [(ngModel)]="selectedPage">
             <mat-option *ngFor="let userInfoPage of userInfoPages" [value]="userInfoPage.value">
@@ -36,5 +36,7 @@
     </div>
     <div class="pageDiv" *ngIf="selectedPage === 'app-other-angling-achievements'">
         <app-other-angling-achievements></app-other-angling-achievements>
-    </div>
+    </div>-->
 </div>
+
+<span>{{selectedPage}}</span>

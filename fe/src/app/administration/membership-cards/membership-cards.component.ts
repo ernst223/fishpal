@@ -30,7 +30,6 @@ export class MembershipCardsComponent implements OnInit {
 
   getFullDetailsForPerson(profileId: number, returnAll:boolean) {
     this.accountService.getAllUserInfo(profileId, returnAll).subscribe((result: any) => {
-      console.log("this is the result for the web fron end",result);
       this.profileCard = result[0];
 
       this.name = result[0].name;
@@ -43,7 +42,6 @@ export class MembershipCardsComponent implements OnInit {
   createBarcode() {
     var barcodeString = this.loggedInProfileId;
     this.QRcode = String(barcodeString);
-    console.log("barcode string",barcodeString);
   }
 
   getExpiryDate(date: Date) {

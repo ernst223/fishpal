@@ -235,7 +235,6 @@ export class DocumentManagementComponent implements OnInit {
         this.openSnackBar("Please fill profiles", "close");
       } else {
         this.service.uploadDocumentMessage(this.theFile, tempText.slice(1)).subscribe(a => {
-          console.log(a);
           this.uploadData.documentId = a;
           this.service.updateDocumentMessage(this.uploadData).subscribe(a => {
             this.openSnackBar('Process Completed', 'Close');

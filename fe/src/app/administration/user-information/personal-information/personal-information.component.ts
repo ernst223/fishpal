@@ -53,17 +53,14 @@ export class PersonalInformationComponent implements OnInit {
       this.openSnackBar('Personal Information Updated', 'close');
       if (this.idFile) {
         this.service.uploadIdDocument(this.idFile).subscribe(a => {
-          console.log('Id Document uploaded');
         });
       }
       if (this.passportFile) {
         this.service.uploadPassportDocument(this.passportFile).subscribe(a => {
-          console.log('Passport Document uploaded');
         });
       }
       if (this.skippersLicenseFile) {
         this.service.uploadSkippersDocument(this.skippersLicenseFile).subscribe(a => {
-          console.log('Skipper License Document uploaded');
         });
       }
     });

@@ -34,7 +34,7 @@ export class MenuService {
       items.push({
         title: 'Role Management',
         route: '/role-management/role-management',
-        icon: 'people_alt',
+        icon: 'swap_vert',
       });
     }
     if(roles.indexOf(role) > -1) {

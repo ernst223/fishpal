@@ -94,7 +94,6 @@ export class MedicalInformationComponent implements OnInit {
       this.openSnackBar("Medical Information Updated", "close");
       if (this.medicalFile) {
         this.service.uploadMedicalDocument(this.medicalFile).subscribe(a => {
-          console.log('Medical Document uploaded');
         });
       }
     });

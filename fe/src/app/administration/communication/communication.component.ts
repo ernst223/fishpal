@@ -128,7 +128,6 @@ export class CommunicationComponent implements OnInit {
   }
 
   openDocument(id) {
-    console.log(id);
   }
 
   selectProfile(id: any) {
@@ -235,7 +234,6 @@ export class CommunicationComponent implements OnInit {
         this.openSnackBar("Please fill profiles", "close");
       } else {
         this.service.uploadCommunicationMessage(tempText.slice(1)).subscribe(a => {
-          console.log(a);
           this.uploadData.documentId = a;
           this.service.updateCommunicationMessage(this.uploadData).subscribe(a => {
             this.openSnackBar('Process Completed', 'Close');

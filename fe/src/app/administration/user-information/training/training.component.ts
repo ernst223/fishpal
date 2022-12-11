@@ -38,12 +38,10 @@ export class TrainingComponent implements OnInit {
       .getTrainingInformation(Number(this.currentProfile))
       .subscribe((a) => {
         this.training = a;
-        console.log("returned data", this.training);
       });
   }
 
   update() {
-    console.log("this is the test", this.training);
     this.service.updateTrainingInformation(
       this.training,
       Number(this.currentProfile)

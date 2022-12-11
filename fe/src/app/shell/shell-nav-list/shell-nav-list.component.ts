@@ -5,6 +5,11 @@ import * as _ from 'lodash';
 import { MenuItem } from '../menu-item';
 import { Router } from '@angular/router';
 
+interface UserInfoPage {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-shell-nav-list',
   templateUrl: './shell-nav-list.component.html',
@@ -34,6 +39,19 @@ import { Router } from '@angular/router';
   ]
 })
 export class ShellNavListComponent implements OnInit {
+  selectedPage: string;
+  userInfoPages: UserInfoPage[] = [
+    {value: 'app-personal-information', viewValue: 'Personal Information'},
+    {value: 'app-medical-information', viewValue: 'Medical Information'},
+    {value: 'app-club-information', viewValue: 'Club Information'},
+    {value: 'app-provincial-information', viewValue: 'Provincial Information'},
+    {value: 'app-geo-province-information', viewValue: 'GEO Province Information'},
+    {value: 'app-training', viewValue: 'Training'},
+    {value: 'app-boat-information', viewValue: 'Boat Information'},
+    {value: 'app-angling-history', viewValue: 'Angling History'},
+    {value: 'app-angling-administration-history', viewValue: 'Angling Administration History'},
+    {value: 'app-other-angling-achievements', viewValue: 'Other Angling Achievements'}
+  ];
 
   @Input() menuItems: MenuItem[];
 
@@ -45,6 +63,10 @@ export class ShellNavListComponent implements OnInit {
 
   ngOnInit() {
     this.initializeMenuItems();
+  }
+
+  navigateToSelectedpage(pageSelected:string){
+      this.router.navigate(["/" + pageSelected + "/" + pageSelected]);
   }
 
   toggleActive(menuItem: MenuItem) {

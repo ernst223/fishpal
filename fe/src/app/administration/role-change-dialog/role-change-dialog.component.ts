@@ -53,9 +53,6 @@ export class RoleChangeDialogComponent implements OnInit {
             this.addDRoles();
             this.addERoles();
         }
-        console.log(myRole);
-        console.log(myRole.charAt(0));
-        console.log(this.roles);
     }
 
     addARoles() {

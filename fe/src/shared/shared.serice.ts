@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UploadDocumentMessage } from './shared.models';
+import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UpdateCourse, UploadDocumentMessage } from './shared.models';
 
 
 @Injectable()
@@ -12,6 +12,17 @@ export class SharedService {
   }
 
   connectionstring = environment.apiUrl;
+
+  public getEmployeeId() {
+    let employeeId = localStorage.getItem('employeeId');
+    let amountToAdd = 7 - employeeId.length;
+    let result = '';
+    for (var i = 0; i < amountToAdd; i++) {
+      result = result + 0;
+    }
+    result = result + employeeId;
+    return result;
+  }
 
   public getAllFacets(): Observable<Array<FacetDTO>> {
     const headers = new HttpHeaders()
@@ -25,6 +36,79 @@ export class SharedService {
             .append('Content-Type', 'application/json')
             .append('Access-Control-Allow-Methods', '*');
     return this.httpClient.get(this.connectionstring + 'api/general/clubs/' + facet + "/" + province, { headers }).pipe(map((res: any) => res));
+  }
+
+  // Uploading Courses
+  public uploadCourse(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/communication/courses/create/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateCourse(data: UpdateCourse): Observable<any> {
+    console.log(data);
+    return this.httpClient.put(this.connectionstring + 'api/communication/courses/update',
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getMyCourses(): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/myCourses/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getApprovedCourses(): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses', {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getUnApprovedCourses(): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/unaproved', {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public approveCourse(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/approve/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public declineCourse(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/decline/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public enrollForCourse(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/enroll/' + id + '/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getPendingEnrollments(): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/enrollments/pending', {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public approveCourseEnrollment(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/enrolment/approve/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public declineCourseEnrollment(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/courses/enrolment/decline/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
   }
 
   // Uploading a document File

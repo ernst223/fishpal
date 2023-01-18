@@ -8,6 +8,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { MatDialog, MatSidenav } from '@angular/material';
 import { Router } from '@angular/router';
 import { SettingsComponent } from '../administration/settings/settings.component';
+import { SharedService } from 'src/shared/shared.serice';
 
 @Component({
   selector: 'app-shell',
@@ -18,16 +19,24 @@ import { SettingsComponent } from '../administration/settings/settings.component
 export class ShellComponent implements OnInit {
 
   menuItems: MenuItem[] = [];
+  employeeNumber: String = '';
+  userName: String = '';
+  profileName: String = '';
+  clubName: String = '';
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
   .pipe(
     map(result => result.matches)
   );
-  constructor(private menuService: MenuService,  private breakpointObserver: BreakpointObserver, private router: Router, public dialog: MatDialog) { }
+  constructor(private menuService: MenuService, private sharedService: SharedService, private breakpointObserver: BreakpointObserver, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.menuItems = this.menuService.getMenuItems();
+    this.employeeNumber = this.sharedService.getEmployeeId();
+    this.userName = localStorage.getItem('loggedInUserEmail');
+    this.profileName = localStorage.getItem('profileName');
+    this.clubName = localStorage.getItem('club');
   }
 
   signOut() {

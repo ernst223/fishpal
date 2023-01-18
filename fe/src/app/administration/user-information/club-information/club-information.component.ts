@@ -48,6 +48,16 @@ export class ClubInformationComponent implements OnInit {
         this.clubInformation = a;
         this.comitteeMembers = this.clubInformation.comitteeMembers;
         this.priorPeriods = this.clubInformation.priorPeriods;
+        let tempSetDate = new Date();
+        if (this.clubInformation.clubCodeOfConductDateAccepted.toString() === "0001-01-01T00:00:00") {
+          this.clubInformation.clubCodeOfConductDateAccepted = tempSetDate;
+        }
+        if (this.clubInformation.clubConstitutionDateAccepted.toString() === "0001-01-01T00:00:00") {
+          this.clubInformation.clubConstitutionDateAccepted = tempSetDate;
+        }
+        if (this.clubInformation.clubDisciplinaryCodeDateAccepted.toString() === "0001-01-01T00:00:00") {
+          this.clubInformation.clubDisciplinaryCodeDateAccepted = tempSetDate;
+        }
       });
   }
 

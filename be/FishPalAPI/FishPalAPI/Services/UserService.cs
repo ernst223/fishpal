@@ -194,6 +194,11 @@ namespace FishPalAPI.Services
                 return null;
          }
 
+        public User getLastUser()
+        {
+            return context.Users.OrderByDescending(a => a.EmployeeId).FirstOrDefault();
+        }
+
         public bool addUserClubs(string userId, List<int> clubs)
         {
             var user = context.Users.Include(a => a.profiles).Where(a => a.Id == userId).FirstOrDefault();
@@ -217,15 +222,16 @@ namespace FishPalAPI.Services
         public void addUserProfileAndClubAndDefaultRole(User user, Club club)
         {
             Role tempRoleToAdd;
-            var role = context.Role.Where(a => a.Description == "E0").FirstOrDefault();
+            var role = context.Role.Where(a => a.Description == "E1").FirstOrDefault();
             if(role == null)
             {
                 context.Role.Add(new Role()
                 {
-                    Description = "E0"
+                    Description = "E1",
+                    FullName = "Club member",
                 });
                 context.SaveChanges();
-                var newRole = context.Role.Where(a => a.Description == "E0").FirstOrDefault();
+                var newRole = context.Role.Where(a => a.Description == "E1").FirstOrDefault();
 
                 tempRoleToAdd = newRole;
             } else

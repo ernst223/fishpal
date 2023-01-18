@@ -1,5 +1,248 @@
-<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
-    <h2 mat-dialog-tile>
-        Courses
-    </h2>
+<button mat-raised-button *ngIf="management" class="newMessage" (click)="openModal(myOpentemplate)">Create Course &nbsp; <i
+    class="fa fa-commenting-o" aria-hidden="true"></i></button>
+
+<!--this is the Tabs only inbox is for normal members, inbox and outbox is for one of the management (excluding chariperson), inbox, outbox and messages request is for chairpeople-->
+<mat-tab-group>
+<!--everything for the inbox-->
+<mat-tab label="My Courses" *ngIf="member">
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyInboxFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #inboxTable [dataSource]="myCoursesDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                        <button matTooltip="View Document" mat-icon-button color="primary"
+                            (click)="openDocument(element.id)">
+                            <mat-icon aria-label="">remove_red_eye</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedMyCourses"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedMyCourses;"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-tab>
+
+<!--everything for the outbox-->
+<mat-tab label="All Courses" *ngIf="member">
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyOutboxFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #outboxTable [dataSource]="allCoursesDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                        <button matTooltip="Enroll for Course" mat-icon-button color="primary"
+                            (click)="enrollForCourse(element.id)">
+                            <mat-icon aria-label="">fact_check</mat-icon>
+                        </button>
+                        <button matTooltip="View Course" mat-icon-button color="primary"
+                            (click)="openDocument(element.id)">
+                            <mat-icon aria-label="">remove_red_eye</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedMyCourses"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedMyCourses;"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-tab>
+
+<!--everything for the pending-->
+<mat-tab label="Course Enrolments" *ngIf="chair">
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyPendingFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #pendingTable [dataSource]="courseEnrolmentsDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> UserName </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.userName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="userEmail">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> UserEmail </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.userEmail}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="memberNumber">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> memberNumber </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.memberNumber}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> courseName </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.courseName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                        <button matTooltip="View Document" mat-icon-button color="primary"
+                            (click)="openDocument(element.id)">
+                            <mat-icon aria-label="">remove_red_eye</mat-icon>
+                        </button>
+                        <button matTooltip="Aprove Document" mat-icon-button color="primary"
+                            (click)="aproveEnrolment(element.id)">
+                            <mat-icon aria-label="">check</mat-icon>
+                        </button>
+                        <button matTooltip="Decline Document" mat-icon-button color="primary"
+                            (click)="declineEnrolment(element.id)">
+                            <mat-icon aria-label="">close</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedPendingEnrolments"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedPendingEnrolments;"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-tab>
+
+<mat-tab label="Pending Courses" *ngIf="chair">
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyPendingFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #pendingTable [dataSource]="pendingDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                        <button matTooltip="View Document" mat-icon-button color="primary"
+                            (click)="openDocument(element.id)">
+                            <mat-icon aria-label="">remove_red_eye</mat-icon>
+                        </button>
+                        <button matTooltip="Aprove Document" mat-icon-button color="primary"
+                            (click)="aproveDocument(element.id)">
+                            <mat-icon aria-label="">check</mat-icon>
+                        </button>
+                        <button matTooltip="Decline Document" mat-icon-button color="primary"
+                            (click)="declineDocument(element.id)">
+                            <mat-icon aria-label="">close</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedMyCourses"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedMyCourses;"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #inboxPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-tab>
+</mat-tab-group>
+
+<ng-template #myOpentemplate>
+<div style="flex-direction: column; box-sizing: border-box; display: flex;">
+    <div  style="flex-direction: column; box-sizing: border-box; display: flex;">
+        <button style="margin-bottom: 20px; padding-bottom: 5px; margin-right: 15px;" mat-button (click)="DocumentFile.click()">
+            <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
+            Upload Course
+        </button>
+        <input hidden type="file" accept=".pdf" id="File" #DocumentFile (change)="OpenFile($event)">
+        <mat-form-field appearance="fill" style="width: 300px; margin-right: 15px;">
+            <mat-label>
+                Course Name
+            </mat-label>
+            <input [(ngModel)]="title" matInput>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 800px; margin-right: 15px;">
+            <mat-label>
+                Description
+            </mat-label>
+            <input [(ngModel)]="note" matInput>
+        </mat-form-field>
+
+        <button matTooltip="Send document" style="padding-top: 10px; padding-left: 15px;" mat-icon-button color="primary"
+                        (click)="sendMessage()">
+                        <mat-icon aria-label="">send</mat-icon>
+                    </button>
+
+    </div>
 </div>
+
+</ng-template>

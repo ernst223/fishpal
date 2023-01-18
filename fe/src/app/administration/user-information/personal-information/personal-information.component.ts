@@ -44,6 +44,13 @@ export class PersonalInformationComponent implements OnInit {
   setupDataStream() {
     this.service.getPersonalInformation(Number(this.currentProfile)).subscribe(a => {
       this.personalInformation = a;
+      let tempSetDate = new Date();
+      if (this.personalInformation.dob.toString() === "0001-01-01T00:00:00") {
+        this.personalInformation.dob = tempSetDate;
+      }
+      if (this.personalInformation.passportExpirationDate.toString() === "0001-01-01T00:00:00") {
+        this.personalInformation.passportExpirationDate = tempSetDate;
+      }
     });
   }
 

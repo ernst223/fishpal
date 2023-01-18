@@ -5,6 +5,10 @@
         <div class="mt-1 ml-1 mb-1" fxLayout="row" fxLayoutAlign="center center">
           <img class="logo" fxFlex="60" src="../../assets/images/logo.png">
         </div>
+        <div style="padding-left: 10px; font-weight: 400; padding-bottom: 5px;">{{userName}}</div>
+        <div style="padding-left: 10px; font-weight: 400; padding-bottom: 5px;">{{clubName}}</div>
+        <div style="padding-left: 10px; font-weight: 400; padding-bottom: 5px;">{{profileName}}</div>
+        <div style="padding-left: 10px; font-weight: 400; padding-bottom: 5px;">Member Number: {{employeeNumber}}</div>
         <mat-divider></mat-divider>
         <app-shell-nav-list [menuItems]="menuItems"></app-shell-nav-list>
     </mat-sidenav>
@@ -21,7 +25,7 @@
             <app-shell-breadcrumbs></app-shell-breadcrumbs>
           </div>
         </div>
-        <div fxLayout="row" fxFlex="100" fxLayoutAlign="end end" style="margin-right: 400px">
+        <div fxLayout="row" fxFlex="100" fxLayoutAlign="end end" style="margin-right: 250px">
           <button type="button" mat-icon-button>
             <mat-icon>notifications</mat-icon>
           </button>

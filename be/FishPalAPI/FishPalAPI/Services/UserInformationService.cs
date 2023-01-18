@@ -531,19 +531,40 @@ namespace FishPalAPI.Services
             }
 
             List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
+            Club currentUserClub;
             foreach(var entry in lowerUserProfiles)
             {
+                currentUserClub = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province)
+                    .Where(a => a.Id == entry.Id).FirstOrDefault().club;
                 result.Add(new RoleManagementUsersDTO()
                 {
                     Id = entry.Id,
                     FullName = getProfileFullName(entry),
                     Username = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(entry)).FirstOrDefault().UserName,
                     Facet = getProfileFacetName(entry),
+                    Province = currentUserClub.Province.Name,
+                    Club = currentUserClub.Name,
+                    MemberNumber = getProfileMemberNumber(entry),
                     Role = entry.role.Description + " " + entry.role.FullName
-                });
+                }); ;
             }
             return result;
         }
+
+        private string getProfileMemberNumber(UserProfile userProfile)
+        {
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var memberNumber = currentUser.EmployeeId.ToString();
+            var amountToAdd = 7 - memberNumber.Length;
+            var result = "";
+            for(var i = 0; i < amountToAdd; i++)
+            {
+                result = result + "0";
+            }
+            result = result + memberNumber;
+            return result;
+        }
+
 
         private string getProfileFullName(UserProfile userProfile)
         {

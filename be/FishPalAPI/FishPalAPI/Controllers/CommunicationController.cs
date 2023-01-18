@@ -158,5 +158,72 @@ namespace FishPalAPI.Controllers
             communicationService.declineCommunicationMessage(id);
             return Ok();
         }
+
+        [HttpGet("courses/myCourses/{profileId}")]
+        public async Task<IActionResult> getMyCourses(int profileId)
+        {
+            return Ok(communicationService.getMyCourses(profileId));
+        }
+
+        [HttpGet("courses")]
+        public async Task<IActionResult> getCourses()
+        {
+            return Ok(communicationService.getApprovedCourses());
+        }
+
+        [HttpGet("courses/unaproved")]
+        public async Task<IActionResult> getAllUnaprovedCourses()
+        {
+            return Ok(communicationService.getUnapprovedCourses());
+        }
+
+        [HttpGet("courses/approve/{id}")]
+        public async Task<IActionResult> approveCourse(int id)
+        {
+            return Ok(communicationService.approveCourse(id));
+        }
+
+        [HttpGet("courses/decline/{id}")]
+        public async Task<IActionResult> declineCourse(int id)
+        {
+            return Ok(communicationService.declineCourse(id));
+        }
+
+        [HttpGet("courses/enroll/{id}/{profileId}")]
+        public async Task<IActionResult> enrollForCourse(int id, int profileId)
+        {
+            return Ok(communicationService.enrollForCourse(id, profileId));
+        }
+
+        [HttpGet("courses/enrollments/pending")]
+        public async Task<IActionResult> getPendingEnrolments()
+        {
+            return Ok(communicationService.getEnrollmentsPending());
+        }
+
+        [HttpGet("courses/enrolment/approve/{id}")]
+        public async Task<IActionResult> approveEnrolment(int id)
+        {
+            return Ok(communicationService.approveEnrolCourse(id));
+        }
+
+        [HttpGet("courses/enrolment/decline/{id}")]
+        public async Task<IActionResult> declineEnrolment(int id)
+        {
+            return Ok(communicationService.declineEnrolCourse(id));
+        }
+
+        [HttpPost("courses/create/{profileId}")]
+        public async Task<IActionResult> createCourse(IFormFile file, int profileId)
+        {
+            var result = await communicationService.uploadCourseAsync(file, profileId);
+            return Ok(result);
+        }
+
+        [HttpPut("courses/update")]
+        public async Task<IActionResult> updateCourse([FromBody] UpdateCourse course)
+        {
+            return Ok(communicationService.updateCourse(course));
+        }
     }
 }

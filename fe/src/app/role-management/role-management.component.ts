@@ -17,7 +17,8 @@ export class RoleManagementComponent implements OnInit {
   pendingData: RoleManagementUsersDTO[];
 
   pendingDataSource: MatTableDataSource<object> = new MatTableDataSource();
-  displayedColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
+  //displayedColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
+  displayedColumns = ['Username', 'FullName', 'Federation', 'Province', 'Club', 'MemberNumber', 'Role', 'Actions'];
   
   constructor(private snackBar: MatSnackBar, private service: SharedService, public dialog: MatDialog) { }
 
@@ -29,6 +30,7 @@ export class RoleManagementComponent implements OnInit {
     this.service.getRoleManagementUsers().subscribe(a => {
       this.pendingData = a;
       this.pendingDataSource.data = this.pendingData;
+      console.log(this.pendingData);
     });
   }
 

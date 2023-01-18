@@ -754,5 +754,171 @@ namespace FishPalAPI.Services
             }
             return null;
         }
+
+        public List<Courses> getApprovedCourses()
+        {
+            return context.Courses.Where(a => a.Approved == true).ToList();
+        }
+
+        public List<Courses> getUnapprovedCourses()
+        {
+            return context.Courses.Where(a => a.Approved == false).ToList();
+        }
+
+        public bool approveCourse(int id)
+        {
+            var course = context.Courses.Where(a => a.Id == id).FirstOrDefault();
+            course.Approved = true;
+            course.ApprovedDate = DateTime.Now;
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool declineCourse(int id)
+        {
+            var course = context.Courses.Where(a => a.Id == id).FirstOrDefault();
+            var enrolledCourses = context.UserCourses.Include(a => a.course).Where(a => a.course.Id == id).ToList();
+            foreach(var entry in enrolledCourses)
+            {
+                context.Remove(entry);
+                context.SaveChanges();
+            }
+            context.Remove(course);
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool enrollForCourse(int id, int profileId)
+        {
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var currentCourse = context.Courses.Where(a => a.Id == id).FirstOrDefault();
+            var userCourseTest = context.UserCourses.Where(a => a.course == currentCourse && a.user == user).FirstOrDefault();
+            if(userCourseTest != null)
+            {
+                return false;
+            }
+            context.UserCourses.Add(new UserCourses()
+            {
+                Approved = false,
+                course = context.Courses.Where(a => a.Id == id).FirstOrDefault(),
+                timeEnrolled = DateTime.Now,
+                user = user
+            });
+            context.SaveChanges();
+            return true;
+        }
+
+        public List<UserCoursesDTO> getEnrollmentsPending()
+        {
+            var userCourses = context.UserCourses.Include(a => a.course).Include(a => a.user).ThenInclude(a => a.profiles)
+                .Where(a => a.Approved == false).ToList();
+            List<UserCoursesDTO> result = new List<UserCoursesDTO>();
+            UserProfile profile;
+            foreach(var entry in userCourses)
+            {
+                profile = entry.user.profiles.FirstOrDefault();
+                result.Add(new UserCoursesDTO()
+                {
+                    Id = entry.Id,
+                    profileId = profile.Id,
+                    userName = entry.user.Name + " " + entry.user.Surname,
+                    userEmail = entry.user.Email,
+                    memberNumber = getProfileMemberNumber(profile),
+                    courseId = entry.course.Id,
+                    courseName = entry.course.Name,
+                    courseDescription = entry.course.Description,
+                    Approved = entry.Approved
+                });
+            }
+            return result;
+        }
+
+        public bool approveEnrolCourse(int id)
+        {
+            var userCourse = context.UserCourses.Where(a => a.Id == id).FirstOrDefault();
+            userCourse.Approved = true;
+            userCourse.timeEnrolled = DateTime.Now;
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool declineEnrolCourse(int id)
+        {
+            var userCourse = context.UserCourses.Where(a => a.Id == id).FirstOrDefault();
+            context.Remove(userCourse);
+            context.SaveChanges();
+            return true;
+        }
+        public List<Courses> getMyCourses(int profileId)
+        {
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var userCourses = context.UserCourses.Include(a => a.user).Include(a => a.course)
+                .Where(a => a.user.Id == user.Id && a.Approved == true).ToList();
+            List<Courses> result = new List<Courses>();
+            foreach(var entry in userCourses)
+            {
+                result.Add(entry.course);
+            }
+            return result;
+        }
+
+        public async Task<int> uploadCourseAsync(IFormFile document, int profileId)
+        {
+            // Saving the document meta data
+            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(currentProfile)).FirstOrDefault();
+            Courses courseToAdd = new Courses();
+            courseToAdd.Approved = false;
+            courseToAdd.UploadDate = DateTime.Now;
+            context.Courses.Add(courseToAdd);
+            context.SaveChanges();
+
+            // Store file on server
+            courseToAdd = context.Courses.OrderByDescending(a => a.Id).FirstOrDefault();
+            await UploadCourseFile(document, courseToAdd.Id);
+
+            context.SaveChanges();
+            return courseToAdd.Id;
+        }
+
+        private async Task<bool> UploadCourseFile(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\courses", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool updateCourse(UpdateCourse course)
+        {
+            var currentCourse = context.Courses.Where(a => a.Id == course.Id).FirstOrDefault();
+            currentCourse.Name = course.Name;
+            currentCourse.Description = course.Description;
+            context.SaveChanges();
+            return true;
+        }
+
+        private string getProfileMemberNumber(UserProfile userProfile)
+        {
+            var currentUser = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var memberNumber = currentUser.EmployeeId.ToString();
+            var amountToAdd = 7 - memberNumber.Length;
+            var result = "";
+            for (var i = 0; i < amountToAdd; i++)
+            {
+                result = result + "0";
+            }
+            result = result + memberNumber;
+            return result;
+        }
     }
 }

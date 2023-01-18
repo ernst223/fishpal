@@ -50,6 +50,19 @@ export class ProvincialInformationComponent implements OnInit {
         this.provincialInformation = a;
         this.comitteeMembers = this.provincialInformation.comitteeMembers;
         this.priorPeriods = this.provincialInformation.priorPeriods;
+        let tempSetDate = new Date();
+        if (this.provincialInformation.provinceCodeOfCoductDate.toString() === "0001-01-01T00:00:00") {
+          this.provincialInformation.provinceCodeOfCoductDate = tempSetDate;
+        }
+        if (this.provincialInformation.provinceConstitutionDate.toString() === "0001-01-01T00:00:00") {
+          this.provincialInformation.provinceConstitutionDate = tempSetDate;
+        }
+        if (this.provincialInformation.provinceDisciplinaryCodeDate.toString() === "0001-01-01T00:00:00") {
+          this.provincialInformation.provinceDisciplinaryCodeDate = tempSetDate;
+        }
+        if (this.provincialInformation.provinceDressCodeDate.toString() === "0001-01-01T00:00:00") {
+          this.provincialInformation.provinceDressCodeDate = tempSetDate;
+        }
       });
   }
 

@@ -9,10 +9,38 @@ export interface RegistrationDTO {
   clubs: number[];
   federations: number[];
 }
+
 export interface ResetPasswordDTO {
   token: string;
   newPassword: string;
   userName: string;
+}
+
+export interface Courses {
+  id: number;
+  name: string;
+  description: string;
+  uploadDate: Date;
+  approvedDate: Date;
+  approved: boolean;
+}
+
+export interface UpdateCourse {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface UserCoursesDTO {
+  id: number;
+  profileId: number;
+  userName: string;
+  userEmail: string;
+  memberNumber: string;
+  courseId: number;
+  courseName: string;
+  courseDescription: string;
+  approved: boolean;
 }
 
 export interface LoginProfilesDTO {
@@ -48,6 +76,9 @@ export interface RoleManagementUsersDTO {
   username: string;
   fullName: string;
   facet: string;
+  province: string;
+  club: string;
+  memberNumber: string;
   role: string;
   status: boolean;
 }

@@ -40,6 +40,10 @@ export class BoatInformationComponent implements OnInit {
       .getBoatInformation(Number(this.currentProfile))
       .subscribe((a) => {
         this.boatInformation = a;
+        let tempSetDate = new Date();
+        if (this.boatInformation.cofExpiryDate.toString() === "0001-01-01T00:00:00") {
+          this.boatInformation.cofExpiryDate = tempSetDate;
+        }
       });
   }
 

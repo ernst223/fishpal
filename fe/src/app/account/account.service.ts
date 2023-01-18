@@ -42,6 +42,7 @@ export class AccountService {
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('loggedInUserEmail', res.userName);
                     localStorage.setItem('userId', res.profiles[0].userId);
+                    localStorage.setItem('employeeId', res.employeeId);
                     return this.loginProfiles;
                 } else {
                     return undefined;

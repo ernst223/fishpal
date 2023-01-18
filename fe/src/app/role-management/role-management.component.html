@@ -11,10 +11,10 @@
                 </mat-form-field>
             </div>
             <mat-table fxFlex="100" #pendingTable [dataSource]="pendingDataSource" matSort>
-                <ng-container matColumnDef="Id">
+                <!-- <ng-container matColumnDef="Id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-                </ng-container>
+                </ng-container> -->
                 <ng-container matColumnDef="Username">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Username </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
@@ -23,9 +23,21 @@
                     <mat-header-cell *matHeaderCellDef mat-sort-header> FullName </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.fullName}} </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="Facet">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Facet </mat-header-cell>
+                <ng-container matColumnDef="Federation">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Federation </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.facet}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Province">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Province </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.province}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Club">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Club </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.club}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="MemberNumber">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> MemberNumber </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.memberNumber}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="Role">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Role </mat-header-cell>

@@ -23,6 +23,7 @@
     <Folder Include="wwwroot\medicalAid\" />
     <Folder Include="wwwroot\cof\" />
     <Folder Include="wwwroot\documents\" />
+    <Folder Include="wwwroot\courses\" />
     <Folder Include="wwwroot\profilePicture\" />
     <Folder Include="wwwroot\passports\" />
     <Folder Include="wwwroot\skippersLicenses\" />

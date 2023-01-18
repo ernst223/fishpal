@@ -25,9 +25,9 @@ namespace FishPalAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
                 //optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
-                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
 
@@ -61,5 +61,7 @@ namespace FishPalAPI.Data
         public DbSet<ProvincialInformationComtteeMembers> ProvincialInformationComtteeMembers { get; set; }
         public DbSet<AnglishAdministrationHistory> AnglishAdministrationHistories { get; set; }
         public DbSet<OtherAnglingAchievements> OtherAnglingAchievements { get; set; }
+        public DbSet<Courses> Courses { get; set; }
+        public DbSet<UserCourses> UserCourses { get; set; }
     }
 }

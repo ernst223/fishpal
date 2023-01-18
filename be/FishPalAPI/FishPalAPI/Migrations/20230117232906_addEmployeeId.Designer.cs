@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230117232906_addEmployeeId")]
+    partial class addEmployeeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,32 +209,6 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("RecipientId");
 
                     b.ToTable("CommunicationMessages");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Courses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("ApprovedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Document", b =>
@@ -814,6 +790,7 @@ namespace FishPalAPI.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<int>("EmployeeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int?>("FederationId")
@@ -872,33 +849,6 @@ namespace FishPalAPI.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.UserCourses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("courseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("timeEnrolled")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("courseId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("UserCourses");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
@@ -1276,21 +1226,6 @@ namespace FishPalAPI.Migrations
                     b.HasOne("FishPalAPI.Data.Federation", null)
                         .WithMany("users")
                         .HasForeignKey("FederationId");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.UserCourses", b =>
-                {
-                    b.HasOne("FishPalAPI.Data.Courses", "course")
-                        .WithMany()
-                        .HasForeignKey("courseId");
-
-                    b.HasOne("FishPalAPI.Data.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("course");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>

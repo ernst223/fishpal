@@ -63,6 +63,7 @@ namespace FishPalAPI.Controllers
                                 userId = user.Id,
                                 profiles = profiles,
                                 userName = user.UserName,
+                                employeeId = user.EmployeeId,
                             });
                         } else
                         {
@@ -98,13 +99,21 @@ namespace FishPalAPI.Controllers
                 }
                 else
                 {
+                    // Find last user and increment employee number
+                    var lastUser = userService.getLastUser();
+                    int employeeNumber = 0;
+                    if (lastUser != null)
+                    {
+                        employeeNumber = lastUser.EmployeeId + 1;
+                    }
                     User idu = new User()
                     {
                         UserName = model.UserName,
                         Email = model.UserName,
                         PhoneNumber = model.PhoneNumber,
                         Name = model.Name,
-                        Surname = model.Surname
+                        Surname = model.Surname,
+                        EmployeeId = employeeNumber
                     };
                     IdentityResult result = await userMgr.CreateAsync(idu, model.Password);
 

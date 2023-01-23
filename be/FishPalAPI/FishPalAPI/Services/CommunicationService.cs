@@ -903,6 +903,7 @@ namespace FishPalAPI.Services
             var currentCourse = context.Courses.Where(a => a.Id == course.Id).FirstOrDefault();
             currentCourse.Name = course.Name;
             currentCourse.Description = course.Description;
+            currentCourse.URL = course.URL;
             context.SaveChanges();
             return true;
         }

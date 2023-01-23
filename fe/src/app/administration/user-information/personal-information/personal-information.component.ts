@@ -55,22 +55,26 @@ export class PersonalInformationComponent implements OnInit {
   }
 
   update() {
-    this.service.updatePersonalInformation(this.personalInformation, Number(this.currentProfile)).subscribe(a => {
-      this.setupDataStream();
-      this.openSnackBar('Personal Information Updated', 'close');
-      if (this.idFile) {
-        this.service.uploadIdDocument(this.idFile).subscribe(a => {
-        });
-      }
-      if (this.passportFile) {
-        this.service.uploadPassportDocument(this.passportFile).subscribe(a => {
-        });
-      }
-      if (this.skippersLicenseFile) {
-        this.service.uploadSkippersDocument(this.skippersLicenseFile).subscribe(a => {
-        });
-      }
-    });
+    if (this.isValidSAID(this.personalInformation.idNumber)) {
+      this.service.updatePersonalInformation(this.personalInformation, Number(this.currentProfile)).subscribe(a => {
+        this.setupDataStream();
+        this.openSnackBar('Personal Information Updated', 'close');
+        if (this.idFile) {
+          this.service.uploadIdDocument(this.idFile).subscribe(a => {
+          });
+        }
+        if (this.passportFile) {
+          this.service.uploadPassportDocument(this.passportFile).subscribe(a => {
+          });
+        }
+        if (this.skippersLicenseFile) {
+          this.service.uploadSkippersDocument(this.skippersLicenseFile).subscribe(a => {
+          });
+        }
+      });
+    } else {
+      this.openSnackBar('Please supply a valid ID', 'close');
+    }
   }
 
   OpenSkippersLicense(event: any) {
@@ -99,6 +103,30 @@ export class PersonalInformationComponent implements OnInit {
   downloadPassport() {
     window.open(environment.apiUrl + "passports/" + localStorage.getItem('profileId') + ".pdf", '_blank');
   }
+
+  isValidSAID(id) {
+    let i: any;
+    let c: any;
+    let even: any = '';
+    let sum: any = 0;
+    let check: any = id.slice(-1);
+
+    if (id.length != 13 || id.match(/\D/)) {
+        return false;
+    }
+    id = id.substr(0, id.length - 1);
+    for (i = 0; c = id.charAt(i); i += 2) {
+        sum += +c;
+        even += id.charAt(i + 1);
+    }
+    even = '' + even * 2;
+    for (i = 0; c = even.charAt(i); i++) {
+        sum += +c;
+    }
+    let temp: any = ('' + sum).charAt(1);
+    sum = 10 - temp;
+    return ('' + sum).slice(-1) == check;
+``}
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {

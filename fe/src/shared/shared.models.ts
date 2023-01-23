@@ -29,6 +29,7 @@ export interface UpdateCourse {
   id: number;
   name: string;
   description: string;
+  url: string;
 }
 
 export interface UserCoursesDTO {

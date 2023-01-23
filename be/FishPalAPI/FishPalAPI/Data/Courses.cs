@@ -17,5 +17,6 @@ namespace FishPalAPI.Data
         public DateTime UploadDate { get; set; }
         public DateTime ApprovedDate { get; set; }
         public bool Approved { get; set; }
+        public string URL { get; set; }
     }
 }

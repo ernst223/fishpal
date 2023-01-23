@@ -40,7 +40,8 @@ export class CoursesComponent implements OnInit {
   sendDataSource: MatTableDataSource<object> = new MatTableDataSource();
   displayedSendColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
   displayedColumns = ['Id', 'SendFrom', 'Title', 'Note', 'Actions'];
-  displayedMyCourses = ['Id', 'Name', 'Description', 'Actions']
+  displayedMyCourses = ['Id', 'Name', 'Description', 'Actions'];
+  displayedMyCoursesWithUrl = ['Id', 'Name', 'Description', 'URL', 'Actions'];
   displayedPendingEnrolments = ['Id', 'userName', 'userEmail', 'memberNumber', 'courseName', 'Actions']
 
   sendOptions: SendOptions[] = [
@@ -58,11 +59,13 @@ export class CoursesComponent implements OnInit {
   theFile: File;
   fileName = '';
   title: string;
-  note: string
+  note: string;
+  url: string;
   uploadData: UpdateCourse = {
     id: null,
     name: null,
     description: null,
+    url: null,
   }
 
   messages: MessageDTO[];
@@ -250,6 +253,7 @@ export class CoursesComponent implements OnInit {
     this.openSnackBar('This may take a while, Please wait...', 'Close');
     this.uploadData.name = this.title;
     this.uploadData.description = this.note;
+    this.uploadData.url = this.url;
 
     if (this.title === null || this.title === undefined || this.title === "" ||
       this.theFile === null || this.theFile === undefined) {

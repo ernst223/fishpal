@@ -123,6 +123,17 @@ namespace FishPalAPI.Services
             context.SaveChanges();
         }
 
+        public void updateEvent(UploadEventDTO T)
+        {
+            var tempEvent = context.Events.Where(a => a.Id == T.eventId).FirstOrDefault();
+            tempEvent.Title = T.title;
+            tempEvent.Description = T.description;
+            tempEvent.StartDate = T.startDate;
+            tempEvent.EndDate = T.endDate;
+            tempEvent.TypeOfEvent = T.TypeOfEvent;
+            context.SaveChanges();
+        }
+
         public void updateCommunication(UploadDocumentMessageDTO T)
         {
             var communication = context.Communications.Where(a => a.Id == T.documentId).FirstOrDefault();
@@ -228,6 +239,25 @@ namespace FishPalAPI.Services
             return documentToAdd.Id;
         }
 
+        public async Task<int> uploadEvent(IFormFile document, int profileId)
+        {
+            // Saving the document meta data
+            UserProfile currentProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role).Where(a => a.Id == profileId).FirstOrDefault();
+            Event eventToAdd = new Event();
+            eventToAdd.Approved = false;
+            eventToAdd.CreatedDate = DateTime.Now;
+            eventToAdd.userProfile = currentProfile;
+            context.Events.Add(eventToAdd);
+            context.SaveChanges();
+
+            // Store file on server
+            eventToAdd = context.Events.OrderByDescending(a => a.Id).FirstOrDefault();
+            await UploadEventFile(document, eventToAdd.Id);
+
+            context.SaveChanges();
+            return eventToAdd.Id;
+        }
+
         public async Task<int> uploadMessageAsync(int profileId, string sendTo)
         {
             // Saving the document meta data
@@ -281,6 +311,21 @@ namespace FishPalAPI.Services
             return false;
         }
 
+        private async Task<bool> UploadEventFile(IFormFile ufile, int documentId)
+        {
+            if (ufile != null && ufile.Length > 0)
+            {
+                var fileName = Path.GetFileName(documentId.ToString() + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\events", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ufile.CopyToAsync(fileStream);
+                }
+                return true;
+            }
+            return false;
+        }
+
         public List<DocumentMessageDTO> getInboxDocumentMessages(int profileId)
         {
             List<DocumentMessageDTO> messages = new List<DocumentMessageDTO>();
@@ -300,6 +345,78 @@ namespace FishPalAPI.Services
                 });
             }
             return messages;
+        }
+
+        public List<EventDTO> getEvents(int profileId)
+        {
+            List<EventDTO> result = new List<EventDTO>();
+            var tempEvents = context.Events.Where(a => a.Approved == true).ToList();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            foreach(var entry in tempEvents)
+            {
+                result.Add(new EventDTO()
+                {
+                    eventId = entry.Id,
+                    endDate = entry.EndDate,
+                    TypeOfEvent = entry.TypeOfEvent,
+                    description = entry.Description,
+                    startDate = entry.StartDate,
+                    title = entry.Title,
+                    userProfile = user.Name + " " + user.Surname,
+                    userEmail = user.Email,
+                    memberNumber = getProfileMemberNumber(userProfile)
+                });
+            }
+            return result;
+        }
+
+        public List<EventDTO> getEventsOutbox(int profileId)
+        {
+            List<EventDTO> result = new List<EventDTO>();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            var tempEvents = context.Events.Include(a => a.userProfile).Where(a => a.Approved == true && a.userProfile.Id == userProfile.Id).ToList();
+            foreach (var entry in tempEvents)
+            {
+                result.Add(new EventDTO()
+                {
+                    eventId = entry.Id,
+                    endDate = entry.EndDate,
+                    TypeOfEvent = entry.TypeOfEvent,
+                    description = entry.Description,
+                    startDate = entry.StartDate,
+                    title = entry.Title,
+                    userProfile = user.Name + " " + user.Surname,
+                    userEmail = user.Email,
+                    memberNumber = getProfileMemberNumber(userProfile)
+                });
+            }
+            return result;
+        }
+
+        public List<EventDTO> getEventsPending(int profileId)
+        {
+            List<EventDTO> result = new List<EventDTO>();
+            var tempEvents = context.Events.Where(a => a.Approved == false).ToList();
+            var userProfile = context.UserProfiles.Where(a => a.Id == profileId).FirstOrDefault();
+            var user = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(userProfile)).FirstOrDefault();
+            foreach (var entry in tempEvents)
+            {
+                result.Add(new EventDTO()
+                {
+                    eventId = entry.Id,
+                    endDate = entry.EndDate,
+                    TypeOfEvent = entry.TypeOfEvent,
+                    description = entry.Description,
+                    startDate = entry.StartDate,
+                    title = entry.Title,
+                    userProfile = user.Name + " " + user.Surname,
+                    userEmail = user.Email,
+                    memberNumber = getProfileMemberNumber(userProfile)
+                });
+            }
+            return result;
         }
 
         public List<DocumentMessageDTO> getInboxCommunicationMessages(int profileId)
@@ -413,6 +530,14 @@ namespace FishPalAPI.Services
             context.SaveChanges();
         }
 
+        public void aproveEvent(int id)
+        {
+            var tempEvent = context.Events.Where(a => a.Id == id).FirstOrDefault();
+            tempEvent.ApprovedDate = DateTime.Now;
+            tempEvent.Approved = true;
+            context.SaveChanges();
+        }
+
         public void aproveCommunicationMessage(int id)
         {
             var communicationMessage = context.CommunicationMessages.Include(a => a.Communication).Where(a => a.Communication.Id == id).FirstOrDefault();
@@ -427,6 +552,13 @@ namespace FishPalAPI.Services
             var document = documentMessage.Document;
             context.Remove(document);
             context.Remove(documentMessage);
+            context.SaveChanges();
+        }
+
+        public void declineEvent(int id)
+        {
+            var tempEvent = context.Events.Where(a => a.Id == id).FirstOrDefault();
+            context.Remove(tempEvent);
             context.SaveChanges();
         }
 

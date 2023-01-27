@@ -75,10 +75,23 @@ namespace FishPalAPI.Controllers
             return Ok(await communicationService.uploadDocumentAsync(file, profileId, sendTo));
         }
 
+        [HttpPost("event/send/{profileId}")]
+        public async Task<IActionResult> uploadEvent(IFormFile file, int profileId)
+        {
+            return Ok(await communicationService.uploadEvent(file, profileId));
+        }
+
         [HttpPut("document/update")]
         public async Task<IActionResult> updateDocumentMessage([FromBody] UploadDocumentMessageDTO uploadDocumentMessageDTO)
         {
             communicationService.updateDocument(uploadDocumentMessageDTO);
+            return Ok();
+        }
+
+        [HttpPut("event/update")]
+        public async Task<IActionResult> updateEventMessage([FromBody] UploadEventDTO uploadEventDTO)
+        {
+            communicationService.updateEvent(uploadEventDTO);
             return Ok();
         }
 
@@ -88,16 +101,34 @@ namespace FishPalAPI.Controllers
             return Ok(communicationService.getInboxDocumentMessages(profileId));
         }
 
+        [HttpGet("event/inbox/{profileId}")]
+        public async Task<IActionResult> getEventInbox(int profileId)
+        {
+            return Ok(communicationService.getEvents(profileId));
+        }
+
         [HttpGet("document/outbox/{profileId}")]
         public async Task<IActionResult> getDocumentMessageOutbox(int profileId)
         {
             return Ok(communicationService.getOutboxDocumentMessages(profileId));
         }
 
+        [HttpGet("event/outbox/{profileId}")]
+        public async Task<IActionResult> getEventOutbox(int profileId)
+        {
+            return Ok(communicationService.getEventsOutbox(profileId));
+        }
+
         [HttpGet("document/pending/{profileId}")]
         public async Task<IActionResult> getDocumentMessagePending(int profileId)
         {
             return Ok(communicationService.getPendingDocumentMessages(profileId));
+        }
+
+        [HttpGet("event/pending/{profileId}")]
+        public async Task<IActionResult> getEventPending(int profileId)
+        {
+            return Ok(communicationService.getEventsPending(profileId));
         }
 
         [HttpGet("document/aprove/{id}")]
@@ -107,10 +138,24 @@ namespace FishPalAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("event/aprove/{id}")]
+        public async Task<IActionResult> aprovePendingEvent(int id)
+        {
+            communicationService.aproveEvent(id);
+            return Ok();
+        }
+
         [HttpGet("document/decline/{id}")]
         public async Task<IActionResult> declinePendingDocument(int id)
         {
             communicationService.declineDocumentMessage(id);
+            return Ok();
+        }
+
+        [HttpGet("event/decline/{id}")]
+        public async Task<IActionResult> declinePendingEvent(int id)
+        {
+            communicationService.declineEvent(id);
             return Ok();
         }
 

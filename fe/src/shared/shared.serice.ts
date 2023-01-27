@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UpdateCourse, UploadDocumentMessage } from './shared.models';
+import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, EventDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UpdateCourse, UploadDocumentMessage, UploadEventDTO } from './shared.models';
 
 
 @Injectable()
@@ -122,6 +122,16 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public uploadEvent(data: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', data);
+
+    return this.httpClient.post(this.connectionstring + 'api/communication/event/send/' + localStorage.getItem('profileId'),
+    formData, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public uploadCommunicationMessage(sendTo: string): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/message/send/' + localStorage.getItem('profileId') + "/" + sendTo, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
@@ -130,6 +140,13 @@ export class SharedService {
 
   public updateDocumentMessage(data: UploadDocumentMessage): Observable<any> {
     return this.httpClient.put(this.connectionstring + 'api/communication/document/update',
+    data, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public updateEvent(data: UploadEventDTO): Observable<any> {
+    return this.httpClient.put(this.connectionstring + 'api/communication/event/update',
     data, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
@@ -148,6 +165,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public getEventInbox(): Observable<Array<EventDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/inbox/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public getCommunicationInboxMessages(): Observable<Array<MyDocumentMessages>> {
     return this.httpClient.get(this.connectionstring + 'api/communication/message/inbox/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
@@ -156,6 +179,12 @@ export class SharedService {
 
   public getDocumentOutboxMessages(): Observable<Array<MyDocumentMessages>> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/outbox/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getEventOutbox(): Observable<Array<EventDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/outbox/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -172,6 +201,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public getEventPending(): Observable<Array<EventDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/pending/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public getPendingCommunicationMessages(): Observable<Array<MyDocumentMessages>> {
     return this.httpClient.get(this.connectionstring + 'api/communication/message/pending/' + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
@@ -184,6 +219,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public aprovePendingEvent(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/aprove/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public aprovePendingCommunicationMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/message/aprove/' + id, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
@@ -192,6 +233,12 @@ export class SharedService {
 
   public declinePendingDocumentMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/decline/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public declinePendingEvent(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/decline/' + id, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }

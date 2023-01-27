@@ -258,7 +258,28 @@ export interface ClubInformationDTO {
   priorPeriods: ClubInformationPriorPeriodsDTO[];
 }
 
-export interface ProvincialInformationComteeMembersDTO{
+export interface UploadEventDTO {
+  eventId: number;
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  TypeOfEvent: string;
+}
+
+export interface EventDTO {
+  eventId: number;
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  typeOfEvent: string;
+  userProfile: string;
+  userEmail: string;
+  memberNumber: string;
+}
+
+export interface ProvincialInformationComteeMembersDTO {
   id: number;
   position: string;
   period: string;

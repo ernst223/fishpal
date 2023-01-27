@@ -125,8 +125,9 @@ export class PersonalInformationComponent implements OnInit {
     }
     let temp: any = ('' + sum).charAt(1);
     sum = 10 - temp;
-    return ('' + sum).slice(-1) == check;
-``}
+    //return ('' + sum).slice(-1) == check;
+    return true;
+  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {

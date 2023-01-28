@@ -1,4 +1,5 @@
 ﻿using FishPalAPI.Data;
+using FishPalAPI.Data.Export;
 using FishPalAPI.Models;
 using FishPalAPI.Models.DocumentMessageModels;
 using FishPalAPI.Models.MessagesModels;
@@ -1051,6 +1052,64 @@ namespace FishPalAPI.Services
                 result = result + "0";
             }
             result = result + memberNumber;
+            return result;
+        }
+
+        public List<exportUserInformationDTO> exportUserInformation(int currentProfileID)
+        {
+            var tempProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role)
+                .Where(a => a.Id == currentProfileID).FirstOrDefault();
+            var exportProfiles = getProfilesInLowerRoles(tempProfile);
+            exportProfiles.Add(tempProfile);
+
+            List<exportUserInformationDTO> result = new List<exportUserInformationDTO>();
+            UserProfile currentProfile;
+            UserInformation userInformation;
+            foreach(var entry in exportProfiles)
+            {
+                currentProfile = context.UserProfiles.Include(a => a.userInformation).Include(a => a.club)
+                    .ThenInclude(a => a.Province).Where(a => a.Id == entry.Id).FirstOrDefault();
+                userInformation = context.UserInformation.Include(a => a.personalInformation).Include(a => a.medicalInformation)
+                    .Include(a => a.boatInformation).Include(a => a.training)
+                    .Where(a => a.Id == currentProfile.userInformation.Id).FirstOrDefault();
+                result.Add(new exportUserInformationDTO()
+                {
+                    Id = currentProfileID,
+                    nickName = userInformation.personalInformation.nickName,
+                    idNumber = userInformation.personalInformation.idNumber,
+                    dob = Convert.ToString(userInformation.personalInformation.dob),
+                    nationality = userInformation.personalInformation.nationality,
+                    ethnicGroup = userInformation.personalInformation.ethnicGroup,
+                    gender = userInformation.personalInformation.gender,
+                    passportNumber = userInformation.personalInformation.passportNumber,
+                    passportExpirationDate = Convert.ToString(userInformation.personalInformation.passportExpirationDate),
+                    homeAddress = userInformation.personalInformation.homeAddress,
+                    postalAddress = userInformation.personalInformation.postalAddress,
+                    phone = userInformation.personalInformation.phone,
+                    cell = userInformation.personalInformation.phone,
+                    memberNumber = getProfileMemberNumber(currentProfile),
+                    skipperLicenseNumber = userInformation.personalInformation.skipperLicenseNumber,
+                    BoatOwner = userInformation.boatInformation.BoatOwner,
+                    BoatNumber = userInformation.boatInformation.BoatNumber,
+                    CofNumber = userInformation.boatInformation.CofNumber,
+                    MedicalAidName = userInformation.medicalInformation.MedicalAidName,
+                    MedicalAidContactNumber = userInformation.medicalInformation.MedicalAidContactNumber,
+                    MedicalAidNumber = userInformation.medicalInformation.MedicalAidNumber,
+                    MedicalAidPlan = userInformation.medicalInformation.MedicalAidPlan,
+                    ClubName = currentProfile.club.Name,
+                    Province = currentProfile.club.Province.Name,
+                    ManagerYearCompleted = userInformation.training.ManagerYearCompleted,
+                    ManagerPointsReceived = userInformation.training.ManagerPointsReceived,
+                    CoachLvl1PointsReceived = userInformation.training.CoachLvl1PointsReceived,
+                    CoachLvl1YearCompleted = userInformation.training.CoachLvl1YearCompleted,
+                    CoachLvl2PointsReceived = userInformation.training.CoachLvl2PointsReceived,
+                    CoachLvl2YearCompleted = userInformation.training.CoachLvl2YearCompleted,
+                    CaptainPointsReceived = userInformation.training.CaptainPointsReceived,
+                    CaptainYearCompleted = userInformation.training.CaptainYearCompleted,
+                    AdminPointsReceived = userInformation.training.CaptainYearCompleted,
+                    AdminYearCompleted = userInformation.training.AdminPointsReceived,
+                });
+            }
             return result;
         }
     }

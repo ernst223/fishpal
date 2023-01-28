@@ -322,3 +322,40 @@ export interface AnglishAdministrationHistoryDTO {
   capacity: string;
   year: string;
 }
+
+export interface exportUserInformationDTO {
+  id: number;
+  nickName: string;
+  idNumber: string;
+  dob: string;
+  nationality: string;
+  ethnicGroup: string;
+  gender: string;
+  passportNumber: string;
+  passportExpirationDate: string;
+  homeAddress: string;
+  postalAddress: string;
+  phone: string;
+  cell: string;
+  skipperLicenseNumber: string;
+  memberNumber: string;
+  MedicalAidName: string;
+  MedicalAidPlan: string;
+  MedicalAidNumber: string;
+  MedicalAidContactNumber: string;
+  ClubName: string;
+  Province: string;
+  BoatOwner: string;
+  BoatNumber: string;
+  CofNumber: string;
+  ManagerYearCompleted: string;
+  ManagerPointsReceived: string;
+  CoachLvl1YearCompleted: string;
+  CoachLvl1PointsReceived: string;
+  CoachLvl2YearCompleted: string;
+  CoachLvl2PointsReceived: string;
+  CaptainYearCompleted: string;
+  CaptainPointsReceived: string;
+  AdminYearCompleted: string;
+  AdminPointsReceived: string;
+}

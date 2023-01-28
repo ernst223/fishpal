@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, EventDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UpdateCourse, UploadDocumentMessage, UploadEventDTO } from './shared.models';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { AnglishAdministrationHistoryDTO, BoatInformationDTO, ClubDTO, ClubInformationDTO, EventDTO, exportUserInformationDTO, FacetDTO, GeoProvinceInformationDTO, MedicalInformationDTO, MyDocumentMessages, OtherAnglingAchievementsDTO, PersonalInformationDTO, ProvincialInformationDTO, RoleManagementUsersDTO, TrainingDTO, UpdateCourse, UploadDocumentMessage, UploadEventDTO } from './shared.models';
 
 
 @Injectable()
@@ -444,4 +446,36 @@ export class SharedService {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
+
+  public getExportUserInformation(): Observable<Array<exportUserInformationDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/export/userinformation/' + + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  downloadFile(data: any) {
+    const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+    const header = Object.keys(data[0]);
+    let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+    csv.unshift(header.join(','));
+    let csvArray = csv.join('\r\n');
+
+    var blob = new Blob([csvArray], {type: 'text/csv' })
+    saveAs(blob, "userInformations.csv");
+ }
+
+ downloadExcelFile(json: any[], excelFileName: string) {
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+  const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+  const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  this.saveAsExcelFile(excelBuffer, excelFileName);
+ }
+
+ private saveAsExcelFile(buffer: any, fileName: string): void {
+  const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  const EXCEL_EXTENSION = '.xlsx';
+     const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+     saveAs(data, fileName + '_export_' + new  Date().getTime() + EXCEL_EXTENSION);
+  }
 }
+

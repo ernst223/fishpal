@@ -270,5 +270,11 @@ namespace FishPalAPI.Controllers
         {
             return Ok(communicationService.updateCourse(course));
         }
+
+        [HttpGet("export/userinformation/{currentProfileID}")]
+        public async Task<IActionResult> exportUserInformation(int currentProfileID)
+        {
+            return Ok(communicationService.exportUserInformation(currentProfileID));
+        }
     }
 }

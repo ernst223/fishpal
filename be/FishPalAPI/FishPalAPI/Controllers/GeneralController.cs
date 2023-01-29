@@ -42,5 +42,11 @@ namespace FishPalAPI.Controllers
         {
             return Ok(userService.seed());
         }
+
+        [HttpGet("events/public")]
+        public async Task<IActionResult> getPublicEvents()
+        {
+            return Ok(userService.getPublicEvents());
+        }
     }
 }

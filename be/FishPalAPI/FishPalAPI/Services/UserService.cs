@@ -24,6 +24,25 @@ namespace FishPalAPI.Services
             context = new ApplicationDbContext();
         }
 
+        public async Task<List<PublicEventDTO>> getPublicEvents()
+        {
+            var publicEvents = context.Events.Where(a => a.Approved == true).ToList();
+            List<PublicEventDTO> result = new List<PublicEventDTO>();
+            foreach(var entry in publicEvents)
+            {
+                result.Add(new PublicEventDTO()
+                {
+                    eventId = entry.Id,
+                    startDate = entry.StartDate,
+                    description = entry.Description,
+                    endDate = entry.EndDate,
+                    TypeOfEvent = entry.TypeOfEvent,
+                    title = entry.Title
+                });
+            }
+            return result;
+        }
+
         public bool seed()
         {
             // This method is to seed the database to its basic form.

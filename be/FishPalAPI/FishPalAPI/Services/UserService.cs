@@ -371,5 +371,27 @@ namespace FishPalAPI.Services
             }
             return true;
         }
+
+        public async Task<bool> TestEmailsAsync()
+        {
+            var message = new TemplatedPostmarkMessage
+            {
+                From = "admin@fishpal.co.za",
+                To = "ernst.blignaut0@gmail.com",
+                TemplateAlias = "test",
+                TemplateModel = new Dictionary<string, object> {
+                  },
+            };
+
+            var client = new PostmarkClient("5e0179d5-0165-41e5-a52a-15a136f17a59");
+
+            var response = await client.SendMessageAsync(message);
+
+            if (response.Status != PostmarkStatus.Success)
+            {
+                Console.WriteLine("Response was: " + response.Message);
+            }
+            return true;
+        }
     }
 }

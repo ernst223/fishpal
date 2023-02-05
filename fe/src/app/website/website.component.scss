@@ -98,6 +98,9 @@
       background-color: white;
       height: auto;
       min-height: 100px;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
     }
     .CalendarOfEventsHeader{
       text-align: center;

@@ -464,8 +464,8 @@ export class SharedService {
     saveAs(blob, "userInformations.csv");
  }
 
- downloadExcelFile(json: any[], excelFileName: string) {
-  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+ downloadExcelFile(data: any[], excelFileName: string) {
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
   const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
   const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
   this.saveAsExcelFile(excelBuffer, excelFileName);

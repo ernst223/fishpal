@@ -4,6 +4,7 @@ using FishPalAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,16 @@ namespace FishPalAPI.Controllers
         private IPasswordHasher<User> hasher;
         private IConfiguration config;
         private UserService userService;
+        ILogger<TokenController> _logger;
         public static string loggedInUserEmail { get; set; }
 
-        public TokenController(UserManager<User> userMgr, IPasswordHasher<User> hasher, IConfiguration config)
+        public TokenController(UserManager<User> userMgr, IPasswordHasher<User> hasher, IConfiguration config, ILogger<TokenController> logger)
         {
             this.userMgr = userMgr;
             this.hasher = hasher;
             this.config = config;
             userService = new UserService();
+            this._logger = logger;
         }
 
         [HttpPost("token")]
@@ -36,6 +39,8 @@ namespace FishPalAPI.Controllers
         {
             try
             {
+                _logger.LogInformation("Testing logging");
+                _logger.LogError("testing error logging");
                 var user = await userMgr.FindByEmailAsync(model.UserName);
                 if (user != null)
                 {
@@ -162,6 +167,12 @@ namespace FishPalAPI.Controllers
                 await userService.sendResetPasswordEmailAsync(resetModel, user.Name);
             }
             return Ok();
+        }
+
+        [HttpGet("testemail")]
+        public async Task<IActionResult> testemail(string username)
+        {
+            return Ok(await userService.TestEmailsAsync());
         }
 
         [HttpPost("reset")]

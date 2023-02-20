@@ -70,6 +70,7 @@ export interface MyDocumentMessages {
   title: string;
   note: string;
   sendFrom: string;
+  acknoledged: boolean;
 }
 
 export interface RoleManagementUsersDTO {
@@ -185,6 +186,7 @@ export interface GeoProvinceInformationDTO {
   geoProvince: string;
   provincialSasaccManagement: string;
   position: string;
+  districtMunicipality: string;
 }
 export interface MobileUserInfoDTO {
   profileId : number;

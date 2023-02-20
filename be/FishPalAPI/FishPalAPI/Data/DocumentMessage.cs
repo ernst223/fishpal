@@ -12,5 +12,6 @@ namespace FishPalAPI.Data
         public int Id { get; set; }
         public UserProfile Recipient { get; set; }
         public Document Document { get; set; }
+        public bool Acknowledged { get; set; }
     }
 }

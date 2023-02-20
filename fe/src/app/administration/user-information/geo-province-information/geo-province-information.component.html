@@ -4,18 +4,9 @@
 
     <h2 class="RegisterHeader">GEO Province Information Page</h2>
 
-    <mat-slide-toggle style="padding-left: 7.5em;">Summary view</mat-slide-toggle>
     <hr class="splitLine">
 
     <mat-grid-list cols="2" rowHeight="90px">
-        <mat-grid-tile>
-            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
-                <mat-label>
-                    <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; GEO Province
-                </mat-label>
-                <input [(ngModel)]="geoProvinceInformation.geoProvince" matInput>
-            </mat-form-field>
-        </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>
@@ -30,6 +21,22 @@
                     <mat-icon aria-hidden="false" class="theIcon">person_pin</mat-icon>&nbsp; Position
                 </mat-label>
                 <input [(ngModel)]="geoProvinceInformation.position" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; GEO Province
+                </mat-label>
+                <input [(ngModel)]="geoProvinceInformation.geoProvince" matInput>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">house</mat-icon>&nbsp; District Municipality
+                </mat-label>
+                <input [(ngModel)]="geoProvinceInformation.districtMunicipality" matInput>
             </mat-form-field>
         </mat-grid-tile>
     </mat-grid-list>

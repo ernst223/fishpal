@@ -69,6 +69,18 @@ namespace FishPalAPI.Controllers
             return Ok(communicationService.getAccessableProfiles(profileId));
         }
 
+        [HttpGet("document/acknoledge/{documentId}/{profileId}")]
+        public async Task<IActionResult> setDocumentAcknoledge(int documentId, int profileId)
+        {
+            return Ok(communicationService.setAcknowledged(documentId, profileId));
+        }
+
+        [HttpGet("getacknoledgedusers/{documentId}")]
+        public async Task<IActionResult> getAcknoledgedUsers(int documentId)
+        {
+            return Ok(communicationService.getDocumentsAcknowledgedUsers(documentId));
+        }
+
         [HttpPost("document/send/{profileId}/{sendTo}")]
         public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, string sendTo)
         {
@@ -117,6 +129,12 @@ namespace FishPalAPI.Controllers
         public async Task<IActionResult> getEventOutbox(int profileId)
         {
             return Ok(communicationService.getEventsOutbox(profileId));
+        }
+
+        [HttpGet("event/delete/{documentId}")]
+        public async Task<IActionResult> deleteEvent(int documentId)
+        {
+            return Ok(communicationService.deleteEvent(documentId));
         }
 
         [HttpGet("document/pending/{profileId}")]
@@ -271,10 +289,10 @@ namespace FishPalAPI.Controllers
             return Ok(communicationService.updateCourse(course));
         }
 
-        [HttpGet("export/userinformation/{currentProfileID}")]
-        public async Task<IActionResult> exportUserInformation(int currentProfileID)
+        [HttpGet("export/userinformation/{currentProfileID}/{facetId}/{provinceId}/{clubId}")]
+        public async Task<IActionResult> exportUserInformation(int currentProfileID, int facetId, int provinceId, int clubId)
         {
-            return Ok(communicationService.exportUserInformation(currentProfileID));
+            return Ok(communicationService.exportUserInformation(currentProfileID, facetId, provinceId, clubId));
         }
     }
 }

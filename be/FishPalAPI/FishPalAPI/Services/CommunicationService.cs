@@ -342,7 +342,8 @@ namespace FishPalAPI.Services
                     id = entry.Document.Id,
                     note = entry.Document.Note,
                     sendFrom = user.UserName,
-                    title = entry.Document.Title
+                    title = entry.Document.Title,
+                    acknoledged = entry.Acknowledged
                 });
             }
             return messages;
@@ -370,6 +371,18 @@ namespace FishPalAPI.Services
                 });
             }
             return result;
+        }
+
+        public bool deleteEvent(int eventId)
+        {
+            var eventDocument = context.Events.Where(a => a.Id == eventId).FirstOrDefault();
+            if (eventDocument != null)
+            {
+                context.Remove(eventDocument);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public List<EventDTO> getEventsOutbox(int profileId)
@@ -459,6 +472,41 @@ namespace FishPalAPI.Services
                 });
             }
             return messages;
+        }
+
+        public bool setAcknowledged(int documenId, int profileId)
+        {
+            var documentMessage = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient)
+                .Where(a => a.Document.Id == documenId && a.Recipient.Id == profileId).FirstOrDefault();
+            if (documentMessage != null)
+            {
+                documentMessage.Acknowledged = true;
+                context.Update(documentMessage);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public List<RoleManagementUsersDTO> getDocumentsAcknowledgedUsers(int documentId)
+        {
+            var acknoledgedDocuments = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient).ThenInclude(a => a.role)
+                .Where(a => a.Document.Id == documentId).ToList();
+
+            List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
+            foreach (var entry in acknoledgedDocuments)
+            {
+                result.Add(new RoleManagementUsersDTO()
+                {
+                    Id = entry.Recipient.Id,
+                    FullName = getProfileFullName(entry.Recipient),
+                    Username = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(entry.Recipient)).FirstOrDefault().UserName,
+                    Facet = getProfileFacetName(entry.Recipient),
+                    Role = entry.Recipient.role.Description + " " + entry.Recipient.role.FullName,
+                    Status = false,
+                });
+            }
+            return result;
         }
 
         public List<DocumentMessageDTO> getOutboxCommunicationMessages(int profileId)
@@ -773,7 +821,8 @@ namespace FishPalAPI.Services
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
-                return context.UserProfiles.Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && a.club.Name == userClub &&
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.club).ThenInclude(a => a.Province)
+                    .Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && a.club.Name == userClub &&
                 (a.role.Description == "E1" ||
                 a.role.Description == "E2")
                 ).ToList();
@@ -786,7 +835,8 @@ namespace FishPalAPI.Services
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
-                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.club).ThenInclude(a => a.Province)
+                    .Include(a => a.role).Where(a => a.club.Province.Id == userProvince.Id &&
                 a.club.Facet.Id == userFacet.Id && (
                 a.role.Description != "C1" &&
                 a.role.Description != "C2" &&
@@ -836,7 +886,8 @@ namespace FishPalAPI.Services
                 var userFacet = context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet)
                     .Where(a => a.Id == profile.Id).FirstOrDefault().club.Facet;
 
-                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Province).Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.club).ThenInclude(a => a.Province)
+                    .Include(a => a.role).Where(a => a.club.Facet.Id == userFacet.Id && (
                 a.role.Description != "B1" &&
                 a.role.Description != "B2" &&
                 a.role.Description != "B3" &&
@@ -869,7 +920,8 @@ namespace FishPalAPI.Services
             }
             else if (new string[] { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13" }.Contains(userRole))
             {
-                return context.UserProfiles.Include(a => a.role).Where(a =>
+                return context.UserProfiles.Include(a => a.club).ThenInclude(a => a.Facet).Include(a => a.club).ThenInclude(a => a.Province)
+                    .Include(a => a.role).Where(a =>
                 a.role.Description != "A1" &&
                 a.role.Description != "A2" &&
                 a.role.Description != "A3" &&
@@ -1055,12 +1107,25 @@ namespace FishPalAPI.Services
             return result;
         }
 
-        public List<exportUserInformationDTO> exportUserInformation(int currentProfileID)
+        public List<exportUserInformationDTO> exportUserInformation(int currentProfileID, int facetId, int provinceId, int clubId)
         {
             var tempProfile = context.UserProfiles.Include(a => a.club).Include(a => a.role)
                 .Where(a => a.Id == currentProfileID).FirstOrDefault();
             var exportProfiles = getProfilesInLowerRoles(tempProfile);
             exportProfiles.Add(tempProfile);
+
+            if (facetId != 0)
+            {
+                exportProfiles = exportProfiles.Where(a => a.club.Facet.Id == facetId).ToList();
+            }
+            if (provinceId != 0)
+            {
+                exportProfiles = exportProfiles.Where(a => a.club.Province.Id == facetId).ToList();
+            }
+            if (clubId != 0)
+            {
+                exportProfiles = exportProfiles.Where(a => a.club.Id == facetId).ToList();
+            }
 
             List<exportUserInformationDTO> result = new List<exportUserInformationDTO>();
             UserProfile currentProfile;
@@ -1069,46 +1134,50 @@ namespace FishPalAPI.Services
             {
                 currentProfile = context.UserProfiles.Include(a => a.userInformation).Include(a => a.club)
                     .ThenInclude(a => a.Province).Where(a => a.Id == entry.Id).FirstOrDefault();
-                userInformation = context.UserInformation.Include(a => a.personalInformation).Include(a => a.medicalInformation)
+                
+                if (currentProfile.userInformation != null)
+                {
+                    userInformation = context.UserInformation.Include(a => a.personalInformation).Include(a => a.medicalInformation)
                     .Include(a => a.boatInformation).Include(a => a.training)
                     .Where(a => a.Id == currentProfile.userInformation.Id).FirstOrDefault();
-                result.Add(new exportUserInformationDTO()
-                {
-                    Id = currentProfileID,
-                    nickName = userInformation.personalInformation.nickName,
-                    idNumber = userInformation.personalInformation.idNumber,
-                    dob = Convert.ToString(userInformation.personalInformation.dob),
-                    nationality = userInformation.personalInformation.nationality,
-                    ethnicGroup = userInformation.personalInformation.ethnicGroup,
-                    gender = userInformation.personalInformation.gender,
-                    passportNumber = userInformation.personalInformation.passportNumber,
-                    passportExpirationDate = Convert.ToString(userInformation.personalInformation.passportExpirationDate),
-                    homeAddress = userInformation.personalInformation.homeAddress,
-                    postalAddress = userInformation.personalInformation.postalAddress,
-                    phone = userInformation.personalInformation.phone,
-                    cell = userInformation.personalInformation.phone,
-                    memberNumber = getProfileMemberNumber(currentProfile),
-                    skipperLicenseNumber = userInformation.personalInformation.skipperLicenseNumber,
-                    BoatOwner = userInformation.boatInformation.BoatOwner,
-                    BoatNumber = userInformation.boatInformation.BoatNumber,
-                    CofNumber = userInformation.boatInformation.CofNumber,
-                    MedicalAidName = userInformation.medicalInformation.MedicalAidName,
-                    MedicalAidContactNumber = userInformation.medicalInformation.MedicalAidContactNumber,
-                    MedicalAidNumber = userInformation.medicalInformation.MedicalAidNumber,
-                    MedicalAidPlan = userInformation.medicalInformation.MedicalAidPlan,
-                    ClubName = currentProfile.club.Name,
-                    Province = currentProfile.club.Province.Name,
-                    ManagerYearCompleted = userInformation.training.ManagerYearCompleted,
-                    ManagerPointsReceived = userInformation.training.ManagerPointsReceived,
-                    CoachLvl1PointsReceived = userInformation.training.CoachLvl1PointsReceived,
-                    CoachLvl1YearCompleted = userInformation.training.CoachLvl1YearCompleted,
-                    CoachLvl2PointsReceived = userInformation.training.CoachLvl2PointsReceived,
-                    CoachLvl2YearCompleted = userInformation.training.CoachLvl2YearCompleted,
-                    CaptainPointsReceived = userInformation.training.CaptainPointsReceived,
-                    CaptainYearCompleted = userInformation.training.CaptainYearCompleted,
-                    AdminPointsReceived = userInformation.training.CaptainYearCompleted,
-                    AdminYearCompleted = userInformation.training.AdminPointsReceived,
-                });
+                    result.Add(new exportUserInformationDTO()
+                    {
+                        Id = currentProfileID,
+                        nickName = userInformation.personalInformation.nickName,
+                        idNumber = userInformation.personalInformation.idNumber,
+                        dob = Convert.ToString(userInformation.personalInformation.dob),
+                        nationality = userInformation.personalInformation.nationality,
+                        ethnicGroup = userInformation.personalInformation.ethnicGroup,
+                        gender = userInformation.personalInformation.gender,
+                        passportNumber = userInformation.personalInformation.passportNumber,
+                        passportExpirationDate = Convert.ToString(userInformation.personalInformation.passportExpirationDate),
+                        homeAddress = userInformation.personalInformation.homeAddress,
+                        postalAddress = userInformation.personalInformation.postalAddress,
+                        phone = userInformation.personalInformation.phone,
+                        cell = userInformation.personalInformation.phone,
+                        memberNumber = getProfileMemberNumber(currentProfile),
+                        skipperLicenseNumber = userInformation.personalInformation.skipperLicenseNumber,
+                        BoatOwner = userInformation.boatInformation.BoatOwner,
+                        BoatNumber = userInformation.boatInformation.BoatNumber,
+                        CofNumber = userInformation.boatInformation.CofNumber,
+                        MedicalAidName = userInformation.medicalInformation.MedicalAidName,
+                        MedicalAidContactNumber = userInformation.medicalInformation.MedicalAidContactNumber,
+                        MedicalAidNumber = userInformation.medicalInformation.MedicalAidNumber,
+                        MedicalAidPlan = userInformation.medicalInformation.MedicalAidPlan,
+                        ClubName = currentProfile.club.Name,
+                        Province = currentProfile.club.Province.Name,
+                        ManagerYearCompleted = userInformation.training.ManagerYearCompleted,
+                        ManagerPointsReceived = userInformation.training.ManagerPointsReceived,
+                        CoachLvl1PointsReceived = userInformation.training.CoachLvl1PointsReceived,
+                        CoachLvl1YearCompleted = userInformation.training.CoachLvl1YearCompleted,
+                        CoachLvl2PointsReceived = userInformation.training.CoachLvl2PointsReceived,
+                        CoachLvl2YearCompleted = userInformation.training.CoachLvl2YearCompleted,
+                        CaptainPointsReceived = userInformation.training.CaptainPointsReceived,
+                        CaptainYearCompleted = userInformation.training.CaptainYearCompleted,
+                        AdminPointsReceived = userInformation.training.CaptainYearCompleted,
+                        AdminYearCompleted = userInformation.training.AdminPointsReceived,
+                    });
+                }
             }
             return result;
         }

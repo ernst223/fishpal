@@ -1,4 +1,39 @@
-<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
-    <button style="margin-right: 10px;" mat-raised-button (click)="download()">Download Excel Report</button>
+<div style="margin-left: 20px; margin-top: 20px;" fxLayout="column wrap" fxLayoutAlign="start start">
+    <mat-form-field style="width: 300px;" appearance="fill" class="registerInputsFishing">
+        <mat-label>
+            <mat-icon aria-hidden="false" class="theIcon">list</mat-icon>&nbsp;
+            Fishing Facet
+        </mat-label>
+        <mat-select [(ngModel)]="selectedFacet" (selectionChange)="facetSelected()">
+            <mat-option *ngFor="let facet of facets" [value]="facet.id">
+                {{ facet.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 300px;" appearance="fill" class="registerInputsFishing">
+        <mat-label>
+            <mat-icon aria-hidden="false" class="theIcon">room</mat-icon>&nbsp;
+            Province
+        </mat-label>
+        <mat-select [(ngModel)]="selectedProvince" (selectionChange)="getFacetClubsByProvince()">
+            <mat-option *ngFor="let province of provinces" [value]="province.id">
+                {{ province.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 300px;" appearance="fill" class="registerInputsFishing">
+        <mat-label>
+            <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Club
+        </mat-label>
+        <mat-select [(ngModel)]="selectedClub">
+            <mat-option *ngFor="let club of clubs" [value]="club.id">
+                {{ club.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button style="margin-bottom: 10px" mat-raised-button (click)="download()">
+        Download Excel Report
+    </button>
     <button mat-raised-button (click)="downloadCSV()">Download CSV Report</button>
 </div>

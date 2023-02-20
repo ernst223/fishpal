@@ -38,7 +38,8 @@ namespace FishPalAPI.Services.Member_Information.Geo_Province_Information
                 Id = currentGeoProvinceInformation.Id,
                 GeoProvince = currentGeoProvinceInformation.GeoProvince,
                 ProvincialSasaccManagement = currentGeoProvinceInformation.ProvincialSasaccManagement,
-                Position = currentGeoProvinceInformation.Position,            
+                Position = currentGeoProvinceInformation.Position,
+                DistrictMunicipality = currentGeoProvinceInformation.DistrictMunicipality
             };
         }
 
@@ -51,6 +52,7 @@ namespace FishPalAPI.Services.Member_Information.Geo_Province_Information
             currentGeoProvinceInformation.GeoProvince = geoProvinceInformation.GeoProvince;
             currentGeoProvinceInformation.ProvincialSasaccManagement = geoProvinceInformation.ProvincialSasaccManagement;
             currentGeoProvinceInformation.Position = geoProvinceInformation.Position;
+            currentGeoProvinceInformation.DistrictMunicipality = geoProvinceInformation.DistrictMunicipality;
             context.SaveChanges();
         }
     }

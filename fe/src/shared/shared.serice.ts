@@ -245,6 +245,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public deleteEvent(id: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/event/delete/' + id, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public declinePendingCommunicationMessage(id: number): Observable<any> {
     return this.httpClient.get(this.connectionstring + 'api/communication/message/decline/' + id, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
@@ -259,6 +265,18 @@ export class SharedService {
 
   public getAccessableUsersToMessage(): Observable<Array<RoleManagementUsersDTO>> {
     return this.httpClient.get(this.connectionstring + 'api/communication/accessableprofiles/' + localStorage.getItem('profileId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public getAcknoledgedUsers(documentId: number): Observable<Array<RoleManagementUsersDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/getacknoledgedusers/' + documentId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
+  public setAcknoledgement(documentId: number): Observable<Array<RoleManagementUsersDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/document/acknoledge/' + documentId + "/" + + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -447,8 +465,9 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
-  public getExportUserInformation(): Observable<Array<exportUserInformationDTO>> {
-    return this.httpClient.get(this.connectionstring + 'api/communication/export/userinformation/' + + localStorage.getItem('profileId'), {
+  public getExportUserInformation(facetId: number, provinceId: number, clubId: number): Observable<Array<exportUserInformationDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/export/userinformation/' + + localStorage.getItem('profileId') + 
+    '/' + facetId + '/' + provinceId + '/' + clubId, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }

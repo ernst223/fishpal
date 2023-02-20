@@ -11,5 +11,6 @@ namespace FishPalAPI.Models.DocumentMessageModels
         public string title { get; set; }
         public string note { get; set; }
         public string sendFrom { get; set; }
+        public bool acknoledged { get; set; }
     }
 }

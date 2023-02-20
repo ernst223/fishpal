@@ -18,7 +18,8 @@ export class GeoProvinceInformationComponent implements OnInit {
     id: null,
     geoProvince: null,
     provincialSasaccManagement: null,
-    position: null
+    position: null,
+    districtMunicipality: null,
   };
   ngOnInit() {
     this.setupDataStream();
@@ -29,6 +30,7 @@ export class GeoProvinceInformationComponent implements OnInit {
       .getGeoProvinceInformation(Number(this.currentProfile))
       .subscribe((a) => {
         this.geoProvinceInformation = a;
+        console.log(a);
       });
   }
 

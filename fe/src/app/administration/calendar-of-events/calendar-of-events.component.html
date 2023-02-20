@@ -122,6 +122,10 @@
                             (click)="openDocument(element.eventId)">
                             <mat-icon aria-label="">remove_red_eye</mat-icon>
                         </button>
+                        <button matTooltip="remove Event" mat-icon-button color="primary"
+                            (click)="deleteDocument(element.eventId)">
+                            <mat-icon aria-label="">delete</mat-icon>
+                        </button>
                     </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

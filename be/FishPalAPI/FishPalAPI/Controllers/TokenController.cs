@@ -127,7 +127,12 @@ namespace FishPalAPI.Controllers
                     if (userService.addUserClubs(createdUser.Id, model.clubs))
                     {
                         // Send confirm email
-                        await userService.sendConfirmEmailAsync(createdUser);
+                        //await userService.sendConfirmEmailAsync(createdUser);
+
+                        // This should be deleted because the emailing does not work now
+                        var token = await userMgr.GenerateEmailConfirmationTokenAsync(createdUser);
+                        await userMgr.ConfirmEmailAsync(createdUser, token);
+
                         return Ok(true);
                     }
                     else

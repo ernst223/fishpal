@@ -45,6 +45,7 @@ export class ClubInformationComponent implements OnInit {
     this.service
       .getClubInformation(Number(this.currentProfile))
       .subscribe((a) => {
+        console.log(a);
         this.clubInformation = a;
         this.comitteeMembers = this.clubInformation.comitteeMembers;
         this.priorPeriods = this.clubInformation.priorPeriods;

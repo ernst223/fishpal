@@ -169,6 +169,13 @@ export class CalendarOfEventsComponent implements OnInit {
     window.open(environment.apiUrl + "events/" + id + ".pdf", '_blank');
   }
 
+  deleteDocument(id) {
+    this.service.deleteEvent(id).subscribe(a => {
+      this.setupDataStream();
+      this.openSnackBar('Event is removed', 'close');
+    });
+  }
+
   contains(str, arr) {
     var value = 0;
     arr.forEach(function (word) {

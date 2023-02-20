@@ -27,8 +27,11 @@ export class DocumentManagementComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) pendingPaginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sendSort: MatSort;
   @ViewChild(MatPaginator, { static: false }) sendPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) acknoledgeSort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) acknoledgePaginator: MatPaginator;
 
   sendData: RoleManagementUsersDTO[];
+  acknoledgeData: RoleManagementUsersDTO[];
 
   inboxData: MyDocumentMessages[];
   outboxData: MyDocumentMessages[];
@@ -37,7 +40,9 @@ export class DocumentManagementComponent implements OnInit {
   outboxDataSource: MatTableDataSource<object> = new MatTableDataSource();
   pendingDataSource: MatTableDataSource<object> = new MatTableDataSource();
   sendDataSource: MatTableDataSource<object> = new MatTableDataSource();
+  acknoledgeDataSource: MatTableDataSource<object> = new MatTableDataSource();
   displayedSendColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
+  displayedAcknoledgeColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role'];
   displayedColumns = ['Id', 'SendFrom', 'Title', 'Note', 'Actions'];
 
   sendOptions: SendOptions[] = [
@@ -89,7 +94,13 @@ export class DocumentManagementComponent implements OnInit {
   applySendFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
-    this.pendingDataSource.filter = filterValue;
+    this.sendDataSource.filter = filterValue;
+  }
+
+  applyAcknoledgeFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.acknoledgeDataSource.filter = filterValue;
   }
 
   contains(str, arr) {
@@ -130,6 +141,42 @@ export class DocumentManagementComponent implements OnInit {
     window.open(environment.apiUrl + "documents/" + id + ".pdf", '_blank');
   }
 
+  setAcknoledgement(id) {
+    this.service.setAcknoledgement(id).subscribe(a => {
+      this.setupDataStream();
+      this.openSnackBar('Success, you made an acknoledgement.', 'close');
+    });
+  }
+
+  viewDocumentsAcknoledgments(templateRef, id) {
+    console.log(id);
+    this.service.getAcknoledgedUsers(id).subscribe(a => {
+      this.acknoledgeData = a;
+      this.acknoledgeDataSource.data = this.acknoledgeData;
+      let dialogRef = this.dialog.open(templateRef, {
+        width: '1400px',
+        height: '650px'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+      });
+    });
+  }
+
+  openModal(templateRef, card?: any) {
+    if (card) {
+      this.messages = card;
+    }
+
+    let dialogRef = this.dialog.open(templateRef, {
+      width: '1500px',
+      height: '700px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
   selectProfile(id: any) {
 
     let index = this.selectedProfiles.indexOf(id, 0);
@@ -149,6 +196,8 @@ export class DocumentManagementComponent implements OnInit {
     this.pendingDataSource.paginator = this.pendingPaginator;
     this.sendDataSource.sort = this.sendSort;
     this.sendDataSource.paginator = this.sendPaginator;
+    this.acknoledgeDataSource.sort = this.acknoledgeSort;
+    this.acknoledgeDataSource.paginator = this.acknoledgePaginator;
   }
 
   applyInboxFilter(filterValue: string) {
@@ -189,20 +238,6 @@ export class DocumentManagementComponent implements OnInit {
   public validationMessages = {
     required: 'Please complete required field.',
   };
-
-  openModal(templateRef, card?: any) {
-    if (card) {
-      this.messages = card;
-    }
-
-    let dialogRef = this.dialog.open(templateRef, {
-      width: '1500px',
-      height: '700px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
 
   aproveDocument(id) {
     this.service.aprovePendingDocumentMessage(id).subscribe(a => {

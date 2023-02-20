@@ -195,9 +195,9 @@ namespace FishPalAPI.Services
             currentClubInformation.ClubConstitutionRecieved = clubInformation.ClubConstitutionRecieved;
             currentClubInformation.ClubConstitutionDateAccepted = clubInformation.ClubConstitutionDateAccepted;
             currentClubInformation.ClubCodeOfConductRecieved = clubInformation.ClubCodeOfConductRecieved;
-            currentClubInformation.ClubCodeOfConductDateAccepted = currentClubInformation.ClubCodeOfConductDateAccepted;
-            currentClubInformation.ClubDisciplinaryCodeRecieved = currentClubInformation.ClubDisciplinaryCodeRecieved;
-            currentClubInformation.ClubDisciplinaryCodeDateAccepted = currentClubInformation.ClubDisciplinaryCodeDateAccepted;
+            currentClubInformation.ClubCodeOfConductDateAccepted = clubInformation.ClubCodeOfConductDateAccepted;
+            currentClubInformation.ClubDisciplinaryCodeRecieved = clubInformation.ClubDisciplinaryCodeRecieved;
+            currentClubInformation.ClubDisciplinaryCodeDateAccepted = clubInformation.ClubDisciplinaryCodeDateAccepted;
             currentClubInformation.ComitteeMembers = comitteeMembers;
             currentClubInformation.PriorPeriods = priorPeriods;
 

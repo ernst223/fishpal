@@ -39,6 +39,13 @@
                                 (click)="openDocument(element.id)">
                                 <mat-icon aria-label="">remove_red_eye</mat-icon>
                             </button>
+                            <div *ngIf="!element.acknoledged">
+                                <button matTooltip="Acknoledge document" mat-icon-button color="primary"
+                                (click)="setAcknoledgement(element.id)">
+                                <mat-icon aria-label="">thumb_up</mat-icon>
+                            </button>
+                            </div>
+                            
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -88,6 +95,10 @@
                             <button matTooltip="View Document" mat-icon-button color="primary"
                                 (click)="openDocument(element.id)">
                                 <mat-icon aria-label="">remove_red_eye</mat-icon>
+                            </button>
+                            <button matTooltip="View Acknoledgements" mat-icon-button color="primary"
+                                (click)="viewDocumentsAcknoledgments(myAcknoledgetemplate, element.id)">
+                                <mat-icon aria-label="">handshake</mat-icon>
                             </button>
                         </mat-cell>
                     </ng-container>
@@ -161,6 +172,50 @@
         </mat-card>
     </mat-tab>
 </mat-tab-group>
+
+<ng-template #myAcknoledgetemplate>
+    <div style="flex-direction: column; box-sizing: border-box; display: flex;">
+        <h1>Members who made Acknoledgements</h1>
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyAcknoledgeFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #sendTable [dataSource]="acknoledgeDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Username">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Username </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="FullName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> FullName </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.fullName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Facet">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Facet </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.facet}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Role">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Role </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.role}} </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedAcknoledgeColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedAcknoledgeColumns;"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #acknoledgePaginator [pageSize]="20" [pageSizeOptions]="[10, 20, 40]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </div>
+</ng-template>
 
 <ng-template #myOpentemplate>
     <div style="flex-direction: column; box-sizing: border-box; display: flex;">
@@ -239,54 +294,4 @@
             </div>
         </mat-card-content>
     </div>
-   
-    <!-- <div class="card-body">
-        <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="form-group">
-                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
-                    <mat-label>Send to:</mat-label>
-                    <select [(ngModel)]="selectedSendOption" matNativeControl required>
-                        <option value=0>Send to all in same role</option>
-                        <option value=1>Send to all in lower roles</option>
-                    </select>
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="form-group">
-                <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="DocumentFile.click()">
-                    <mat-icon style="margin-right: 5px; margin-bottom: 5px;">backup</mat-icon>
-                    Attach Document File...
-                </button>
-                <input hidden type="file" accept=".pdf" id="File" #DocumentFile (change)="OpenFile($event)">
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="form-group">
-                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
-                    <mat-label>
-                        Document Title
-                    </mat-label>
-                    <input [(ngModel)]="title" matInput>
-                </mat-form-field>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="form-group">
-                <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
-                    <mat-label>
-                        <i class="fa fa-comment" aria-hidden="true"></i>
-                        &nbsp; Document Note
-                    </mat-label>
-                    <textarea matInput placeholder="Type document note..." style="height: 100px;width: 600px;"
-                        type="text" [(ngModel)]="note" class="form-control"></textarea>
-                </mat-form-field>
-            </div>
-        </div>
-        <button mat-raised-button class="newMessageSendButton" (click)="sendMessage()">Send &nbsp; <i class="fa fa-pencil"
-            aria-hidden="true"></i></button>
-    </div> -->
-
 </ng-template>

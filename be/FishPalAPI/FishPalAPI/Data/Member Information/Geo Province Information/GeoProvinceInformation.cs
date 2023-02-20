@@ -11,5 +11,6 @@ namespace FishPalAPI.Data.Member_Information.Geo_Province_Information
         public string GeoProvince { get; set; }
         public string ProvincialSasaccManagement { get; set; }
         public string Position { get; set; }
+        public string DistrictMunicipality { get; set; }
     }
 }

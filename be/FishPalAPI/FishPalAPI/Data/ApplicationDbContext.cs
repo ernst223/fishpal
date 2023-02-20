@@ -28,13 +28,13 @@ namespace FishPalAPI.Data
                 //var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
                 // Basson server
-                optionsBuilder.UseMySql("server = localhost; user id = root; Password = AWE7; database = fishPalDB; SSL Mode = None", new MySqlServerVersion(new Version(8, 0, 28)));
+                //optionsBuilder.UseMySql("server = localhost; user id = root; Password = AWE7; database = fishPalDB; SSL Mode = None", new MySqlServerVersion(new Version(8, 0, 28)));
                 
                 // Basson localhost
                 //optionsBuilder.UseMySql("server=localhost;user id=root;Password=awe7;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
                 
                 // Ernst localhost
-                //optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
+                optionsBuilder.UseMySql("server=localhost;user id=root;Password=Ernst123?;database=fishPalDB", new MySqlServerVersion(new Version(8, 0, 28)));
             }
         }
 

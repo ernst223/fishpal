@@ -1,6 +1,6 @@
 export interface InsertClothesOrderModel {
-    Id: number,
-    CategoryName: string,
-    ItemName: string,
-    Amount: number,
+    id: number,
+    categoryName: string,
+    itemName: string,
+    itemCost: number,
 }

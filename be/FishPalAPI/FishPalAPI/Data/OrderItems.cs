@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FishPalAPI.Data
 {
@@ -10,6 +11,6 @@ namespace FishPalAPI.Data
         public string CategoryName { get; set; }
         public string ItemName { get; set; }
 
-        public double Amount { get; set; }
+        public double ItemCost { get; set; }
     }
 }

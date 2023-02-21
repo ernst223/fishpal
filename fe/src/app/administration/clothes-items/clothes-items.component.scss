@@ -29,12 +29,24 @@
     margin-top: 15PX;
 }
 .AddItemsButton {
+    background-color: #1d981d;
+    margin-left: 5px;
+    color: white;
+    float: right;
+    padding: 5PX;
+    margin-top: 15PX;
+}
+.DeleteItemsButton {
     background-color: #F40F02;
     margin-left: 5px;
     color: white;
     float: right;
     padding: 5PX;
     margin-top: 15PX;
+}
+
+.inlineBlock{
+    display: inline-block;
 }
 
 .BackButton {
@@ -128,6 +140,12 @@ th {
 .headerClothesOrder {
     text-align: center;
     padding: 10px;
+}
+
+.headerCenter{
+    vertical-align: sub;
+    width: 70%;
+    text-align: center;
 }
 
 .submitButton {

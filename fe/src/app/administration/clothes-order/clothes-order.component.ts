@@ -55,11 +55,12 @@ const NAMES: string[] = [
   styleUrls: ['./clothes-order.component.scss']
 })
 export class ClothesOrderComponent  {
-  viewItems: boolean = false;
-  viewOrders: boolean = false;
 
-  viewitemsButton: boolean = true;
-  viewOrdersButton: boolean = true;
+  clothesItems: boolean = false;
+  viewOrders: boolean = false;
+  clothesAdmin:boolean = true;
+
+  buttonVisible: boolean = true;
 
   createOrderForm!: FormGroup;
   category: itemValue[] = [
@@ -78,7 +79,7 @@ export class ClothesOrderComponent  {
     { value: 'Keepnet' },
   ];
 
-  displayedColumns: string[] = ['id', 'username', 'orderdate', 'item', 'price', 'status', 'actions'];
+  displayedColumns: string[] = ['id', 'username', 'orderdate', 'price', 'status', 'actions'];
   dataSource: MatTableDataSource<UserData>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -190,24 +191,22 @@ export class ClothesOrderComponent  {
     this.dialog.closeAll();
   }
 
-  toggleViewItems(){
-    this.viewItems = true;
-    this.viewitemsButton = false;
-    this.viewOrdersButton = false;
-  }
-
-  toggleViewOrders(){
-    this.viewItems = false;
-    this.viewOrders = true;
-    this.viewitemsButton = false;
-    this.viewOrdersButton = false;
-  }
-
   navigateBack(){
-    this.viewItems = false;
+    this.clothesItems = false;
     this.viewOrders = false;
-    this.viewitemsButton = true;
-    this.viewOrdersButton = true;
+    this.buttonVisible = true;
+  }
+
+  toggleClothesItems(){
+    this.clothesItems = true;
+    this.viewOrders = false;
+    this.buttonVisible = false;
+  }
+
+  toggleOrders(){
+    this.clothesItems = false;
+    this.viewOrders = true;
+    this.buttonVisible = false;
   }
 
 }

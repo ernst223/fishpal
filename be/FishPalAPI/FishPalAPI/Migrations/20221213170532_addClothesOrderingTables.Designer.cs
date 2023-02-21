@@ -3,14 +3,16 @@ using System;
 using FishPalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FishPalAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213170532_addClothesOrderingTables")]
+    partial class addClothesOrderingTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,35 +211,6 @@ namespace FishPalAPI.Migrations
                     b.ToTable("CommunicationMessages");
                 });
 
-            modelBuilder.Entity("FishPalAPI.Data.Courses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("ApprovedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
-
             modelBuilder.Entity("FishPalAPI.Data.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -275,9 +248,6 @@ namespace FishPalAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Acknowledged")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int?>("DocumentId")
                         .HasColumnType("int");
 
@@ -291,46 +261,6 @@ namespace FishPalAPI.Migrations
                     b.HasIndex("RecipientId");
 
                     b.ToTable("DocumentMessages");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.Event", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("ApprovedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TypeOfEvent")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("userProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("userProfileId");
-
-                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.Facet", b =>
@@ -351,6 +281,20 @@ namespace FishPalAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Facets");
+                });
+
+            modelBuilder.Entity("FishPalAPI.Data.Federation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Federation");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.ItemListForOrder", b =>
@@ -586,9 +530,6 @@ namespace FishPalAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("DistrictMunicipality")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("GeoProvince")
                         .HasColumnType("longtext");
@@ -910,7 +851,7 @@ namespace FishPalAPI.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("FederationId")
                         .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
@@ -956,6 +897,8 @@ namespace FishPalAPI.Migrations
 
                     b.HasIndex("ClubId");
 
+                    b.HasIndex("FederationId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -964,33 +907,6 @@ namespace FishPalAPI.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("FishPalAPI.Data.UserCourses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("courseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("timeEnrolled")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("courseId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("UserCourses");
                 });
 
             modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
@@ -1303,280 +1219,265 @@ namespace FishPalAPI.Migrations
                     b.Navigation("Recipient");
                 });
 
-            modelBuilder.Entity("FishPalAPI.Data.Event", b =>
+            modelBuilder.Entity("FishPalAPI.Data.ItemListForOrder", b =>
                 {
-                    b.HasOne("FishPalAPI.Data.UserProfile", "userProfile")
+                    b.HasOne("FishPalAPI.Data.OrderItems", "Item")
                         .WithMany()
-                        .HasForeignKey("userProfileId");
+                        .HasForeignKey("ItemId");
 
-                    b.Navigation("userProfile");
-                    modelBuilder.Entity("FishPalAPI.Data.ItemListForOrder", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.OrderItems", "Item")
-                                .WithMany()
-                                .HasForeignKey("ItemId");
+                    b.HasOne("FishPalAPI.Data.Orders", "Orders")
+                        .WithMany("ItemsListForOrder")
+                        .HasForeignKey("OrdersFKId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.HasOne("FishPalAPI.Data.Orders", "Orders")
-                                .WithMany("ItemsListForOrder")
-                                .HasForeignKey("OrdersFKId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Item");
 
-                            b.Navigation("Item");
-
-                            b.Navigation("Orders");
-                        });
+                    b.Navigation("Orders");
                 });
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformationAllergies", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", null)
-                                .WithMany("MedicalInformationAllergies")
-                                .HasForeignKey("MedicalInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformationAllergies", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", null)
+                        .WithMany("MedicalInformationAllergies")
+                        .HasForeignKey("MedicalInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformationEmergencyContacts", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", null)
-                                .WithMany("MedicalInformationEmergencyContacts")
-                                .HasForeignKey("MedicalInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformationEmergencyContacts", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", null)
+                        .WithMany("MedicalInformationEmergencyContacts")
+                        .HasForeignKey("MedicalInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformationMedicalConditions", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", null)
-                                .WithMany("MedicalInformationMedicalConditions")
-                                .HasForeignKey("MedicalInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformationMedicalConditions", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", null)
+                        .WithMany("MedicalInformationMedicalConditions")
+                        .HasForeignKey("MedicalInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformationPharmacies", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", null)
-                                .WithMany("MedicalInformationPharmacies")
-                                .HasForeignKey("MedicalInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformationPharmacies", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", null)
+                        .WithMany("MedicalInformationPharmacies")
+                        .HasForeignKey("MedicalInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformationPhysicians", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", null)
-                                .WithMany("MedicalInformationPhysicians")
-                                .HasForeignKey("MedicalInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformationPhysicians", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", null)
+                        .WithMany("MedicalInformationPhysicians")
+                        .HasForeignKey("MedicalInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformationComtteeMembers", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", null)
-                                .WithMany("ComitteeMembers")
-                                .HasForeignKey("ProvincialInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformationComtteeMembers", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", null)
+                        .WithMany("ComitteeMembers")
+                        .HasForeignKey("ProvincialInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformationPriorPeriods", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", null)
-                                .WithMany("PriorPeriods")
-                                .HasForeignKey("ProvincialInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformationPriorPeriods", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", null)
+                        .WithMany("PriorPeriods")
+                        .HasForeignKey("ProvincialInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.OtherAnglingAchievements", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.UserInformation", null)
-                                .WithMany("otherAnglingAchievements")
-                                .HasForeignKey("UserInformationId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.OtherAnglingAchievements", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.UserInformation", null)
+                        .WithMany("otherAnglingAchievements")
+                        .HasForeignKey("UserInformationId");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.User", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.Club", null)
-                                .WithMany("Users")
-                                .HasForeignKey("ClubId");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.User", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Club", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ClubId");
 
-                    modelBuilder.Entity("FishPalAPI.Data.UserCourses", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.Courses", "course")
-                                .WithMany()
-                                .HasForeignKey("courseId");
+                    b.HasOne("FishPalAPI.Data.Federation", null)
+                        .WithMany("users")
+                        .HasForeignKey("FederationId");
+                });
 
-                            b.HasOne("FishPalAPI.Data.User", "user")
-                                .WithMany()
-                                .HasForeignKey("userId");
+            modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.Member_Information.Boat_Information.BoatInformation", "boatInformation")
+                        .WithMany()
+                        .HasForeignKey("boatInformationId");
 
-                            b.Navigation("course");
+                    b.HasOne("FishPalAPI.Data.ClubInformation", "clubInformation")
+                        .WithMany()
+                        .HasForeignKey("clubInformationId");
 
-                            b.Navigation("user");
-                        });
+                    b.HasOne("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinceInformation", "geoProvinceInformation")
+                        .WithMany()
+                        .HasForeignKey("geoProvinceInformationId");
 
-                    modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.Member_Information.Boat_Information.BoatInformation", "boatInformation")
-                                .WithMany()
-                                .HasForeignKey("boatInformationId");
+                    b.HasOne("FishPalAPI.Data.MedicalInformation", "medicalInformation")
+                        .WithMany()
+                        .HasForeignKey("medicalInformationId");
 
-                            b.HasOne("FishPalAPI.Data.ClubInformation", "clubInformation")
-                                .WithMany()
-                                .HasForeignKey("clubInformationId");
+                    b.HasOne("FishPalAPI.Data.PersonalInformation", "personalInformation")
+                        .WithMany()
+                        .HasForeignKey("personalInformationId");
 
-                            b.HasOne("FishPalAPI.Data.Member_Information.Geo_Province_Information.GeoProvinceInformation", "geoProvinceInformation")
-                                .WithMany()
-                                .HasForeignKey("geoProvinceInformationId");
+                    b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", "provincialInformation")
+                        .WithMany()
+                        .HasForeignKey("provincialInformationId");
 
-                            b.HasOne("FishPalAPI.Data.MedicalInformation", "medicalInformation")
-                                .WithMany()
-                                .HasForeignKey("medicalInformationId");
+                    b.HasOne("FishPalAPI.Data.Member_Information.Training.Training", "training")
+                        .WithMany()
+                        .HasForeignKey("trainingId");
 
-                            b.HasOne("FishPalAPI.Data.PersonalInformation", "personalInformation")
-                                .WithMany()
-                                .HasForeignKey("personalInformationId");
+                    b.Navigation("boatInformation");
 
-                            b.HasOne("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", "provincialInformation")
-                                .WithMany()
-                                .HasForeignKey("provincialInformationId");
+                    b.Navigation("clubInformation");
 
-                            b.HasOne("FishPalAPI.Data.Member_Information.Training.Training", "training")
-                                .WithMany()
-                                .HasForeignKey("trainingId");
+                    b.Navigation("geoProvinceInformation");
 
-                            b.Navigation("boatInformation");
+                    b.Navigation("medicalInformation");
 
-                            b.Navigation("clubInformation");
+                    b.Navigation("personalInformation");
 
-                            b.Navigation("geoProvinceInformation");
+                    b.Navigation("provincialInformation");
 
-                            b.Navigation("medicalInformation");
+                    b.Navigation("training");
+                });
 
-                            b.Navigation("personalInformation");
+            modelBuilder.Entity("FishPalAPI.Data.UserProfile", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany("profiles")
+                        .HasForeignKey("UserId");
 
-                            b.Navigation("provincialInformation");
+                    b.HasOne("FishPalAPI.Data.Club", "club")
+                        .WithMany()
+                        .HasForeignKey("clubId");
 
-                            b.Navigation("training");
-                        });
+                    b.HasOne("FishPalAPI.Data.Role", "role")
+                        .WithMany()
+                        .HasForeignKey("roleId");
 
-                    modelBuilder.Entity("FishPalAPI.Data.UserProfile", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.User", null)
-                                .WithMany("profiles")
-                                .HasForeignKey("UserId");
+                    b.HasOne("FishPalAPI.Data.UserInformation", "userInformation")
+                        .WithMany()
+                        .HasForeignKey("userInformationId");
 
-                            b.HasOne("FishPalAPI.Data.Club", "club")
-                                .WithMany()
-                                .HasForeignKey("clubId");
+                    b.Navigation("club");
 
-                            b.HasOne("FishPalAPI.Data.Role", "role")
-                                .WithMany()
-                                .HasForeignKey("roleId");
+                    b.Navigation("role");
 
-                            b.HasOne("FishPalAPI.Data.UserInformation", "userInformation")
-                                .WithMany()
-                                .HasForeignKey("userInformationId");
+                    b.Navigation("userInformation");
+                });
 
-                            b.Navigation("club");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                            b.Navigation("role");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                            b.Navigation("userInformation");
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                                .WithMany()
-                                .HasForeignKey("RoleId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.User", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.User", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("FishPalAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                                .WithMany()
-                                .HasForeignKey("RoleId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+            modelBuilder.Entity("FishPalAPI.Data.Club", b =>
+                {
+                    b.Navigation("Users");
+                });
 
-                            b.HasOne("FishPalAPI.Data.User", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.ClubInformation", b =>
+                {
+                    b.Navigation("ComitteeMembers");
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                        {
-                            b.HasOne("FishPalAPI.Data.User", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+                    b.Navigation("PriorPeriods");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.Club", b =>
-                        {
-                            b.Navigation("Users");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.Federation", b =>
+                {
+                    b.Navigation("users");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.ClubInformation", b =>
-                        {
-                            b.Navigation("ComitteeMembers");
+            modelBuilder.Entity("FishPalAPI.Data.MedicalInformation", b =>
+                {
+                    b.Navigation("MedicalInformationAllergies");
 
-                            b.Navigation("PriorPeriods");
-                        });
+                    b.Navigation("MedicalInformationEmergencyContacts");
 
-                    modelBuilder.Entity("FishPalAPI.Data.MedicalInformation", b =>
-                        {
-                            b.Navigation("MedicalInformationAllergies");
+                    b.Navigation("MedicalInformationMedicalConditions");
 
-                            b.Navigation("MedicalInformationEmergencyContacts");
+                    b.Navigation("MedicalInformationPharmacies");
 
-                            b.Navigation("MedicalInformationMedicalConditions");
+                    b.Navigation("MedicalInformationPhysicians");
+                });
 
-                            b.Navigation("MedicalInformationPharmacies");
+            modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", b =>
+                {
+                    b.Navigation("ComitteeMembers");
 
-                            b.Navigation("MedicalInformationPhysicians");
-                        });
+                    b.Navigation("PriorPeriods");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.Member_Information.Provincial_Information.ProvincialInformation", b =>
-                        {
-                            b.Navigation("ComitteeMembers");
+            modelBuilder.Entity("FishPalAPI.Data.Orders", b =>
+                {
+                    b.Navigation("ItemsListForOrder");
+                });
 
-                            b.Navigation("PriorPeriods");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.User", b =>
+                {
+                    b.Navigation("profiles");
+                });
 
-                    modelBuilder.Entity("FishPalAPI.Data.Orders", b =>
-                        {
-                            b.Navigation("ItemsListForOrder");
-                        });
+            modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
+                {
+                    b.Navigation("anglishAdministrationHistories");
 
-                    modelBuilder.Entity("FishPalAPI.Data.User", b =>
-                        {
-                            b.Navigation("profiles");
-                        });
-
-                    modelBuilder.Entity("FishPalAPI.Data.UserInformation", b =>
-                        {
-                            b.Navigation("anglishAdministrationHistories");
-
-                            b.Navigation("otherAnglingAchievements");
-                        });
+                    b.Navigation("otherAnglingAchievements");
+                });
 #pragma warning restore 612, 618
-                }
+        }
     }
-    }
-
+}

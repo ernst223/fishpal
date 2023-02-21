@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } 
 import { InsertClothesOrderModel } from '../models/add-clothes-order-form-model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { AdministrationService } from '../administration.service';
 
@@ -13,21 +13,10 @@ interface itemValue {
 export interface UserData {
   id: string;
   name: string;
+  category: string;
   price: string;
-  size: string;
 }
 
-/** Constants used to fill up our data base. */
-const FRUITS: string[] = [
-  'S',
-  'M',
-  'L',
-  'XL',
-  '34/36',
-  '48',
-  'XXL',
-  '34',
-];
 const NAMES: string[] = [
   'Tshirt',
   'Long Short',
@@ -57,6 +46,7 @@ const NAMES: string[] = [
   styleUrls: ['./clothes-items.component.scss']
 })
 export class ClothesItemsComponent  implements OnInit, AfterViewInit {
+  rowToUpdate:InsertClothesOrderModel = {} as any;
   addUpdateItem:boolean = true;
   clothesItemsModal: InsertClothesOrderModel = {} as any
   addItemForm!: FormGroup;
@@ -66,22 +56,16 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     { value: 'Other' },
   ];
 
-  displayedColumns: string[] = ['id', 'name', 'price', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'category', 'price', 'actions'];
   dataSource: MatTableDataSource<UserData>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(private adminService: AdministrationService,private formBuilder: FormBuilder, public dialog: MatDialog) {
-    const users = Array.from({ length: 100 }, (_, k) => this.createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-  }
+  constructor(public snackBar: MatSnackBar, private adminService: AdministrationService,private formBuilder: FormBuilder, public dialog: MatDialog) {}
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
   }
 
   getRecord(name)
@@ -98,21 +82,24 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     }
   }
 
-  /** Builds and returns a new User. */
-  createNewUser(id: number): UserData {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))]
-
-    return {
-      id: id.toString(),
-      name: name,
-      price: Math.round(Math.random() * 100).toString(),
-      size: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-    };
-  }
-
   ngOnInit(): void {
     this.createForm();
+    this.getAllItems();
+  }
+
+  getAllItems(){
+    this.adminService.getOrderItem().subscribe(result => {
+      console.log("result of item get",result);
+      this.dataSource = new MatTableDataSource(result);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
   createForm(): void {
@@ -130,24 +117,15 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     }
 
     const formData = this.addItemForm.getRawValue();
-    
-    this.clothesItemsModal.CategoryName = formData.the_ItemName;
-    this.clothesItemsModal.ItemName = formData.the_ItemName;
-    this.clothesItemsModal.Amount = formData.the_Price
 
+    this.clothesItemsModal.categoryName = formData.the_Category;
+    this.clothesItemsModal.itemName = formData.the_ItemName;
+    this.clothesItemsModal.itemCost = formData.the_Price
 
     this.adminService.insertOrderItem(this.clothesItemsModal).subscribe(result => {
+      this.openSnackBar('Successfully added item', 'Close');
+      this.closeModal();
     });
-    //this.myModel.Province = formData.the_Province;
-    //this.myModel.photos = this.photosObject;
-
-    /*console.log(this.myModel);
-    this.http.post('https://localhost:44351/InsertListing', this.myModel).pipe().subscribe(a => {
-
-    }, (error) => {
-
-    });
-    console.log(formData);*/
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -169,10 +147,19 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     required: 'Please complete required field.',
   };
 
-  openModal(templateRef, rowVal:any) {
-    if(rowVal != undefined){
+  openModal(templateRef, row:any) {
+   this.rowToUpdate = row;
+   console.log(this.rowToUpdate);
+    if(row != undefined){
+      //view clicked
       this.addUpdateItem = false;
+      this.addItemForm.patchValue({
+        the_Category: row.categoryName,
+        the_ItemName: row.itemName,
+        the_Price: row.itemCost
+      });
     }else{
+      //add items clicked
       this.addUpdateItem = true;
     }
    
@@ -183,11 +170,32 @@ export class ClothesItemsComponent  implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // this.animal = result;
     });
   }
 
   closeModal() {
     this.dialog.closeAll();
+    this.getAllItems();
+  }
+
+  updateItem(){
+
+    const formData = this.addItemForm.getRawValue();
+    this.rowToUpdate.categoryName = formData.the_Category;
+    this.rowToUpdate.itemName = formData.the_ItemName;
+    this.rowToUpdate.itemCost = formData.the_Price;
+
+    this.adminService.updateOrderItem(this.rowToUpdate).subscribe(result => {
+      this.openSnackBar('Successfully updated item', 'Close');
+      this.closeModal();
+    });
+  }
+
+  deleteItem(){
+    console.log("test",this.rowToUpdate);
+    this.adminService.deleteOrderItem(this.rowToUpdate.id).subscribe(result => {
+      this.openSnackBar('Successfully deleted item', 'Close');
+      this.closeModal();
+    });
   }
 }

@@ -13,17 +13,32 @@ export class AdministrationService {
 
     connectionstring = environment.apiUrl;
 
+    public getOrderItem(): Observable<any> {
+        const headers = new HttpHeaders()
+            .append('Content-Type', 'application/json')
+            .append('Access-Control-Allow-Methods', '*');
+            return this.httpClient.get(this.connectionstring + 'api/clothes/getOrderItems', { headers }).pipe(map((res: any) => res));
+    }
+
     public insertOrderItem(body: InsertClothesOrderModel): Observable<any> {
         const headers = new HttpHeaders()
             .append('Content-Type', 'application/json')
             .append('Access-Control-Allow-Methods', '*');
-            return this.httpClient.post(this.connectionstring + 'api/clothes/insertOrderItem', body, { headers }).pipe(
-            map((res: any) => {
-                if (res.err == 'err') {
-                    return false;
-                }
-                return true;
-            }));
+            return this.httpClient.post(this.connectionstring + 'api/clothes/insertOrderItem', body, { headers }).pipe(map((res: any) => res));
+    }
+
+    public updateOrderItem(body: InsertClothesOrderModel): Observable<any> {
+        const headers = new HttpHeaders()
+            .append('Content-Type', 'application/json')
+            .append('Access-Control-Allow-Methods', '*');
+            return this.httpClient.put(this.connectionstring + 'api/clothes/updateOrderItem', body, { headers }).pipe(map((res: any) => res));
+    }
+
+    public deleteOrderItem(orderItemId: number): Observable<any> {
+        const headers = new HttpHeaders()
+            .append('Content-Type', 'application/json')
+            .append('Access-Control-Allow-Methods', '*');
+            return this.httpClient.delete(this.connectionstring + 'api/clothes/deleteOrderItem/' + orderItemId, { headers }).pipe(map((res: any) => res));
     }
     
     public sendMessages(body: MessageDTO, federationId:number, profileId:number, sendEmail:boolean): Observable<any> {

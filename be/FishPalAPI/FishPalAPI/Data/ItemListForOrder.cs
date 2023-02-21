@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FishPalAPI.Data
@@ -8,9 +9,13 @@ namespace FishPalAPI.Data
         [Key]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public OrderItems Item { get; set; }
+
+        public string ManWoman { get; set; }
 
         public string Team { get; set; }
+
+        public string AdultKid { get; set; }
 
         public int Quantity { get; set; }
 

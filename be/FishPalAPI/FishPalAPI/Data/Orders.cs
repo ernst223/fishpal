@@ -11,7 +11,7 @@ namespace FishPalAPI.Data
 
         public string OrderDate { get; set; }
 
-        public List<ItemListForOrder> Items { get; set; }
+        public List<ItemListForOrder> ItemsListForOrder { get; set; }
 
         public double TotalAmount { get; set; }
 

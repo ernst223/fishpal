@@ -34,8 +34,14 @@ import { PersonalInformationComponent } from './user-information/personal-inform
 import { ProvincialInformationComponent } from './user-information/provincial-information/provincial-information.component';
 import { TrainingComponent } from './user-information/training/training.component';
 import { UserInformationComponent } from './user-information/user-information.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @NgModule({
   imports: [
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatExpansionModule,
     MatTabsModule,
     ReactiveFormsModule,
     QRCodeModule,

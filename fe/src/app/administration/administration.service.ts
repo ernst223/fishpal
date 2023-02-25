@@ -106,4 +106,32 @@ export class AdministrationService {
                 .append('Access-Control-Allow-Methods', '*');
         return this.httpClient.post(this.connectionstring + 'api/communication/getAll/getAllClubsForSelectedProvinces',province, { headers }).pipe(map((res: any) => res));
       }  
+
+      public getDocumentAknowledgementsTrueCount(profileId:number): Observable<number> {      
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.get(this.connectionstring + 'api/dashboard/getDocumentAknowledgementsTrueCount/' + profileId, { headers }).pipe(map((res: any) => res));
+      }   
+
+      public getDocumentAknowledgementsFalseCount(profileId:number): Observable<number> {      
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.get(this.connectionstring + 'api/dashboard/getDocumentAknowledgementsFalseCount/' + profileId, { headers }).pipe(map((res: any) => res));
+      }   
+
+      public getEnrolledCoursesCount(profileId:number): Observable<number> {      
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.get(this.connectionstring + 'api/dashboard/getEnrolledCoursesCount/' + profileId, { headers }).pipe(map((res: any) => res));
+      }  
+
+      public getEnrolledCoursesApprovedCount(profileId:number): Observable<number> {      
+        const headers = new HttpHeaders()
+                .append('Content-Type', 'application/json')
+                .append('Access-Control-Allow-Methods', '*');
+        return this.httpClient.get(this.connectionstring + 'api/dashboard/getEnrolledCoursesApprovedCount/' + profileId, { headers }).pipe(map((res: any) => res));
+      }  
 }

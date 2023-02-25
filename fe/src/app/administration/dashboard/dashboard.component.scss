@@ -1,44 +1,92 @@
-.edit-class {
-  padding-top: 20px;
-  padding-bottom: 15px;
-  border: #2bc52b70;
-  border-style: solid;
-  border-width: 0.2px;
-  background: #f9f8f8a6;
+@import './../../../theme.scss';
+
+.mat-mdc-form-field+.mat-mdc-form-field {
+  margin-left: 8px;
 }
 
-.facetCard {
-  width: 93%;
-  color: white;
-  height: auto;
+.course-enrollment ::ng-deep .mat-progress-bar-buffer {
+  background-color: $indicator-neutral !important;
 }
 
-.cardHeader {
-  font-size: 30px;
-  position: absolute;
-  right: 40px;
-  float: right;
+.document-aknowledgement ::ng-deep .mat-progress-bar-buffer {
+  background-color: red !important;
 }
 
-.facetCardTitle {
-  font-size: 30px;
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: green !important;
 }
 
-.numberStyle {
-  font-weight: bold;
-  font-size: 30px;
-}
-
-.circle {
-  background-color: rgb(0, 0, 255);
-  opacity: 0.8;
-  display: block;
-  height: 50px;
-  width: 50px;
+.legend {
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
-  border: 3px solid rgb(255, 0, 0);
-  margin: auto;
-  color: #fff;
-  line-height: 50px;
-  text-align: center
+}
+
+.legend-positive {
+  background-color: $indicator-positive;
+}
+
+.legend-neutral {
+  background-color: $indicator-neutral;
+}
+
+.legend-negative {
+  background-color: $indicator-negative;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.vetical-bottom {
+  vertical-align: text-bottom;
+}
+
+.vetical-super {
+  vertical-align: super;
+}
+
+.progress-bar {
+  height: 30px;
+  border-radius: 10px;
+}
+
+.legend-font {
+  color: $secondary-gray;
+  font-size: 15px;
+}
+
+.indicator-value {
+  position: absolute;
+  bottom: 11px;
+  padding: 10px;
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: $indicator-positive;
+}
+
+mat-progress-spinner {
+  box-shadow: 0 0 0 10px red inset;
+  border-radius: 50%;
+}
+
+.circle-value {
+  position: absolute;
+  bottom: 35px;
+  left: 40px;
+  color: $indicator-positive;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.left-15{
+  left: 15px !important;
+}
+
+.right-15{
+  right: 15px !important;
 }

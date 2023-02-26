@@ -491,7 +491,7 @@ namespace FishPalAPI.Services
         public List<RoleManagementUsersDTO> getDocumentsAcknowledgedUsers(int documentId)
         {
             var acknoledgedDocuments = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient).ThenInclude(a => a.role)
-                .Where(a => a.Document.Id == documentId).ToList();
+                .Where(a => a.Document.Id == documentId && a.Acknowledged == true).ToList();
 
             List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
             foreach (var entry in acknoledgedDocuments)

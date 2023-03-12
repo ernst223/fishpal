@@ -129,6 +129,7 @@ export interface PersonalInformationDTO {
   passportExpirationDate: Date;
   homeAddress: string;
   postalAddress: string;
+  postalCode: string;
   phone: string;
   cell: string;
   skipperLicenseNumber: string;

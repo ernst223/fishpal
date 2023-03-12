@@ -81,6 +81,12 @@ namespace FishPalAPI.Controllers
             return Ok(communicationService.getDocumentsAcknowledgedUsers(documentId));
         }
 
+        [HttpGet("pending/getacknoledgedusers/{documentId}")]
+        public async Task<IActionResult> getPendingAcknoledgedUsers(int documentId)
+        {
+            return Ok(communicationService.getDocumentsPendingAcknowledgedUsers(documentId));
+        }
+
         [HttpPost("document/send/{profileId}/{sendTo}")]
         public async Task<IActionResult> uploadDocumentMessage(IFormFile file, int profileId, string sendTo)
         {

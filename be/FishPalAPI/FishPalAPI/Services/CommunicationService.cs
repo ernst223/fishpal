@@ -488,6 +488,27 @@ namespace FishPalAPI.Services
             return false;
         }
 
+        public List<RoleManagementUsersDTO> getDocumentsPendingAcknowledgedUsers(int documentId)
+        {
+            var acknoledgedDocuments = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient).ThenInclude(a => a.role)
+                .Where(a => a.Document.Id == documentId && a.Acknowledged == false).ToList();
+
+            List<RoleManagementUsersDTO> result = new List<RoleManagementUsersDTO>();
+            foreach (var entry in acknoledgedDocuments)
+            {
+                result.Add(new RoleManagementUsersDTO()
+                {
+                    Id = entry.Recipient.Id,
+                    FullName = getProfileFullName(entry.Recipient),
+                    Username = context.Users.Include(a => a.profiles).Where(a => a.profiles.Contains(entry.Recipient)).FirstOrDefault().UserName,
+                    Facet = getProfileFacetName(entry.Recipient),
+                    Role = entry.Recipient.role.Description + " " + entry.Recipient.role.FullName,
+                    Status = false,
+                });
+            }
+            return result;
+        }
+
         public List<RoleManagementUsersDTO> getDocumentsAcknowledgedUsers(int documentId)
         {
             var acknoledgedDocuments = context.DocumentMessages.Include(a => a.Document).Include(a => a.Recipient).ThenInclude(a => a.role)

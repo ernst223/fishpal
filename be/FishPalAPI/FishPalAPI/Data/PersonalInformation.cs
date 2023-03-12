@@ -22,6 +22,7 @@ namespace FishPalAPI.Data
         public DateTime passportExpirationDate { get; set; }
         public string homeAddress { get; set; }
         public string postalAddress { get; set; }
+        public string postalCode { get; set; }
         public string phone { get; set; }
         public string cell { get; set; }
         public string skipperLicenseNumber { get; set; }

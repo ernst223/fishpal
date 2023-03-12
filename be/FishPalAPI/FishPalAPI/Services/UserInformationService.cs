@@ -369,6 +369,7 @@ namespace FishPalAPI.Services
                 passportExpirationDate = currentPersonalInformation.passportExpirationDate,
                 homeAddress = currentPersonalInformation.homeAddress,
                 postalAddress = currentPersonalInformation.postalAddress,
+                postalCode = currentPersonalInformation.postalCode,
                 phone = currentPersonalInformation.phone,
                 cell = currentPersonalInformation.cell,
                 skipperLicenseNumber = currentPersonalInformation.skipperLicenseNumber
@@ -394,6 +395,7 @@ namespace FishPalAPI.Services
             currentPersonalInformation.passportExpirationDate = personalInformationDTO.passportExpirationDate;
             currentPersonalInformation.homeAddress = personalInformationDTO.homeAddress;
             currentPersonalInformation.postalAddress = personalInformationDTO.postalAddress;
+            currentPersonalInformation.postalCode = personalInformationDTO.postalCode;
             currentPersonalInformation.phone = personalInformationDTO.phone;
             currentPersonalInformation.cell = personalInformationDTO.cell;
             currentPersonalInformation.skipperLicenseNumber = personalInformationDTO.skipperLicenseNumber;

@@ -24,6 +24,7 @@ export class PersonalInformationComponent implements OnInit {
     ethnicGroup: null,
     homeAddress: null,
     postalAddress: null,
+    postalCode: null,
     gender: null,
     passportExpirationDate: null,
     phone: null,
@@ -55,6 +56,10 @@ export class PersonalInformationComponent implements OnInit {
   }
 
   update() {
+    if (this.personalInformation.idNumber === undefined || this.personalInformation.idNumber === '' || this.personalInformation.idNumber === null) {
+      this.openSnackBar('Please add a id Number', 'Close');
+      return;
+    }
     if (this.isValidSAID(this.personalInformation.idNumber)) {
       this.service.updatePersonalInformation(this.personalInformation, Number(this.currentProfile)).subscribe(a => {
         this.setupDataStream();

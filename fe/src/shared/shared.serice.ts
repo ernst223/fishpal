@@ -275,6 +275,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
 
+  public getPendingAcknoledgedUsers(documentId: number): Observable<Array<RoleManagementUsersDTO>> {
+    return this.httpClient.get(this.connectionstring + 'api/communication/pending/getacknoledgedusers/' + documentId, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+
   public setAcknoledgement(documentId: number): Observable<Array<RoleManagementUsersDTO>> {
     return this.httpClient.get(this.connectionstring + 'api/communication/document/acknoledge/' + documentId + "/" + + localStorage.getItem('profileId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)

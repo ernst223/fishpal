@@ -131,6 +131,14 @@
         <mat-grid-tile>
             <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
                 <mat-label>
+                    <mat-icon aria-hidden="false" class="theIcon">home</mat-icon>&nbsp; Postal Code
+                </mat-label>
+                <input [(ngModel)]="personalInformation.postalCode" matInput/>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill" class="registerInputsPersonalLeft">
+                <mat-label>
                     <mat-icon aria-hidden="false" class="theIcon">mail</mat-icon>&nbsp; Email Address (Username)
                 </mat-label>
                 <input [(ngModel)]="emailAddress" matInput>

@@ -32,6 +32,7 @@ export class DocumentManagementComponent implements OnInit {
 
   sendData: RoleManagementUsersDTO[];
   acknoledgeData: RoleManagementUsersDTO[];
+  pendingAcknoledgeData: RoleManagementUsersDTO[];
 
   inboxData: MyDocumentMessages[];
   outboxData: MyDocumentMessages[];
@@ -41,6 +42,7 @@ export class DocumentManagementComponent implements OnInit {
   pendingDataSource: MatTableDataSource<object> = new MatTableDataSource();
   sendDataSource: MatTableDataSource<object> = new MatTableDataSource();
   acknoledgeDataSource: MatTableDataSource<object> = new MatTableDataSource();
+  pedingAcknoledgeDataSource: MatTableDataSource<object> = new MatTableDataSource();
   displayedSendColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role', 'Actions'];
   displayedAcknoledgeColumns = ['Id', 'Username', 'FullName', 'Facet', 'Role'];
   displayedColumns = ['Id', 'SendFrom', 'Title', 'Note', 'Actions'];
@@ -55,6 +57,7 @@ export class DocumentManagementComponent implements OnInit {
   chair: boolean = false;
 
   selectedProfiles: number[] = [];
+  selectedAcknoledgment: any;
 
   selectedSendOption: number;
   theFile: File;
@@ -103,6 +106,12 @@ export class DocumentManagementComponent implements OnInit {
     this.acknoledgeDataSource.filter = filterValue;
   }
 
+  applyPendingAcknoledgeFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.pedingAcknoledgeDataSource.filter = filterValue;
+  }
+
   contains(str, arr) {
     var value = 0;
     arr.forEach(function (word) {
@@ -141,25 +150,49 @@ export class DocumentManagementComponent implements OnInit {
     window.open(environment.apiUrl + "documents/" + id + ".pdf", '_blank');
   }
 
-  setAcknoledgement(id) {
-    this.service.setAcknoledgement(id).subscribe(a => {
-      this.setupDataStream();
-      this.openSnackBar('Success, you made an acknoledgement.', 'close');
-    });
-  }
-
   viewDocumentsAcknoledgments(templateRef, id) {
     console.log(id);
     this.service.getAcknoledgedUsers(id).subscribe(a => {
       this.acknoledgeData = a;
       this.acknoledgeDataSource.data = this.acknoledgeData;
-      let dialogRef = this.dialog.open(templateRef, {
-        width: '1400px',
-        height: '650px'
+
+      this.service.getPendingAcknoledgedUsers(id).subscribe(b => {
+
+        this.pendingAcknoledgeData = b;
+        this.pedingAcknoledgeDataSource.data = this.pendingAcknoledgeData;
+        let dialogRef = this.dialog.open(templateRef, {
+          width: '1400px',
+          height: '650px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+        });
       });
-  
-      dialogRef.afterClosed().subscribe(result => {
-      });
+    });
+  }
+
+  opentViewDocument(templateRef, id: any) {
+    this.selectedAcknoledgment = id;
+
+    let dialogRef = this.dialog.open(templateRef, {
+      width: '800px',
+      height: '650px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  disagreeDocument() {
+    this.dialog.closeAll();
+    this.openSnackBar('You did not agree with the terms', 'close');
+  }
+
+  agreeDocument() {
+    this.service.setAcknoledgement(this.selectedAcknoledgment).subscribe(a => {
+      this.setupDataStream();
+      this.openSnackBar('Success, you made an acknoledgement.', 'close');
+      this.dialog.closeAll();
     });
   }
 
